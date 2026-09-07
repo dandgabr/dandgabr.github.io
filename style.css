@@ -55,6 +55,7 @@
 
   /* Dimensions & Spacing */
   --header-height: 56px;
+  --sidebar-width: 110px;
   --max-width: 1180px;
   --radius-xs: 2px;
   --radius-sm: 3px;
@@ -271,7 +272,7 @@ a:hover {
   position: sticky;
   top: 0;
   z-index: 100;
-  min-height: var(--header-height);
+  height: var(--header-height);
   background-color: var(--bg-header);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -283,12 +284,11 @@ a:hover {
 .hud-container {
   max-width: var(--max-width);
   margin: 0 auto;
-  min-height: var(--header-height);
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  gap: 8px;
 }
 
 /* System State Badge */
@@ -438,6 +438,106 @@ a:hover {
 }
 
 /* ==========================================================================
+   SYS-CTRL Vertical Side Panel
+   ========================================================================== */
+.sys-ctrl-panel {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 90;
+  width: var(--sidebar-width);
+  background: var(--bg-header);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-left: none;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.45), var(--green-glow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ctrl-header {
+  padding: 8px 10px 6px;
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: center;
+}
+
+.ctrl-title {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.ctrl-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ctrl-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  text-align: left;
+  gap: 4px;
+}
+
+.ctrl-item:last-child {
+  border-bottom: none;
+}
+
+.ctrl-item:hover,
+.ctrl-item:focus-visible {
+  background: var(--green-subtle);
+  outline: none;
+}
+
+.ctrl-item:focus-visible {
+  outline: 1px solid var(--border-medium);
+  outline-offset: -1px;
+}
+
+.ctrl-item-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+}
+
+.ctrl-item:hover .ctrl-item-label {
+  color: var(--text-muted);
+}
+
+/* .btn-val reused from header buttons — color + weight already defined */
+.ctrl-item .btn-val {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green-core);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.ctrl-item:hover .btn-val {
+  text-shadow: var(--green-glow-sm);
+}
+
+/* ==========================================================================
    Main Layout & Section Structure
    ========================================================================== */
 .main-layout {
@@ -445,7 +545,7 @@ a:hover {
   z-index: 5;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 24px 20px 80px 20px;
+  padding: 24px 20px 80px calc(var(--sidebar-width) + 20px);
   display: flex;
   flex-direction: column;
   gap: 60px;
@@ -1778,6 +1878,30 @@ a:hover {
 /* ==========================================================================
    Responsive Breakpoints
    ========================================================================== */
+
+/* --- 1. Tablet compacto (768–1023px): sidebar estreita, só o valor ------ */
+@media (max-width: 1023px) {
+  :root {
+    --sidebar-width: 48px;
+  }
+  .ctrl-header {
+    display: none;
+  }
+  .ctrl-item {
+    align-items: center;
+    padding: 10px 6px;
+    gap: 3px;
+  }
+  .ctrl-item-label {
+    display: none;
+  }
+  .ctrl-item .btn-val {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* --- 2. Grid/hero adjustments 900px --------------------------------------- */
 @media (max-width: 900px) {
   .hero-identity-grid {
     grid-template-columns: 1fr;
@@ -1800,11 +1924,77 @@ a:hover {
   }
 }
 
-@media (max-width: 768px) {
+/* --- 3. Mobile portrait (≤767px): sidebar → barra inferior fixa ---------- */
+@media (max-width: 767px) {
+  :root {
+    --sidebar-width: 0px;
+  }
+
+  /* Sidebar transforma-se em barra inferior */
+  .sys-ctrl-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    transform: none;
+    width: 100%;
+    height: 48px;
+    flex-direction: row;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    border-radius: 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 95;
+  }
+
+  .ctrl-header {
+    display: none;
+  }
+
+  .ctrl-group {
+    flex-direction: row;
+    flex: 1;
+  }
+
+  .ctrl-item {
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    border-bottom: none;
+    border-right: 1px solid var(--border-subtle);
+    gap: 5px;
+    height: 100%;
+  }
+
+  .ctrl-item:last-child {
+    border-right: none;
+  }
+
+  .ctrl-item-label {
+    display: block;
+    font-size: 8.5px;
+    letter-spacing: 0.3px;
+  }
+
+  .ctrl-item .btn-val {
+    font-size: 10.5px;
+  }
+
+  /* Main layout: padding bottom para não ficar atrás da barra */
+  .main-layout {
+    padding-left: 20px;
+    padding-bottom: 68px;
+  }
+
+  /* Hero pillars single column */
   .hero-pillars {
     grid-template-columns: 1fr;
   }
-  /* Nav links colapsam em menu dropdown */
+
+  /* Nav links dropdown mobile */
   .nav-links {
     display: none;
     position: absolute;
@@ -1838,78 +2028,30 @@ a:hover {
   .timeline-marker {
     left: -24px;
   }
-
-  /* Controles: reduz gap e padding */
-  .hud-controls {
-    gap: 6px;
-  }
-  .hud-btn {
-    padding: 5px 8px;
-    font-size: 11px;
-  }
 }
 
-/* Telas estreitas: esconde labels textuais, mantém apenas o valor do botão */
-@media (max-width: 520px) {
-  .hud-controls {
-    gap: 5px;
-  }
-  /* Oculta o texto fixo "LANG:", "THEME:", "CRT:", "STREAM:" — mantém só o valor */
-  .hud-btn .btn-label,
-  .hud-btn .btn-bracket {
-    display: none;
-  }
-  .hud-btn {
-    padding: 5px 7px;
-    font-size: 10.5px;
-    letter-spacing: 0;
-  }
-  /* Badge: oculta [ACTIVE] para liberar espaço */
-  .sys-state {
-    display: none;
-  }
-}
-
-/* Telas muito estreitas: scroll horizontal interno nos controles como fallback */
-@media (max-width: 380px) {
-  .hud-container {
-    flex-wrap: wrap;
-    padding: 6px 12px;
-    row-gap: 0;
-  }
-  .hud-controls {
-    flex: 0 0 100%;
-    justify-content: flex-end;
-    padding-bottom: 5px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .hud-controls::-webkit-scrollbar {
-    display: none;
-  }
-  .sys-badge {
-    flex: 1;
-  }
-  .hud-nav {
-    flex: 0 0 auto;
-  }
-}
-
-/* Landscape em dispositivos móveis (pouca altura vertical) */
+/* --- 4. Landscape mobile (altura curta): sidebar ultra-compacta ---------- */
 @media (max-height: 500px) and (orientation: landscape) {
   :root {
     --header-height: 44px;
+    --sidebar-width: 40px;
   }
-  .hud-btn {
-    padding: 4px 7px;
-    font-size: 10.5px;
+  .ctrl-header {
+    display: none;
+  }
+  .ctrl-item {
+    align-items: center;
+    padding: 6px 4px;
+  }
+  .ctrl-item-label {
+    display: none;
+  }
+  .ctrl-item .btn-val {
+    font-size: 9px;
+    letter-spacing: 0;
   }
   .sys-state {
     display: none;
-  }
-  .hud-controls {
-    gap: 5px;
   }
 }
 

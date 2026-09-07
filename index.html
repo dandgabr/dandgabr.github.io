@@ -80,6 +80,31 @@
   <!-- CRT Screen Glare & Scanline Filter Overlay -->
   <div class="crt-overlay" aria-hidden="true"></div>
 
+  <!-- SYS-CTRL: Vertical Side Panel (controls moved from header) -->
+  <aside class="sys-ctrl-panel" aria-label="System Controls">
+    <div class="ctrl-header">
+      <span class="ctrl-title">SYS-CTRL</span>
+    </div>
+    <div class="ctrl-group">
+      <button id="toggle-lang" class="ctrl-item" type="button" aria-label="Switch language (EN, PT, ES)" title="Switch Language (EN / PT / ES)">
+        <span class="ctrl-item-label">&gt; LANG</span>
+        <span class="btn-val" id="lang-val">EN</span>
+      </button>
+      <button id="toggle-theme" class="ctrl-item" type="button" aria-label="Toggle Theme Mode" title="Toggle Light / Dark Mode">
+        <span class="ctrl-item-label">&gt; THEME</span>
+        <span class="btn-val" id="theme-val">DARK</span>
+      </button>
+      <button id="toggle-crt" class="ctrl-item" type="button" aria-pressed="true" title="Toggle CRT Scanline Effect">
+        <span class="ctrl-item-label">&gt; CRT</span>
+        <span class="btn-val">ON</span>
+      </button>
+      <button id="toggle-rain" class="ctrl-item" type="button" aria-pressed="true" title="Toggle Background Stream">
+        <span class="ctrl-item-label">&gt; STREAM</span>
+        <span class="btn-val">RUN</span>
+      </button>
+    </div>
+  </aside>
+
   <!-- HUD Top Bar / System Navigation -->
   <header class="hud-header" role="banner">
     <div class="hud-container">
@@ -101,24 +126,10 @@
         </ul>
       </nav>
 
-      <!-- System Controls & Diagnostics -->
-      <div class="hud-controls">
-        <button id="toggle-lang" class="hud-btn" type="button" aria-label="Switch language (EN, PT, ES)" title="Switch Language (EN / PT / ES)">
-          <span class="btn-bracket">[</span><span class="btn-label">LANG: </span><span class="btn-val" id="lang-val">EN</span><span class="btn-bracket">]</span>
-        </button>
-        <button id="toggle-theme" class="hud-btn" type="button" aria-label="Toggle Theme Mode" title="Toggle Light / Dark Mode">
-          <span class="btn-bracket">[</span><span class="btn-label">THEME: </span><span class="btn-val" id="theme-val">DARK</span><span class="btn-bracket">]</span>
-        </button>
-        <button id="toggle-crt" class="hud-btn" type="button" aria-pressed="true" title="Toggle CRT Scanline Effect">
-          <span class="btn-bracket">[</span><span class="btn-label">CRT: </span><span class="btn-val">ON</span><span class="btn-bracket">]</span>
-        </button>
-        <button id="toggle-rain" class="hud-btn" type="button" aria-pressed="true" title="Toggle Background Stream">
-          <span class="btn-bracket">[</span><span class="btn-label">STREAM: </span><span class="btn-val">RUN</span><span class="btn-bracket">]</span>
-        </button>
-        <button id="mobile-menu-btn" class="hud-btn mobile-only" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle Navigation Menu">
-          <span class="btn-bracket">[</span>MENU<span class="btn-bracket">]</span>
-        </button>
-      </div>
+      <!-- Mobile: hamburger menu toggle only -->
+      <button id="mobile-menu-btn" class="hud-btn mobile-only" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle Navigation Menu">
+        <span class="btn-bracket">[</span>MENU<span class="btn-bracket">]</span>
+      </button>
     </div>
   </header>
 
