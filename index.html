@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en" class="matrix-theme">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- Primary Meta Tags -->
+  <title>Daniel Gonçalves Araujo (@dandgabr) | Information Security Architect</title>
+  <meta name="title" content="Daniel Gonçalves Araujo (@dandgabr) | Information Security Architect">
+  <meta name="description" content="Portfolio and Security Research of Daniel Gonçalves Araujo (@dandgabr). Information Security Architect @ Dasa. Specializing in Enterprise Security Architecture, AI Safety & Hardening, AppSec, DevSecOps, and Low-Level Systems.">
+  <meta name="keywords" content="Daniel Gonçalves Araujo, dandgabr, Security Architect, Dasa, AI Safety, AI Hardening, AppSec, DevSecOps, Threat Modeling, CIS Benchmarks, MCP, Model Context Protocol, Low-Level, C, Assembly, Reverse Engineering, CompTIA Security+">
+  <meta name="author" content="Daniel Gonçalves Araujo (@dandgabr)">
+  <meta name="theme-color" content="#050807">
+  <meta name="color-scheme" content="dark">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dandgabr.github.io/">
+  <meta property="og:title" content="Daniel Gonçalves Araujo | Information Security Architect">
+  <meta property="og:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and Low-Level Systems. Matrix-grade technical portfolio.">
+  <meta property="og:image" content="https://github.com/dandgabr.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://dandgabr.github.io/">
+  <meta property="twitter:title" content="Daniel Gonçalves Araujo | Information Security Architect">
+  <meta property="twitter:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and Low-Level Systems. Matrix-grade technical portfolio.">
+  <meta property="twitter:image" content="https://github.com/dandgabr.png">
+
+  <!-- Favicon / SVG Icon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050807' rx='6'/%3E%3Cpath d='M16 4 L28 9 V18 C28 24 16 28 16 28 C16 28 4 24 4 18 V9 Z' fill='none' stroke='%2300ff66' stroke-width='2'/%3E%3Cpath d='M11 16 L15 20 L21 12' fill='none' stroke='%2300ff66' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="crt-scanlines">
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to system interface [Enter]</a>
+
+  <!-- Background Matrix Rain Canvas -->
+  <canvas id="matrix-canvas" aria-hidden="true"></canvas>
+
+  <!-- CRT Screen Glare & Scanline Filter Overlay -->
+  <div class="crt-overlay" aria-hidden="true"></div>
+
+  <!-- HUD Top Bar / System Navigation -->
+  <header class="hud-header" role="banner">
+    <div class="hud-container">
+      <div class="sys-badge">
+        <span class="status-led" aria-hidden="true"></span>
+        <span class="sys-title">dandga@matrix-sec:~#</span>
+        <span class="sys-state" aria-label="System status operational">[ACTIVE]</span>
+      </div>
+
+      <nav class="hud-nav" aria-label="Main system navigation">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#hero" class="nav-item active"><span class="nav-num">01.</span>//ROOT</a></li>
+          <li><a href="#terminal" class="nav-item"><span class="nav-num">02.</span>//TERMINAL</a></li>
+          <li><a href="#about" class="nav-item"><span class="nav-num">03.</span>//INTEL</a></li>
+          <li><a href="#skills" class="nav-item"><span class="nav-num">04.</span>//MATRIX</a></li>
+          <li><a href="#projects" class="nav-item"><span class="nav-num">05.</span>//PROJECTS</a></li>
+          <li><a href="#credentials" class="nav-item"><span class="nav-num">06.</span>//ACADEMIC</a></li>
+          <li><a href="#contact" class="nav-item"><span class="nav-num">07.</span>//CONNECT</a></li>
+        </ul>
+      </nav>
+
+      <!-- System Controls & Diagnostics -->
+      <div class="hud-controls">
+        <button id="toggle-crt" class="hud-btn" type="button" aria-pressed="true" title="Toggle CRT Scanline Effect">
+          <span class="btn-bracket">[</span>CRT: <span class="btn-val">ON</span><span class="btn-bracket">]</span>
+        </button>
+        <button id="toggle-rain" class="hud-btn" type="button" aria-pressed="true" title="Toggle Matrix Digital Rain">
+          <span class="btn-bracket">[</span>RAIN: <span class="btn-val">RUN</span><span class="btn-bracket">]</span>
+        </button>
+        <button id="mobile-menu-btn" class="hud-btn mobile-only" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle Navigation Menu">
+          <span class="btn-bracket">[</span>MENU<span class="btn-bracket">]</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Landmark -->
+  <main id="main-content" class="main-layout" role="main">
+
+    <!-- HERO SECTION: Boot Telemetry & Identity -->
+    <section id="hero" class="terminal-section hero-section" aria-labelledby="hero-heading">
+      <div class="terminal-card hero-card">
+        <div class="terminal-card-header">
+          <div class="terminal-dots" aria-hidden="true">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-amber"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="terminal-title">sec_core_v6.12_hardened.sys &mdash; 80x24 VT100</div>
+          <div class="terminal-meta">CIPHER: CHACHA20-POLY1305</div>
+        </div>
+
+        <div class="terminal-card-body">
+          <div id="boot-log" class="boot-sequence" aria-live="polite">
+            <!-- Populated progressively by app.js; fallback content for non-JS -->
+            <p class="log-line text-dim">&gt; BIOS_CHECKSUM: OK | KERNEL_LOAD: 0x00007FFD... ACCESS_GRANTED</p>
+            <p class="log-line text-accent">&gt; IDENTITY: Daniel Gonçalves Araujo [@dandgabr]</p>
+            <p class="log-line text-highlight">&gt; ROLE: Information Security Architect @ Dasa</p>
+            <p class="log-line text-dim">&gt; SPECIALIZATION: Enterprise Defense | AI Safety & Hardening | AppSec | Low-Level Systems</p>
+          </div>
+
+          <div class="hero-identity-grid">
+            <div class="hero-text-block">
+              <div class="identity-badge-row">
+                <span class="tag-badge tag-security">SECURITY ARCHITECT @ DASA</span>
+                <span class="tag-badge tag-cert">CompTIA Security+ ce</span>
+                <span class="tag-badge tag-geo">LONDRINA, PR &mdash; BRAZIL</span>
+              </div>
+
+              <h1 id="hero-heading" class="hero-glitch-title" data-text="DANIEL GONÇALVES ARAUJO">
+                DANIEL GONÇALVES ARAUJO
+              </h1>
+
+              <p class="hero-subline">
+                Architecting resilient enterprise defenses, forging containment frameworks for autonomous AI agents, and deconstructing low-level software boundaries.
+              </p>
+
+              <div class="hero-pillars">
+                <div class="pillar-chip">
+                  <span class="chip-icon" aria-hidden="true">🛡️</span>
+                  <div class="chip-body">
+                    <strong>Enterprise Security</strong>
+                    <small>Threat Modeling & DevSecOps</small>
+                  </div>
+                </div>
+                <div class="pillar-chip">
+                  <span class="chip-icon" aria-hidden="true">🤖</span>
+                  <div class="chip-body">
+                    <strong>AI Safety & Hardening</strong>
+                    <small>MCP & Agent Containment</small>
+                  </div>
+                </div>
+                <div class="pillar-chip">
+                  <span class="chip-icon" aria-hidden="true">⚡</span>
+                  <div class="chip-body">
+                    <strong>Low-Level Systems</strong>
+                    <small>Memory & Reverse Engineering</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hero-actions">
+                <a href="#terminal" class="action-btn action-primary">
+                  <span class="btn-prefix">&gt;</span> INTERACTIVE TERMINAL
+                </a>
+                <a href="#projects" class="action-btn action-secondary">
+                  <span class="btn-prefix">#</span> INSPECT RESEARCH
+                </a>
+                <a href="https://github.com/dandgabr" target="_blank" rel="noopener noreferrer" class="action-btn action-ghost">
+                  <span class="btn-prefix">↗</span> GITHUB PROFILE
+                </a>
+              </div>
+            </div>
+
+            <!-- Profile Matrix Hologram HUD -->
+            <div class="hero-avatar-pane" aria-hidden="true">
+              <div class="hud-reticle">
+                <div class="hud-corner top-left"></div>
+                <div class="hud-corner top-right"></div>
+                <div class="hud-corner bottom-left"></div>
+                <div class="hud-corner bottom-right"></div>
+                <div class="avatar-frame">
+                  <img src="https://github.com/dandgabr.png" alt="Daniel Gonçalves Araujo Avatar" class="avatar-img" onerror="this.style.display='none'; document.getElementById('ascii-avatar').style.display='block';">
+                  <pre id="ascii-avatar" class="ascii-fallback" style="display:none;">
+    [ SEC_ARCH ]
+      .---.
+     /     \
+    | () () |
+     \  _  /
+      `---`
+  [ DANDGABR ]
+                  </pre>
+                  <div class="scan-bar"></div>
+                </div>
+                <div class="telemetry-hud-data">
+                  <div class="telemetry-item">NODE: <span>dasa-sec-arch</span></div>
+                  <div class="telemetry-item">STATUS: <span class="text-accent">ONLINE</span></div>
+                  <div class="telemetry-item">CLEARANCE: <span>LEVEL_4</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 02: Interactive Terminal Console -->
+    <section id="terminal" class="terminal-section" aria-labelledby="terminal-heading">
+      <div class="section-tag-header">
+        <span class="tag-index">[SECTION 02]</span>
+        <h2 id="terminal-heading" class="section-title">INTERACTIVE COMMAND SHELL</h2>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="terminal-card shell-card">
+        <div class="terminal-card-header">
+          <div class="terminal-dots" aria-hidden="true">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-amber"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="terminal-title">guest@dandga-kernel:/workspace (bash 5.2)</div>
+          <div class="terminal-meta">TTY: /dev/pts/0</div>
+        </div>
+
+        <div class="terminal-card-body terminal-interactive">
+          <div class="terminal-instructions text-dim">
+            Type <span class="code-highlight">help</span> to list commands, or click any tactical command chip below:
+          </div>
+
+          <!-- Tactical Quick Command Buttons -->
+          <div class="quick-cmd-bar" role="toolbar" aria-label="Terminal command shortcuts">
+            <button type="button" class="cmd-chip" data-cmd="help">help</button>
+            <button type="button" class="cmd-chip" data-cmd="whoami">whoami</button>
+            <button type="button" class="cmd-chip" data-cmd="skills">skills</button>
+            <button type="button" class="cmd-chip" data-cmd="projects">projects</button>
+            <button type="button" class="cmd-chip" data-cmd="credentials">credentials</button>
+            <button type="button" class="cmd-chip" data-cmd="contact">contact</button>
+            <button type="button" class="cmd-chip" data-cmd="matrix">matrix</button>
+            <button type="button" class="cmd-chip" data-cmd="clear">clear</button>
+          </div>
+
+          <!-- Terminal Output Log -->
+          <div id="terminal-output" class="terminal-output" role="log" aria-live="polite" aria-atomic="false">
+            <div class="term-response">
+              <span class="text-dim">Matrix Security Shell v2.4.0 (x86_64-hardened-linux)</span><br>
+              <span class="text-dim">Session initialized for peer review. Type </span><span class="text-accent">'help'</span><span class="text-dim"> for guidance.</span>
+            </div>
+          </div>
+
+          <!-- Command Input Line -->
+          <form id="terminal-form" class="terminal-input-row" autocomplete="off">
+            <label for="cli-input" class="term-prompt">
+              <span class="term-user">dandga</span><span class="term-at">@</span><span class="term-host">sec-node</span>:<span class="term-path">~</span>$&nbsp;
+            </label>
+            <input type="text" id="cli-input" class="term-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Terminal command line input" placeholder="type a command...">
+            <button type="submit" class="term-submit-btn" aria-label="Execute command">&gt;</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 03: Profile Intel & Philosophy -->
+    <section id="about" class="terminal-section" aria-labelledby="about-heading">
+      <div class="section-tag-header">
+        <span class="tag-index">[SECTION 03]</span>
+        <h2 id="about-heading" class="section-title">DOSSIER // PROFESSIONAL INTEL</h2>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="about-grid">
+        <div class="hud-card about-dossier">
+          <div class="card-hud-label">[OPERATIONAL PROFILE]</div>
+          <h3 class="card-title">Information Security Architect</h3>
+          <div class="dossier-org">
+            <span class="org-label">ORGANIZATION:</span>
+            <span class="org-name">Dasa (Largest integrated healthcare network in Latin America)</span>
+          </div>
+
+          <div class="dossier-body">
+            <p>
+              Operating at the intersection of <strong>Enterprise Defense Architecture</strong> and <strong>Emerging Autonomous Tech</strong>, I engineer security frameworks that prevent exploitation before code reaches production and isolate autonomous agents operating in developer workspaces.
+            </p>
+            <p>
+              My engineering approach is rooted in systems programming, microcontroller diagnostics, and threat containment. With 4+ years of academic background lecturing algorithms, computer security, and electronics, I combine pedagogical clarity with technical rigor in application security, threat modeling, and secure software development lifecycles.
+            </p>
+          </div>
+
+          <div class="dossier-specs">
+            <div class="spec-row">
+              <span class="spec-key">DISCIPLINE:</span>
+              <span class="spec-val">Security Architecture & DevSecOps</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">RESEARCH_FOCUS:</span>
+              <span class="spec-val">AI Safety, MCP Sandboxing, Memory Forensics</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">ACCREDITATION:</span>
+              <span class="spec-val text-accent">CompTIA Security+ ce</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">COMMUNITY:</span>
+              <span class="spec-val">Google Developer Groups (GDG) Speaker</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Architecture Triad HUD -->
+        <div class="hud-card triad-dossier">
+          <div class="card-hud-label">[DEFENSE METHODOLOGY]</div>
+          <h3 class="card-title">The Three Pillars of Defense</h3>
+
+          <div class="triad-list">
+            <article class="triad-item">
+              <div class="triad-num">01</div>
+              <div class="triad-content">
+                <h4>Enterprise Security Architecture & AppSec</h4>
+                <p>Establishing defense-in-depth through systematic threat modeling (STRIDE, PASTA), OWASP ASVS/SAMM frameworks, and automated DevSecOps pipelines integrated into CI/CD environments.</p>
+              </div>
+            </article>
+
+            <article class="triad-item">
+              <div class="triad-num">02</div>
+              <div class="triad-content">
+                <h4>AI Safety & Agent Containment</h4>
+                <p>Pioneering practical sandboxing for developer AI tooling. Designing MCP (Model Context Protocol) validation layers and agent skill frameworks to prevent prompt injection and tool misuse.</p>
+              </div>
+            </article>
+
+            <article class="triad-item">
+              <div class="triad-num">03</div>
+              <div class="triad-content">
+                <h4>Low-Level Systems & Reverse Engineering</h4>
+                <p>Drawing upon hardware engineering, microcontrollers, and C/Assembly fundamentals to analyze memory layouts, inspect process execution, and conduct baseline OS hardening.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 04: Technical Capabilities Matrix (Skills) -->
+    <section id="skills" class="terminal-section" aria-labelledby="skills-heading">
+      <div class="section-tag-header">
+        <span class="tag-index">[SECTION 04]</span>
+        <h2 id="skills-heading" class="section-title">CORE EXPERTISE & TECHNICAL MATRIX</h2>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="skills-grid">
+        <!-- Quadrant 1: Security Architecture -->
+        <div class="hud-card skill-card">
+          <div class="card-hud-label">[DOMAIN: 0x01]</div>
+          <div class="skill-header">
+            <span class="domain-icon" aria-hidden="true">🛡️</span>
+            <h3 class="skill-title">Security Architecture & Governance</h3>
+          </div>
+          <p class="skill-desc">Enterprise defense design, policy enforcement, and resilient DevSecOps integration.</p>
+          <ul class="skill-pill-list" aria-label="Security skills list">
+            <li class="skill-pill">Threat Modeling (STRIDE)</li>
+            <li class="skill-pill">OWASP SAMM & ASVS</li>
+            <li class="skill-pill">Cloud Security (AWS / Azure)</li>
+            <li class="skill-pill">DevSecOps CI/CD Pipelines</li>
+            <li class="skill-pill">PCI DSS Compliance</li>
+            <li class="skill-pill">Linux & OS Hardening</li>
+            <li class="skill-pill">Security Champions Leadership</li>
+          </ul>
+        </div>
+
+        <!-- Quadrant 2: AI & Agentic Systems -->
+        <div class="hud-card skill-card">
+          <div class="card-hud-label">[DOMAIN: 0x02]</div>
+          <div class="skill-header">
+            <span class="domain-icon" aria-hidden="true">🧠</span>
+            <h3 class="skill-title">AI Safety & Agentic Systems</h3>
+          </div>
+          <p class="skill-desc">Hardening autonomous agents, sandbox containment, and protocol-level integration.</p>
+          <ul class="skill-pill-list" aria-label="AI and Agentic skills list">
+            <li class="skill-pill">Model Context Protocol (MCP)</li>
+            <li class="skill-pill">Agent Safety & Containment</li>
+            <li class="skill-pill">AI Workspace Hardening</li>
+            <li class="skill-pill">Agentic Skill Architectures</li>
+            <li class="skill-pill">Academic AI (UTFPR Research)</li>
+            <li class="skill-pill">Prompt Injection Mitigation</li>
+          </ul>
+        </div>
+
+        <!-- Quadrant 3: Low-Level & Systems -->
+        <div class="hud-card skill-card">
+          <div class="card-hud-label">[DOMAIN: 0x03]</div>
+          <div class="skill-header">
+            <span class="domain-icon" aria-hidden="true">⚡</span>
+            <h3 class="skill-title">Low-Level & Reverse Engineering</h3>
+          </div>
+          <p class="skill-desc">Deep hardware awareness, memory scanning, process inspection, and systems code.</p>
+          <ul class="skill-pill-list" aria-label="Low-Level skills list">
+            <li class="skill-pill">C Programming (Memory & Pointers)</li>
+            <li class="skill-pill">x86 / x64 Assembly Basics</li>
+            <li class="skill-pill">Cheat Engine Memory Scanning</li>
+            <li class="skill-pill">Embedded Microcontrollers</li>
+            <li class="skill-pill">Linux Process & Kernel Internals</li>
+            <li class="skill-pill">Hardware / Digital Electronics</li>
+          </ul>
+        </div>
+
+        <!-- Quadrant 4: Tooling & Documentation -->
+        <div class="hud-card skill-card">
+          <div class="card-hud-label">[DOMAIN: 0x04]</div>
+          <div class="skill-header">
+            <span class="domain-icon" aria-hidden="true">⚙️</span>
+            <h3 class="skill-title">Languages, Scripting & Tooling</h3>
+          </div>
+          <p class="skill-desc">Languages and automation pipelines for rapid validation and reproducible reporting.</p>
+          <ul class="skill-pill-list" aria-label="Languages and tooling list">
+            <li class="skill-pill">Python (Automation & Analysis)</li>
+            <li class="skill-pill">Bash & Linux Shell Scripting</li>
+            <li class="skill-pill">C# (.NET Integrations)</li>
+            <li class="skill-pill">Typst & Technical Presentations</li>
+            <li class="skill-pill">Git / GitHub Workflows</li>
+            <li class="skill-pill">CIS Benchmark Auditing</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 05: Featured Projects & Research -->
+    <section id="projects" class="terminal-section" aria-labelledby="projects-heading">
+      <div class="section-tag-header">
+        <span class="tag-index">[SECTION 05]</span>
+        <h2 id="projects-heading" class="section-title">FEATURED RESEARCH & OPEN REPOSITORIES</h2>
+        <span class="section-line"></span>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="filter-bar" role="tablist" aria-label="Filter projects by discipline">
+        <button type="button" class="filter-btn active" role="tab" aria-selected="true" data-filter="all">
+          [ ALL (5) ]
+        </button>
+        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="security">
+          [ SECURITY (2) ]
+        </button>
+        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="ai">
+          [ AI & AGENTS (2) ]
+        </button>
+        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="low-level">
+          [ LOW-LEVEL (1) ]
+        </button>
+        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="community">
+          [ COMMUNITY (1) ]
+        </button>
+      </div>
+
+      <!-- Projects Grid -->
+      <div class="projects-grid" id="projects-grid">
+
+        <!-- Project 1: hardening-ia -->
+        <article class="project-card" data-category="security ai" data-project-id="hardening-ia">
+          <div class="project-card-header">
+            <div class="proj-telemetry">
+              <span class="proj-id">PRJ-01</span>
+              <span class="proj-status status-active">ACTIVE_RESEARCH</span>
+            </div>
+            <div class="proj-category-tags">
+              <span class="mini-tag">AI Security</span>
+              <span class="mini-tag">Python</span>
+            </div>
+          </div>
+          <h3 class="proj-title">
+            <span class="proj-icon">🛡️</span> hardening-ia
+          </h3>
+          <p class="proj-desc">
+            Automated security hardening framework and validation scripts designed for AI-assisted development tools, sandboxing environments, and developer workspace security containment.
+          </p>
+          <div class="proj-capabilities">
+            <div class="cap-item">&gt; Sandboxing validation for LLM developer tools</div>
+            <div class="cap-item">&gt; Workspace permission & escape vector auditing</div>
+            <div class="cap-item">&gt; Hardened isolation profiles for agent execution</div>
+          </div>
+          <div class="proj-actions">
+            <button type="button" class="inspect-btn" data-project="hardening-ia" aria-haspopup="dialog">
+              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+            </button>
+            <a href="https://github.com/dandgabr/hardening-ia" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View hardening-ia on GitHub">
+              REPO ↗
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 2: skills -->
+        <article class="project-card" data-category="ai" data-project-id="skills">
+          <div class="project-card-header">
+            <div class="proj-telemetry">
+              <span class="proj-id">PRJ-02</span>
+              <span class="proj-status status-active">STANDARDIZED</span>
+            </div>
+            <div class="proj-category-tags">
+              <span class="mini-tag">Agentic AI</span>
+              <span class="mini-tag">Architecture</span>
+            </div>
+          </div>
+          <h3 class="proj-title">
+            <span class="proj-icon">🧠</span> skills
+          </h3>
+          <p class="proj-desc">
+            A comprehensive, battle-tested repository of standardized skills and domain capabilities for autonomous AI coding agents, enforcing deterministic tool execution and security constraints.
+          </p>
+          <div class="proj-capabilities">
+            <div class="cap-item">&gt; Modular domain skills for AI software engineering</div>
+            <div class="cap-item">&gt; Enforces input sanitization & boundary validation</div>
+            <div class="cap-item">&gt; Multi-agent orchestration protocols</div>
+          </div>
+          <div class="proj-actions">
+            <button type="button" class="inspect-btn" data-project="skills" aria-haspopup="dialog">
+              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+            </button>
+            <a href="https://github.com/dandgabr/skills" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View skills on GitHub">
+              REPO ↗
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 3: mcp-cheatengine -->
+        <article class="project-card" data-category="low-level ai" data-project-id="mcp-cheatengine">
+          <div class="project-card-header">
+            <div class="proj-telemetry">
+              <span class="proj-id">PRJ-03</span>
+              <span class="proj-status status-prototype">INTEGRATION</span>
+            </div>
+            <div class="proj-category-tags">
+              <span class="mini-tag">Model Context Protocol</span>
+              <span class="mini-tag">Memory Analysis</span>
+            </div>
+          </div>
+          <h3 class="proj-title">
+            <span class="proj-icon">🧩</span> mcp-cheatengine
+          </h3>
+          <p class="proj-desc">
+            Model Context Protocol (MCP) server interface for Cheat Engine, enabling programmatic memory scanning, pointer disassembly, and reverse engineering telemetry for AI assistants.
+          </p>
+          <div class="proj-capabilities">
+            <div class="cap-item">&gt; MCP server bridging LLMs to process memory</div>
+            <div class="cap-item">&gt; Real-time process address scanning and reading</div>
+            <div class="cap-item">&gt; Reverse engineering tooling for AI workflows</div>
+          </div>
+          <div class="proj-actions">
+            <button type="button" class="inspect-btn" data-project="mcp-cheatengine" aria-haspopup="dialog">
+              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+            </button>
+            <a href="https://github.com/dandgabr/mcp-cheatengine" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View mcp-cheatengine on GitHub">
+              REPO ↗
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 4: Linux Security Validator -->
+        <article class="project-card" data-category="security" data-project-id="linux-security-validator">
+          <div class="project-card-header">
+            <div class="proj-telemetry">
+              <span class="proj-id">PRJ-04</span>
+              <span class="proj-status status-audit">COMPLIANCE</span>
+            </div>
+            <div class="proj-category-tags">
+              <span class="mini-tag">CIS Hardening</span>
+              <span class="mini-tag">Linux / Python</span>
+            </div>
+          </div>
+          <h3 class="proj-title">
+            <span class="proj-icon">🐧</span> Linux Security Validator
+          </h3>
+          <p class="proj-desc">
+            Automated scripts for security auditing, CIS baseline compliance validation, file permission anomaly detection, and kernel parameter enforcement across Linux servers and developer workstations.
+          </p>
+          <div class="proj-capabilities">
+            <div class="cap-item">&gt; System audit against CIS Linux benchmarks</div>
+            <div class="cap-item">&gt; SUID/SGID executable discovery & anomaly alerts</div>
+            <div class="cap-item">&gt; Automated remediation checklist generation</div>
+          </div>
+          <div class="proj-actions">
+            <button type="button" class="inspect-btn" data-project="linux-security-validator" aria-haspopup="dialog">
+              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+            </button>
+            <a href="https://github.com/dandgabr/Valida-o-de-seguran-a-em-sistemas-Linux" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View Linux Security Validator on GitHub">
+              REPO ↗
+            </a>
+          </div>
+        </article>
+
+        <!-- Project 5: GDG Typst Presentation Theme -->
+        <article class="project-card" data-category="community" data-project-id="gdg-polylux-theme">
+          <div class="project-card-header">
+            <div class="proj-telemetry">
+              <span class="proj-id">PRJ-05</span>
+              <span class="proj-status status-community">COMMUNITY</span>
+            </div>
+            <div class="proj-category-tags">
+              <span class="mini-tag">Typst / Polylux</span>
+              <span class="mini-tag">GDG Speaker</span>
+            </div>
+          </div>
+          <h3 class="proj-title">
+            <span class="proj-icon">🎨</span> GDG Typst Presentation Theme & Talks
+          </h3>
+          <p class="proj-desc">
+            Modular presentation deck theme designed for Typst using Polylux, inspired by Google Developer Groups visual identity, accompanied by technical talk materials including Quantum Computing Fundamentals.
+          </p>
+          <div class="proj-capabilities">
+            <div class="cap-item">&gt; Modern programmatic typesetting with Typst</div>
+            <div class="cap-item">&gt; High-contrast slides for technical architecture talks</div>
+            <div class="cap-item">&gt; Includes Quantum Computing fundamentals material</div>
+          </div>
+          <div class="proj-actions">
+            <button type="button" class="inspect-btn" data-project="gdg-polylux-theme" aria-haspopup="dialog">
+              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+            </button>
+            <a href="https://github.com/dandgabr/gdg-polylux-theme" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View GDG Theme on GitHub">
+              REPO ↗
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SECTION 06: Academic Trajectory & Credentials -->
+    <section id="credentials" class="terminal-section" aria-labelledby="credentials-heading">
+      <div class="section-tag-header">
+        <span class="tag-index">[SECTION 06]</span>
+        <h2 id="credentials-heading" class="section-title">ACADEMIC TRAJECTORY & CERTIFICATIONS</h2>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="credentials-timeline">
+
+        <!-- Certification -->
+        <div class="timeline-entry">
+          <div class="timeline-marker">
+            <span class="marker-dot"></span>
+            <span class="marker-code">CERT</span>
+          </div>
+          <div class="hud-card timeline-card">
+            <div class="timeline-head">
+              <span class="cred-badge badge-cert">CERTIFICATION</span>
+              <span class="cred-institution">CompTIA</span>
+            </div>
+            <h3 class="cred-title">CompTIA Security+ ce Certification</h3>
+            <p class="cred-detail">
+              Globally recognized credential validating foundational and operational cybersecurity proficiency: network architecture security, threat analysis, incident response, cryptographic controls, and risk governance.
+            </p>
+          </div>
+        </div>
+
+        <!-- Postgrad -->
+        <div class="timeline-entry">
+          <div class="timeline-marker">
+            <span class="marker-dot"></span>
+            <span class="marker-code">PÓS</span>
+          </div>
+          <div class="hud-card timeline-card">
+            <div class="timeline-head">
+              <span class="cred-badge badge-academic">POSTGRADUATE</span>
+              <span class="cred-institution">Universidade Tecnológica Federal do Paraná (UTFPR)</span>
+            </div>
+            <h3 class="cred-title">Postgraduate Specialization in Artificial Intelligence</h3>
+            <p class="cred-detail">
+              Specialized research and development in machine learning paradigms, deep neural architectures, heuristic optimization, and automated decision-making models.
+            </p>
+          </div>
+        </div>
+
+        <!-- B.S. Degree -->
+        <div class="timeline-entry">
+          <div class="timeline-marker">
+            <span class="marker-dot"></span>
+            <span class="marker-code">ENG</span>
+          </div>
+          <div class="hud-card timeline-card">
+            <div class="timeline-head">
+              <span class="cred-badge badge-academic">BACHELOR OF SCIENCE</span>
+              <span class="cred-institution">Faculdade Pitágoras</span>
+            </div>
+            <h3 class="cred-title">B.S. in Electrical and Electronic Engineering</h3>
+            <p class="cred-detail">
+              Comprehensive engineering foundation: circuit analysis, analog/digital signal processing, embedded systems, microcontrollers, control theory, and hardware-level computer architecture.
+            </p>
+          </div>
+        </div>
+
+        <!-- Professor Career -->
+        <div class="timeline-entry">
+          <div class="timeline-marker">
+            <span class="marker-dot"></span>
+            <span class="marker-code">DOC</span>
+          </div>
+          <div class="hud-card timeline-card">
+            <div class="timeline-head">
+              <span class="cred-badge badge-teaching">ACADEMIA & TEACHING</span>
+              <span class="cred-institution">Higher Education Institution</span>
+            </div>
+            <h3 class="cred-title">Former University Professor (4+ Years)</h3>
+            <p class="cred-detail">
+              Taught undergraduate courses in Information Security, Algorithms and Data Structures, Analog and Digital Electronics, and Embedded Microcontrollers. Mentored future engineers in algorithmic thinking and secure systems design.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 07: Coordinates & Telemetry (Contact) -->
+    <section id="contact" class="terminal-section" aria-labelledby="contact-heading">
+      <div class="section-tag-header">
+        <span class="tag-index">[SECTION 07]</span>
+        <h2 id="contact-heading" class="section-title">TRANSMISSION CHANNELS // CONNECT</h2>
+        <span class="section-line"></span>
+      </div>
+
+      <div class="contact-panel hud-card">
+        <div class="contact-header">
+          <div class="card-hud-label">[SECURE COMMUNICATION CHANNELS]</div>
+          <h3 class="contact-headline">Establish Connection with Security Architect</h3>
+          <p class="contact-sub">
+            Available for technical dialogues on enterprise defense architecture, AI agent safety research, threat modeling workshops, and community speaking engagements.
+          </p>
+        </div>
+
+        <div class="channels-grid">
+          <!-- Channel 1: LinkedIn -->
+          <a href="https://www.linkedin.com/in/dandga/" target="_blank" rel="noopener noreferrer" class="channel-card">
+            <div class="channel-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.25c-.9 0-1.63.73-1.63 1.63s.73 1.63 1.63 1.63c.9 0 1.63-.73 1.63-1.63s-.73-1.63-1.63-1.63Z"/>
+              </svg>
+            </div>
+            <div class="channel-info">
+              <span class="channel-label">PROFESSIONAL NETWORK</span>
+              <span class="channel-value">linkedin.com/in/dandga</span>
+            </div>
+            <span class="channel-arrow" aria-hidden="true">&gt;&gt;</span>
+          </a>
+
+          <!-- Channel 2: GitHub -->
+          <a href="https://github.com/dandgabr" target="_blank" rel="noopener noreferrer" class="channel-card">
+            <div class="channel-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
+              </svg>
+            </div>
+            <div class="channel-info">
+              <span class="channel-label">SOURCE REPOSITORIES</span>
+              <span class="channel-value">github.com/dandgabr</span>
+            </div>
+            <span class="channel-arrow" aria-hidden="true">&gt;&gt;</span>
+          </a>
+        </div>
+
+        <div class="transmission-status">
+          <div class="status-line">
+            <span class="status-key">GEOLOCATION:</span>
+            <span class="status-val">Londrina, Paraná &mdash; Brazil (UTC-3)</span>
+          </div>
+          <div class="status-line">
+            <span class="status-key">POLICY:</span>
+            <span class="status-val text-dim">Zero spam, direct professional communication via LinkedIn/GitHub only.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Project Inspection Modal (Dialog) -->
+  <dialog id="project-modal" class="terminal-modal" aria-labelledby="modal-project-title">
+    <div class="modal-card">
+      <div class="terminal-card-header">
+        <div class="terminal-dots" aria-hidden="true">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-amber"></span>
+          <span class="dot dot-green"></span>
+        </div>
+        <div class="terminal-title" id="modal-terminal-title">architecture_telemetry.log</div>
+        <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close modal dialog">[X]</button>
+      </div>
+      <div class="modal-card-body">
+        <div class="modal-meta-row">
+          <span id="modal-project-tag" class="tag-badge tag-security">DOMAIN</span>
+          <span id="modal-project-status" class="tag-badge tag-geo">STATUS</span>
+        </div>
+        <h3 id="modal-project-title" class="modal-title">PROJECT TITLE</h3>
+        <p id="modal-project-desc" class="modal-desc">Project description loading...</p>
+
+        <div class="modal-tech-block">
+          <h4 class="modal-subheading">&gt; ARCHITECTURAL SUMMARY & KEY CHALLENGES</h4>
+          <div id="modal-project-details" class="modal-details-content">
+            <!-- Dynamic architecture details populated by app.js -->
+          </div>
+        </div>
+
+        <div class="modal-tech-block">
+          <h4 class="modal-subheading">&gt; STACK & SPECIFICATIONS</h4>
+          <div id="modal-project-stack" class="modal-stack-tags">
+            <!-- Badges populated by app.js -->
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <a id="modal-repo-link" href="#" target="_blank" rel="noopener noreferrer" class="action-btn action-primary">
+            <span class="btn-prefix">↗</span> VISIT REPOSITORY ON GITHUB
+          </a>
+          <button type="button" id="modal-dismiss-btn" class="action-btn action-ghost">
+            [ESC] CLOSE TERMINAL
+          </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Terminal System Footer -->
+  <footer class="hud-footer" role="contentinfo">
+    <div class="footer-container">
+      <div class="footer-left">
+        <span class="prompt-symbol">&gt;&gt;</span>
+        <span>ROOT@DANDGABR:~# EOF</span>
+        <span class="footer-sep">|</span>
+        <span class="footer-spec">ZERO-FRAMEWORKS &bull; PURE HTML5/CSS3/ES6+</span>
+      </div>
+      <div class="footer-right">
+        <span class="footer-copy">&copy; 2026 Daniel Gonçalves Araujo. Matrix-hardened architecture.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Native JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
