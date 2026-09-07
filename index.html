@@ -33,6 +33,22 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Early Theme Detection (System Preference Default / Zero Flash) -->
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('theme_preference');
+        var systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        var activeTheme = saved || systemTheme;
+        document.documentElement.setAttribute('data-theme', activeTheme);
+        var metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (metaTheme) {
+          metaTheme.setAttribute('content', activeTheme === 'light' ? '#ffffff' : '#050807');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="crt-scanlines">
   <!-- Accessibility Skip Link -->

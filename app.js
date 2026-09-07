@@ -803,14 +803,17 @@ REPOSITORY: ${proj.repo}
       const savedTheme = localStorage.getItem('theme_preference');
 
       const applyTheme = (theme, persist = false) => {
+        const metaTheme = document.querySelector('meta[name="theme-color"]');
         if (theme === 'light') {
           document.documentElement.setAttribute('data-theme', 'light');
           if (this.themeVal) this.themeVal.textContent = 'LIGHT';
           this.themeBtn.setAttribute('aria-pressed', 'true');
+          if (metaTheme) metaTheme.setAttribute('content', '#ffffff');
         } else {
           document.documentElement.setAttribute('data-theme', 'dark');
           if (this.themeVal) this.themeVal.textContent = 'DARK';
           this.themeBtn.setAttribute('aria-pressed', 'false');
+          if (metaTheme) metaTheme.setAttribute('content', '#050807');
         }
 
         if (persist) {
