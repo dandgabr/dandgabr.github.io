@@ -707,6 +707,13 @@ a:hover {
   filter: contrast(1.1) brightness(0.9) hue-rotate(85deg) saturate(1.2);
   mix-blend-mode: luminosity;
   opacity: 0.9;
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.avatar-frame:hover .avatar-img {
+  filter: contrast(1.05) brightness(1);
+  mix-blend-mode: normal;
+  opacity: 1;
 }
 
 .ascii-fallback {
