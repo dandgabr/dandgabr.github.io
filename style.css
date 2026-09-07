@@ -237,7 +237,7 @@ body.crt-off .crt-overlay {
   display: none;
 }
 
-body.crt-off:not([data-theme="light"]) {
+:root:not([data-theme="light"]) body.crt-off {
   --text-main: #dcf5e3;
 }
 
@@ -1209,6 +1209,22 @@ a:hover {
   box-shadow: var(--green-glow-sm);
 }
 
+[data-theme="light"] .skill-pill,
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .skill-pill {
+    background-color: #ffffff;
+    border: 1px solid rgba(234, 88, 12, 0.4);
+    color: #c2410c;
+    font-weight: 600;
+  }
+  :root:not([data-theme="dark"]) .skill-pill:hover {
+    background-color: #ea580c;
+    color: #ffffff;
+    border-color: #ea580c;
+    box-shadow: 0 2px 10px rgba(234, 88, 12, 0.35);
+  }
+}
+
 /* ==========================================================================
    Section 05: Featured Projects & Filter Tabs
    ========================================================================== */
@@ -1300,7 +1316,7 @@ a:hover {
   letter-spacing: 0.5px;
 }
 
-.status-active { background: rgba(0, 255, 102, 0.12); color: var(--green-bright); border: 1px solid rgba(0, 255, 102, 0.25); }
+.status-active { background: var(--green-subtle); color: var(--green-bright); border: 1px solid var(--border-medium); }
 .status-prototype { background: rgba(255, 176, 0, 0.12); color: var(--amber-alert); border: 1px solid rgba(255, 176, 0, 0.25); }
 .status-audit { background: rgba(0, 240, 255, 0.12); color: var(--cyan-intel); border: 1px solid rgba(0, 240, 255, 0.25); }
 .status-community { background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.25); }
@@ -1469,7 +1485,7 @@ a:hover {
 
 .badge-cert { background: rgba(255, 176, 0, 0.12); color: var(--amber-alert); border: 1px solid rgba(255, 176, 0, 0.3); }
 .badge-academic { background: rgba(0, 240, 255, 0.1); color: var(--cyan-intel); border: 1px solid rgba(0, 240, 255, 0.25); }
-.badge-teaching { background: rgba(0, 255, 102, 0.1); color: var(--green-bright); border: 1px solid rgba(0, 255, 102, 0.3); }
+.badge-teaching { background: var(--green-subtle); color: var(--green-bright); border: 1px solid var(--border-medium); }
 
 .cred-institution {
   font-size: 12px;
@@ -1620,7 +1636,7 @@ a:hover {
   background-color: var(--bg-surface);
   border: 1px solid var(--green-core);
   border-radius: var(--radius-sm);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.9), 0 0 24px rgba(0, 255, 102, 0.25);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), var(--green-glow-lg);
   overflow: hidden;
 }
 
