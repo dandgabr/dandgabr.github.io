@@ -34,25 +34,41 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Early Theme Detection (System Preference Default / Zero Flash) -->
+  <!-- Early Theme and Language Detection (System Preference Default / Zero Flash) -->
   <script>
     (function() {
       try {
-        var saved = localStorage.getItem('theme_preference');
+        // Theme Detection
+        var savedTheme = localStorage.getItem('theme_preference');
         var systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        var activeTheme = saved || systemTheme;
+        var activeTheme = savedTheme || systemTheme;
         document.documentElement.setAttribute('data-theme', activeTheme);
         var metaTheme = document.querySelector('meta[name="theme-color"]');
         if (metaTheme) {
           metaTheme.setAttribute('content', activeTheme === 'light' ? '#ffffff' : '#050807');
         }
+
+        // Language Detection
+        var savedLang = localStorage.getItem('lang_preference');
+        var activeLang = 'en';
+        if (savedLang && ['en', 'pt-br', 'es'].indexOf(savedLang) !== -1) {
+          activeLang = savedLang;
+        } else {
+          var navLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+          if (navLang.indexOf('pt') === 0) activeLang = 'pt-br';
+          else if (navLang.indexOf('es') === 0) activeLang = 'es';
+          else if (navLang.indexOf('en') === 0) activeLang = 'en';
+          else activeLang = 'en';
+        }
+        document.documentElement.setAttribute('lang', activeLang === 'pt-br' ? 'pt-BR' : activeLang);
+        document.documentElement.setAttribute('data-lang', activeLang);
       } catch (e) {}
     })();
   </script>
 </head>
 <body class="crt-scanlines">
   <!-- Accessibility Skip Link -->
-  <a href="#main-content" class="skip-link">Skip to system interface [Enter]</a>
+  <a href="#main-content" class="skip-link" data-i18n="a11y.skip">Skip to system interface [Enter]</a>
 
   <!-- Background Terminal Stream Canvas -->
   <canvas id="stream-canvas" aria-hidden="true"></canvas>
@@ -66,23 +82,26 @@
       <div class="sys-badge">
         <span class="status-led" aria-hidden="true"></span>
         <span class="sys-title">terminal</span>
-        <span class="sys-state" aria-label="System status operational">[ACTIVE]</span>
+        <span class="sys-state" aria-label="System status operational" data-i18n="hud.active">[ACTIVE]</span>
       </div>
 
       <nav class="hud-nav" aria-label="Main system navigation">
         <ul class="nav-links" id="nav-links">
-          <li><a href="#hero" class="nav-item active"><span class="nav-num">01.</span>//ROOT</a></li>
-          <li><a href="#terminal" class="nav-item"><span class="nav-num">02.</span>//TERMINAL</a></li>
-          <li><a href="#about" class="nav-item"><span class="nav-num">03.</span>//INTEL</a></li>
-          <li><a href="#skills" class="nav-item"><span class="nav-num">04.</span>//SKILLS</a></li>
-          <li><a href="#projects" class="nav-item"><span class="nav-num">05.</span>//PROJECTS</a></li>
-          <li><a href="#credentials" class="nav-item"><span class="nav-num">06.</span>//ACADEMIC</a></li>
-          <li><a href="#contact" class="nav-item"><span class="nav-num">07.</span>//CONNECT</a></li>
+          <li><a href="#hero" class="nav-item active"><span class="nav-num">01.</span><span data-i18n="nav.root">//ROOT</span></a></li>
+          <li><a href="#terminal" class="nav-item"><span class="nav-num">02.</span><span data-i18n="nav.terminal">//TERMINAL</span></a></li>
+          <li><a href="#about" class="nav-item"><span class="nav-num">03.</span><span data-i18n="nav.intel">//INTEL</span></a></li>
+          <li><a href="#skills" class="nav-item"><span class="nav-num">04.</span><span data-i18n="nav.skills">//SKILLS</span></a></li>
+          <li><a href="#projects" class="nav-item"><span class="nav-num">05.</span><span data-i18n="nav.projects">//PROJECTS</span></a></li>
+          <li><a href="#credentials" class="nav-item"><span class="nav-num">06.</span><span data-i18n="nav.academic">//ACADEMIC</span></a></li>
+          <li><a href="#contact" class="nav-item"><span class="nav-num">07.</span><span data-i18n="nav.connect">//CONNECT</span></a></li>
         </ul>
       </nav>
 
       <!-- System Controls & Diagnostics -->
       <div class="hud-controls">
+        <button id="toggle-lang" class="hud-btn" type="button" aria-label="Switch language (EN, PT, ES)" title="Switch Language (EN / PT / ES)">
+          <span class="btn-bracket">[</span>LANG: <span class="btn-val" id="lang-val">EN</span><span class="btn-bracket">]</span>
+        </button>
         <button id="toggle-theme" class="hud-btn" type="button" aria-label="Toggle Theme Mode" title="Toggle Light / Dark Mode">
           <span class="btn-bracket">[</span>THEME: <span class="btn-val" id="theme-val">DARK</span><span class="btn-bracket">]</span>
         </button>
@@ -127,16 +146,16 @@
           <div class="hero-identity-grid">
             <div class="hero-text-block">
               <div class="identity-badge-row">
-                <span class="tag-badge tag-security">SECURITY ARCHITECT @ DASA</span>
+                <span class="tag-badge tag-security" data-i18n="hero.badge.role">SECURITY ARCHITECT @ DASA</span>
                 <span class="tag-badge tag-cert">CompTIA Security+ ce</span>
-                <span class="tag-badge tag-geo">LONDRINA, PR &mdash; BRAZIL</span>
+                <span class="tag-badge tag-geo" data-i18n="hero.badge.geo">LONDRINA, PR &mdash; BRAZIL</span>
               </div>
 
               <h1 id="hero-heading" class="hero-glitch-title" data-text="DANIEL GONÇALVES ARAUJO">
                 DANIEL GONÇALVES ARAUJO
               </h1>
 
-              <p class="hero-subline">
+              <p class="hero-subline" data-i18n="hero.subline">
                 Architecting resilient enterprise defenses, forging containment frameworks for autonomous AI agents, and establishing continuous DevSecOps governance.
               </p>
 
@@ -144,35 +163,35 @@
                 <div class="pillar-chip">
                   <span class="chip-icon" aria-hidden="true">🛡️</span>
                   <div class="chip-body">
-                    <strong>Enterprise Security</strong>
-                    <small>Threat Modeling & DevSecOps</small>
+                    <strong data-i18n="hero.pillar1.title">Enterprise Security</strong>
+                    <small data-i18n="hero.pillar1.sub">Threat Modeling & DevSecOps</small>
                   </div>
                 </div>
                 <div class="pillar-chip">
                   <span class="chip-icon" aria-hidden="true">🤖</span>
                   <div class="chip-body">
-                    <strong>AI Safety & Hardening</strong>
-                    <small>MCP & Agent Containment</small>
+                    <strong data-i18n="hero.pillar2.title">AI Safety & Hardening</strong>
+                    <small data-i18n="hero.pillar2.sub">MCP & Agent Containment</small>
                   </div>
                 </div>
                 <div class="pillar-chip">
                   <span class="chip-icon" aria-hidden="true">☁️</span>
                   <div class="chip-body">
-                    <strong>Cloud & Infrastructure</strong>
-                    <small>AWS, Azure, CIS Hardening</small>
+                    <strong data-i18n="hero.pillar3.title">Cloud & Infrastructure</strong>
+                    <small data-i18n="hero.pillar3.sub">AWS, Azure, CIS Hardening</small>
                   </div>
                 </div>
               </div>
 
               <div class="hero-actions">
                 <a href="#terminal" class="action-btn action-primary">
-                  <span class="btn-prefix">&gt;</span> INTERACTIVE TERMINAL
+                  <span class="btn-prefix">&gt;</span> <span data-i18n="hero.action.terminal">INTERACTIVE TERMINAL</span>
                 </a>
                 <a href="#projects" class="action-btn action-secondary">
-                  <span class="btn-prefix">#</span> INSPECT RESEARCH
+                  <span class="btn-prefix">#</span> <span data-i18n="hero.action.projects">INSPECT RESEARCH</span>
                 </a>
                 <a href="https://github.com/dandgabr" target="_blank" rel="noopener noreferrer" class="action-btn action-ghost">
-                  <span class="btn-prefix">↗</span> GITHUB PROFILE
+                  <span class="btn-prefix">↗</span> <span data-i18n="hero.action.github">GITHUB PROFILE</span>
                 </a>
               </div>
             </div>
@@ -199,8 +218,8 @@
                 </div>
                 <div class="telemetry-hud-data">
                   <div class="telemetry-item">NODE: <span>dasa-sec-arch</span></div>
-                  <div class="telemetry-item">STATUS: <span class="text-accent">ONLINE</span></div>
-                  <div class="telemetry-item">CLEARANCE: <span>LEVEL_4</span></div>
+                  <div class="telemetry-item"><span data-i18n="hero.hud.status">STATUS</span>: <span class="text-accent" data-i18n="hero.hud.online">ONLINE</span></div>
+                  <div class="telemetry-item"><span data-i18n="hero.hud.clearance">CLEARANCE</span>: <span>LEVEL_4</span></div>
                 </div>
               </div>
             </div>
@@ -213,7 +232,7 @@
     <section id="terminal" class="terminal-section" aria-labelledby="terminal-heading">
       <div class="section-tag-header">
         <span class="tag-index">[SECTION 02]</span>
-        <h2 id="terminal-heading" class="section-title">INTERACTIVE COMMAND SHELL</h2>
+        <h2 id="terminal-heading" class="section-title" data-i18n="sec.terminal.title">INTERACTIVE COMMAND SHELL</h2>
         <span class="section-line"></span>
       </div>
 
@@ -229,8 +248,8 @@
         </div>
 
         <div class="terminal-card-body terminal-interactive">
-          <div class="terminal-instructions text-dim">
-            Type <span class="code-highlight">help</span> to list commands, or click any tactical command chip below:
+          <div class="terminal-instructions text-dim" id="term-instructions">
+            <span data-i18n="terminal.instructions.prefix">Type</span> <span class="code-highlight">help</span> <span data-i18n="terminal.instructions.suffix">to list commands, or click any tactical command chip below:</span>
           </div>
 
           <!-- Tactical Quick Command Buttons -->
@@ -249,7 +268,7 @@
           <div id="terminal-output" class="terminal-output" role="log" aria-live="polite" aria-atomic="false">
             <div class="term-response">
               <span class="text-dim">Security Shell v2.4.0 (x86_64-hardened-linux)</span><br>
-              <span class="text-dim">Session initialized for peer review. Type </span><span class="text-accent">'help'</span><span class="text-dim"> for guidance.</span>
+              <span class="text-dim" data-i18n="terminal.welcome">Session initialized for peer review. Type 'help' for guidance.</span>
             </div>
           </div>
 
@@ -258,7 +277,7 @@
             <label for="cli-input" class="term-prompt">
               <span class="term-user">terminal</span>&gt;&nbsp;
             </label>
-            <input type="text" id="cli-input" class="term-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Terminal command line input" placeholder="type a command...">
+            <input type="text" id="cli-input" class="term-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Terminal command line input" data-i18n-attr="placeholder:terminal.placeholder,aria-label:terminal.input_aria" placeholder="type a command...">
             <button type="submit" class="term-submit-btn" aria-label="Execute command">&gt;</button>
           </form>
         </div>
@@ -269,75 +288,75 @@
     <section id="about" class="terminal-section" aria-labelledby="about-heading">
       <div class="section-tag-header">
         <span class="tag-index">[SECTION 03]</span>
-        <h2 id="about-heading" class="section-title">DOSSIER // PROFESSIONAL INTEL</h2>
+        <h2 id="about-heading" class="section-title" data-i18n="sec.about.title">DOSSIER // PROFESSIONAL INTEL</h2>
         <span class="section-line"></span>
       </div>
 
       <div class="about-grid">
         <div class="hud-card about-dossier">
-          <div class="card-hud-label">[OPERATIONAL PROFILE]</div>
-          <h3 class="card-title">Information Security Architect</h3>
+          <div class="card-hud-label" data-i18n="dossier.profile_label">[OPERATIONAL PROFILE]</div>
+          <h3 class="card-title" data-i18n="dossier.role_title">Information Security Architect</h3>
           <div class="dossier-org">
-            <span class="org-label">ORGANIZATION:</span>
-            <span class="org-name">Dasa (Largest integrated healthcare network in Latin America)</span>
+            <span class="org-label" data-i18n="dossier.org_label">ORGANIZATION:</span>
+            <span class="org-name" data-i18n="dossier.org_name">Dasa (Largest integrated healthcare network in Latin America)</span>
           </div>
 
           <div class="dossier-body">
-            <p>
+            <p data-i18n="dossier.p1">
               Operating at the intersection of <strong>Enterprise Defense Architecture</strong> and <strong>Emerging Autonomous Tech</strong>, I engineer security frameworks that prevent exploitation before code reaches production and isolate autonomous agents operating in developer workspaces.
             </p>
-            <p>
+            <p data-i18n="dossier.p2">
               My engineering approach is rooted in systems programming, microcontroller diagnostics, and threat containment. With 4+ years of academic background lecturing algorithms, computer security, and electronics, I combine pedagogical clarity with technical rigor in application security, threat modeling, and secure software development lifecycles.
             </p>
           </div>
 
           <div class="dossier-specs">
             <div class="spec-row">
-              <span class="spec-key">DISCIPLINE:</span>
-              <span class="spec-val">Security Architecture & DevSecOps</span>
+              <span class="spec-key" data-i18n="dossier.spec.discipline_label">DISCIPLINE:</span>
+              <span class="spec-val" data-i18n="dossier.spec.discipline_val">Security Architecture & DevSecOps</span>
             </div>
             <div class="spec-row">
-              <span class="spec-key">RESEARCH_FOCUS:</span>
-              <span class="spec-val">AI Safety, MCP Sandboxing, Memory Forensics</span>
+              <span class="spec-key" data-i18n="dossier.spec.focus_label">RESEARCH_FOCUS:</span>
+              <span class="spec-val" data-i18n="dossier.spec.focus_val">AI Safety, MCP Sandboxing, Memory Forensics</span>
             </div>
             <div class="spec-row">
-              <span class="spec-key">ACCREDITATION:</span>
+              <span class="spec-key" data-i18n="dossier.spec.accred_label">ACCREDITATION:</span>
               <span class="spec-val text-accent">CompTIA Security+ ce</span>
             </div>
             <div class="spec-row">
-              <span class="spec-key">COMMUNITY:</span>
-              <span class="spec-val">Google Developer Groups (GDG) Speaker</span>
+              <span class="spec-key" data-i18n="dossier.spec.community_label">COMMUNITY:</span>
+              <span class="spec-val" data-i18n="dossier.spec.community_val">Google Developer Groups (GDG) Speaker</span>
             </div>
           </div>
         </div>
 
         <!-- Architecture Triad HUD -->
         <div class="hud-card triad-dossier">
-          <div class="card-hud-label">[DEFENSE METHODOLOGY]</div>
-          <h3 class="card-title">The Three Pillars of Defense</h3>
+          <div class="card-hud-label" data-i18n="triad.label">[DEFENSE METHODOLOGY]</div>
+          <h3 class="card-title" data-i18n="triad.title">The Three Pillars of Defense</h3>
 
           <div class="triad-list">
             <article class="triad-item">
               <div class="triad-num">01</div>
               <div class="triad-content">
-                <h4>Enterprise Security Architecture & AppSec</h4>
-                <p>Establishing defense-in-depth through systematic threat modeling (STRIDE, PASTA), OWASP ASVS/SAMM frameworks, and automated DevSecOps pipelines integrated into CI/CD environments.</p>
+                <h4 data-i18n="triad.p1.title">Enterprise Security Architecture & AppSec</h4>
+                <p data-i18n="triad.p1.desc">Establishing defense-in-depth through systematic threat modeling (STRIDE, PASTA), OWASP ASVS/SAMM frameworks, and automated DevSecOps pipelines integrated into CI/CD environments.</p>
               </div>
             </article>
 
             <article class="triad-item">
               <div class="triad-num">02</div>
               <div class="triad-content">
-                <h4>AI Safety & Agent Containment</h4>
-                <p>Pioneering practical sandboxing for developer AI tooling. Designing MCP (Model Context Protocol) validation layers and agent skill frameworks to prevent prompt injection and tool misuse.</p>
+                <h4 data-i18n="triad.p2.title">AI Safety & Agent Containment</h4>
+                <p data-i18n="triad.p2.desc">Pioneering practical sandboxing for developer AI tooling. Designing MCP (Model Context Protocol) validation layers and agent skill frameworks to prevent prompt injection and tool misuse.</p>
               </div>
             </article>
 
             <article class="triad-item">
               <div class="triad-num">03</div>
               <div class="triad-content">
-                <h4>Cloud Security & DevSecOps</h4>
-                <p>Automating security policy enforcement, infrastructure hardening (CIS Benchmarks), container integrity, and compliance controls across multi-cloud environments (AWS & Azure).</p>
+                <h4 data-i18n="triad.p3.title">Cloud Security & DevSecOps</h4>
+                <p data-i18n="triad.p3.desc">Automating security policy enforcement, infrastructure hardening (CIS Benchmarks), container integrity, and compliance controls across multi-cloud environments (AWS & Azure).</p>
               </div>
             </article>
           </div>
@@ -349,7 +368,7 @@
     <section id="skills" class="terminal-section" aria-labelledby="skills-heading">
       <div class="section-tag-header">
         <span class="tag-index">[SECTION 04]</span>
-        <h2 id="skills-heading" class="section-title">CORE EXPERTISE & TECHNICAL DOMAINS</h2>
+        <h2 id="skills-heading" class="section-title" data-i18n="sec.skills.title">CORE EXPERTISE & TECHNICAL DOMAINS</h2>
         <span class="section-line"></span>
       </div>
 
@@ -359,9 +378,9 @@
           <div class="card-hud-label">[DOMAIN: 0x01]</div>
           <div class="skill-header">
             <span class="domain-icon" aria-hidden="true">🛡️</span>
-            <h3 class="skill-title">Security Architecture & Governance</h3>
+            <h3 class="skill-title" data-i18n="skills.q1.title">Security Architecture & Governance</h3>
           </div>
-          <p class="skill-desc">Enterprise defense design, policy enforcement, and resilient DevSecOps integration.</p>
+          <p class="skill-desc" data-i18n="skills.q1.desc">Enterprise defense design, policy enforcement, and resilient DevSecOps integration.</p>
           <ul class="skill-pill-list" aria-label="Security skills list">
             <li class="skill-pill">Threat Modeling (STRIDE)</li>
             <li class="skill-pill">OWASP SAMM & ASVS</li>
@@ -378,9 +397,9 @@
           <div class="card-hud-label">[DOMAIN: 0x02]</div>
           <div class="skill-header">
             <span class="domain-icon" aria-hidden="true">🧠</span>
-            <h3 class="skill-title">AI Safety & Agentic Systems</h3>
+            <h3 class="skill-title" data-i18n="skills.q2.title">AI Safety & Agentic Systems</h3>
           </div>
-          <p class="skill-desc">Hardening autonomous agents, sandbox containment, and protocol-level integration.</p>
+          <p class="skill-desc" data-i18n="skills.q2.desc">Hardening autonomous agents, sandbox containment, and protocol-level integration.</p>
           <ul class="skill-pill-list" aria-label="AI and Agentic skills list">
             <li class="skill-pill">Model Context Protocol (MCP)</li>
             <li class="skill-pill">Agent Safety & Containment</li>
@@ -396,9 +415,9 @@
           <div class="card-hud-label">[DOMAIN: 0x03]</div>
           <div class="skill-header">
             <span class="domain-icon" aria-hidden="true">☁️</span>
-            <h3 class="skill-title">Cloud Security & Infrastructure</h3>
+            <h3 class="skill-title" data-i18n="skills.q3.title">Cloud Security & Infrastructure</h3>
           </div>
-          <p class="skill-desc">Enterprise cloud defense, operating system hardening, compliance baselines, and infrastructure security.</p>
+          <p class="skill-desc" data-i18n="skills.q3.desc">Enterprise cloud defense, operating system hardening, compliance baselines, and infrastructure security.</p>
           <ul class="skill-pill-list" aria-label="Cloud Security skills list">
             <li class="skill-pill">AWS Security Architecture</li>
             <li class="skill-pill">Microsoft Azure Security</li>
@@ -414,9 +433,9 @@
           <div class="card-hud-label">[DOMAIN: 0x04]</div>
           <div class="skill-header">
             <span class="domain-icon" aria-hidden="true">⚙️</span>
-            <h3 class="skill-title">Languages, Scripting & Tooling</h3>
+            <h3 class="skill-title" data-i18n="skills.q4.title">Languages, Scripting & Tooling</h3>
           </div>
-          <p class="skill-desc">Languages and automation pipelines for rapid validation and reproducible reporting.</p>
+          <p class="skill-desc" data-i18n="skills.q4.desc">Languages and automation pipelines for rapid validation and reproducible reporting.</p>
           <ul class="skill-pill-list" aria-label="Languages and tooling list">
             <li class="skill-pill">Python (Automation & Analysis)</li>
             <li class="skill-pill">Bash & Linux Shell Scripting</li>
@@ -433,26 +452,26 @@
     <section id="projects" class="terminal-section" aria-labelledby="projects-heading">
       <div class="section-tag-header">
         <span class="tag-index">[SECTION 05]</span>
-        <h2 id="projects-heading" class="section-title">FEATURED RESEARCH & OPEN REPOSITORIES</h2>
+        <h2 id="projects-heading" class="section-title" data-i18n="sec.projects.title">FEATURED RESEARCH & OPEN REPOSITORIES</h2>
         <span class="section-line"></span>
       </div>
 
       <!-- Category Filter Tabs -->
       <div class="filter-bar" role="tablist" aria-label="Filter projects by discipline">
         <button type="button" class="filter-btn active" role="tab" aria-selected="true" data-filter="all">
-          [ ALL (5) ]
+          <span data-i18n="projects.tab.all">[ ALL (5) ]</span>
         </button>
         <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="security">
-          [ SECURITY (2) ]
+          <span data-i18n="projects.tab.security">[ SECURITY (2) ]</span>
         </button>
         <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="ai">
-          [ AI & AGENTS (2) ]
+          <span data-i18n="projects.tab.ai">[ AI & AGENTS (2) ]</span>
         </button>
         <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="tools">
-          [ TOOLING (1) ]
+          <span data-i18n="projects.tab.tools">[ TOOLING (1) ]</span>
         </button>
         <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="community">
-          [ COMMUNITY (1) ]
+          <span data-i18n="projects.tab.community">[ COMMUNITY (1) ]</span>
         </button>
       </div>
 
@@ -464,27 +483,27 @@
           <div class="project-card-header">
             <div class="proj-telemetry">
               <span class="proj-id">PRJ-01</span>
-              <span class="proj-status status-active">PRODUCTION</span>
+              <span class="proj-status status-active" data-i18n="proj.status.prod">PRODUCTION</span>
             </div>
             <div class="proj-category-tags">
-              <span class="mini-tag">AI Safety</span>
-              <span class="mini-tag">Hardening</span>
+              <span class="mini-tag" data-i18n="proj.tag.aisafety">AI Safety</span>
+              <span class="mini-tag" data-i18n="proj.tag.hardening">Hardening</span>
             </div>
           </div>
           <h3 class="proj-title">
             <span class="proj-icon">🛡️</span> hardening-ia
           </h3>
-          <p class="proj-desc">
+          <p class="proj-desc" data-i18n="proj.hardening_ia.desc">
             Automated security hardening framework designed for AI-assisted development environments. Implements sandbox verification, API token boundary enforcement, and permission audits.
           </p>
           <div class="proj-capabilities">
-            <div class="cap-item">&gt; Zero-trust isolation for local AI coding CLI tools</div>
-            <div class="cap-item">&gt; Workspace token and credential leakage prevention</div>
-            <div class="cap-item">&gt; Automated compliance and baseline validation audits</div>
+            <div class="cap-item" data-i18n="proj.hardening_ia.c1">&gt; Zero-trust isolation for local AI coding CLI tools</div>
+            <div class="cap-item" data-i18n="proj.hardening_ia.c2">&gt; Workspace token and credential leakage prevention</div>
+            <div class="cap-item" data-i18n="proj.hardening_ia.c3">&gt; Automated compliance and baseline validation audits</div>
           </div>
           <div class="proj-actions">
             <button type="button" class="inspect-btn" data-project="hardening-ia" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
             </button>
             <a href="https://github.com/dandgabr/hardening-ia" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View hardening-ia on GitHub">
               REPO ↗
@@ -497,27 +516,27 @@
           <div class="project-card-header">
             <div class="proj-telemetry">
               <span class="proj-id">PRJ-02</span>
-              <span class="proj-status status-active">PRODUCTION</span>
+              <span class="proj-status status-active" data-i18n="proj.status.prod">PRODUCTION</span>
             </div>
             <div class="proj-category-tags">
-              <span class="mini-tag">Agentic AI</span>
-              <span class="mini-tag">Modular Skills</span>
+              <span class="mini-tag" data-i18n="proj.tag.agentic">Agentic AI</span>
+              <span class="mini-tag" data-i18n="proj.tag.modular">Modular Skills</span>
             </div>
           </div>
           <h3 class="proj-title">
             <span class="proj-icon">🧠</span> skills
           </h3>
-          <p class="proj-desc">
+          <p class="proj-desc" data-i18n="proj.skills.desc">
             A battle-tested ecosystem of standardized, modular skills engineered for AI coding agents, multi-agent orchestration, and developer assistants.
           </p>
           <div class="proj-capabilities">
-            <div class="cap-item">&gt; Standardized capability contracts across 50+ domains</div>
-            <div class="cap-item">&gt; Multi-agent supervisory and governance patterns</div>
-            <div class="cap-item">&gt; Deterministic execution paths for autonomous coding</div>
+            <div class="cap-item" data-i18n="proj.skills.c1">&gt; Standardized capability contracts across 50+ domains</div>
+            <div class="cap-item" data-i18n="proj.skills.c2">&gt; Multi-agent supervisory and governance patterns</div>
+            <div class="cap-item" data-i18n="proj.skills.c3">&gt; Deterministic execution paths for autonomous coding</div>
           </div>
           <div class="proj-actions">
             <button type="button" class="inspect-btn" data-project="skills" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
             </button>
             <a href="https://github.com/dandgabr/skills" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View skills on GitHub">
               REPO ↗
@@ -530,27 +549,27 @@
           <div class="project-card-header">
             <div class="proj-telemetry">
               <span class="proj-id">PRJ-03</span>
-              <span class="proj-status status-prototype">INTEGRATION</span>
+              <span class="proj-status status-prototype" data-i18n="proj.status.integration">INTEGRATION</span>
             </div>
             <div class="proj-category-tags">
               <span class="mini-tag">Model Context Protocol</span>
-              <span class="mini-tag">Process Automation</span>
+              <span class="mini-tag" data-i18n="proj.tag.automation">Process Automation</span>
             </div>
           </div>
           <h3 class="proj-title">
             <span class="proj-icon">🧩</span> mcp-cheatengine
           </h3>
-          <p class="proj-desc">
+          <p class="proj-desc" data-i18n="proj.mcp_ce.desc">
             Model Context Protocol (MCP) server interface for Cheat Engine, enabling programmatic inspection, process automation, and security telemetry for AI assistants.
           </p>
           <div class="proj-capabilities">
-            <div class="cap-item">&gt; MCP server bridging LLMs to process inspection</div>
-            <div class="cap-item">&gt; Real-time process address inspection and automation</div>
-            <div class="cap-item">&gt; Autonomous agent inspection tooling for developer workflows</div>
+            <div class="cap-item" data-i18n="proj.mcp_ce.c1">&gt; MCP server bridging LLMs to process inspection</div>
+            <div class="cap-item" data-i18n="proj.mcp_ce.c2">&gt; Real-time process address inspection and automation</div>
+            <div class="cap-item" data-i18n="proj.mcp_ce.c3">&gt; Autonomous agent inspection tooling for developer workflows</div>
           </div>
           <div class="proj-actions">
             <button type="button" class="inspect-btn" data-project="mcp-cheatengine" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
             </button>
             <a href="https://github.com/dandgabr/mcp-cheatengine" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View mcp-cheatengine on GitHub">
               REPO ↗
@@ -563,7 +582,7 @@
           <div class="project-card-header">
             <div class="proj-telemetry">
               <span class="proj-id">PRJ-04</span>
-              <span class="proj-status status-audit">COMPLIANCE</span>
+              <span class="proj-status status-audit" data-i18n="proj.status.compliance">COMPLIANCE</span>
             </div>
             <div class="proj-category-tags">
               <span class="mini-tag">CIS Hardening</span>
@@ -573,17 +592,17 @@
           <h3 class="proj-title">
             <span class="proj-icon">🐧</span> Linux Security Validator
           </h3>
-          <p class="proj-desc">
+          <p class="proj-desc" data-i18n="proj.linux_sec.desc">
             Automated scripts for security auditing, CIS baseline compliance validation, file permission anomaly detection, and kernel parameter enforcement across Linux servers and developer workstations.
           </p>
           <div class="proj-capabilities">
-            <div class="cap-item">&gt; System audit against CIS Linux benchmarks</div>
-            <div class="cap-item">&gt; SUID/SGID executable discovery & anomaly alerts</div>
-            <div class="cap-item">&gt; Automated remediation checklist generation</div>
+            <div class="cap-item" data-i18n="proj.linux_sec.c1">&gt; System audit against CIS Linux benchmarks</div>
+            <div class="cap-item" data-i18n="proj.linux_sec.c2">&gt; SUID/SGID executable discovery & anomaly alerts</div>
+            <div class="cap-item" data-i18n="proj.linux_sec.c3">&gt; Automated remediation checklist generation</div>
           </div>
           <div class="proj-actions">
             <button type="button" class="inspect-btn" data-project="linux-security-validator" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
             </button>
             <a href="https://github.com/dandgabr/Valida-o-de-seguran-a-em-sistemas-Linux" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View Linux Security Validator on GitHub">
               REPO ↗
@@ -596,27 +615,27 @@
           <div class="project-card-header">
             <div class="proj-telemetry">
               <span class="proj-id">PRJ-05</span>
-              <span class="proj-status status-community">COMMUNITY</span>
+              <span class="proj-status status-community" data-i18n="proj.status.community">COMMUNITY</span>
             </div>
             <div class="proj-category-tags">
               <span class="mini-tag">Typst / Polylux</span>
-              <span class="mini-tag">GDG Speaker</span>
+              <span class="mini-tag" data-i18n="proj.tag.gdg">GDG Speaker</span>
             </div>
           </div>
           <h3 class="proj-title">
             <span class="proj-icon">🎨</span> GDG Typst Presentation Theme & Talks
           </h3>
-          <p class="proj-desc">
+          <p class="proj-desc" data-i18n="proj.gdg_theme.desc">
             Modular presentation deck theme designed for Typst using Polylux, inspired by Google Developer Groups visual identity, accompanied by technical talk materials including Quantum Computing Fundamentals.
           </p>
           <div class="proj-capabilities">
-            <div class="cap-item">&gt; Modern programmatic typesetting with Typst</div>
-            <div class="cap-item">&gt; High-contrast slides for technical architecture talks</div>
-            <div class="cap-item">&gt; Includes Quantum Computing fundamentals material</div>
+            <div class="cap-item" data-i18n="proj.gdg_theme.c1">&gt; Modern programmatic typesetting with Typst</div>
+            <div class="cap-item" data-i18n="proj.gdg_theme.c2">&gt; High-contrast slides for technical architecture talks</div>
+            <div class="cap-item" data-i18n="proj.gdg_theme.c3">&gt; Includes Quantum Computing fundamentals material</div>
           </div>
           <div class="proj-actions">
             <button type="button" class="inspect-btn" data-project="gdg-polylux-theme" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> INSPECT ARCHITECTURE
+              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
             </button>
             <a href="https://github.com/dandgabr/gdg-polylux-theme" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View GDG Theme on GitHub">
               REPO ↗
@@ -631,7 +650,7 @@
     <section id="credentials" class="terminal-section" aria-labelledby="credentials-heading">
       <div class="section-tag-header">
         <span class="tag-index">[SECTION 06]</span>
-        <h2 id="credentials-heading" class="section-title">ACADEMIC TRAJECTORY & CERTIFICATIONS</h2>
+        <h2 id="credentials-heading" class="section-title" data-i18n="sec.credentials.title">ACADEMIC TRAJECTORY & CERTIFICATIONS</h2>
         <span class="section-line"></span>
       </div>
 
@@ -645,11 +664,11 @@
           </div>
           <div class="hud-card timeline-card">
             <div class="timeline-head">
-              <span class="cred-badge badge-cert">CERTIFICATION</span>
+              <span class="cred-badge badge-cert" data-i18n="cred.badge.cert">CERTIFICATION</span>
               <span class="cred-institution">CompTIA</span>
             </div>
-            <h3 class="cred-title">CompTIA Security+ ce Certification</h3>
-            <p class="cred-detail">
+            <h3 class="cred-title" data-i18n="cred.c1.title">CompTIA Security+ ce Certification</h3>
+            <p class="cred-detail" data-i18n="cred.c1.detail">
               Globally recognized credential validating foundational and operational cybersecurity proficiency: network architecture security, threat analysis, incident response, cryptographic controls, and risk governance.
             </p>
           </div>
@@ -663,11 +682,11 @@
           </div>
           <div class="hud-card timeline-card">
             <div class="timeline-head">
-              <span class="cred-badge badge-academic">POSTGRADUATE</span>
+              <span class="cred-badge badge-academic" data-i18n="cred.badge.postgrad">POSTGRADUATE</span>
               <span class="cred-institution">Universidade Tecnológica Federal do Paraná (UTFPR)</span>
             </div>
-            <h3 class="cred-title">Postgraduate Specialization in Artificial Intelligence</h3>
-            <p class="cred-detail">
+            <h3 class="cred-title" data-i18n="cred.c2.title">Postgraduate Specialization in Artificial Intelligence</h3>
+            <p class="cred-detail" data-i18n="cred.c2.detail">
               Specialized research and development in machine learning paradigms, deep neural architectures, heuristic optimization, and automated decision-making models.
             </p>
           </div>
@@ -681,11 +700,11 @@
           </div>
           <div class="hud-card timeline-card">
             <div class="timeline-head">
-              <span class="cred-badge badge-academic">BACHELOR OF SCIENCE</span>
+              <span class="cred-badge badge-academic" data-i18n="cred.badge.bs">BACHELOR OF SCIENCE</span>
               <span class="cred-institution">Faculdade Pitágoras</span>
             </div>
-            <h3 class="cred-title">B.S. in Electrical and Electronic Engineering</h3>
-            <p class="cred-detail">
+            <h3 class="cred-title" data-i18n="cred.c3.title">B.S. in Electrical and Electronic Engineering</h3>
+            <p class="cred-detail" data-i18n="cred.c3.detail">
               Comprehensive engineering foundation: circuit analysis, analog/digital signal processing, embedded systems, microcontrollers, control theory, and hardware-level computer architecture.
             </p>
           </div>
@@ -699,11 +718,11 @@
           </div>
           <div class="hud-card timeline-card">
             <div class="timeline-head">
-              <span class="cred-badge badge-teaching">ACADEMIA & TEACHING</span>
-              <span class="cred-institution">Higher Education Institution</span>
+              <span class="cred-badge badge-teaching" data-i18n="cred.badge.teaching">ACADEMIA & TEACHING</span>
+              <span class="cred-institution" data-i18n="cred.c4.institution">Higher Education Institution</span>
             </div>
-            <h3 class="cred-title">Former University Professor (4+ Years)</h3>
-            <p class="cred-detail">
+            <h3 class="cred-title" data-i18n="cred.c4.title">Former University Professor (4+ Years)</h3>
+            <p class="cred-detail" data-i18n="cred.c4.detail">
               Taught undergraduate courses in Information Security, Algorithms and Data Structures, Analog and Digital Electronics, and Embedded Microcontrollers. Mentored future engineers in algorithmic thinking and secure systems design.
             </p>
           </div>
@@ -716,15 +735,15 @@
     <section id="contact" class="terminal-section" aria-labelledby="contact-heading">
       <div class="section-tag-header">
         <span class="tag-index">[SECTION 07]</span>
-        <h2 id="contact-heading" class="section-title">TRANSMISSION CHANNELS // CONNECT</h2>
+        <h2 id="contact-heading" class="section-title" data-i18n="sec.contact.title">TRANSMISSION CHANNELS // CONNECT</h2>
         <span class="section-line"></span>
       </div>
 
       <div class="contact-panel hud-card">
         <div class="contact-header">
-          <div class="card-hud-label">[SECURE COMMUNICATION CHANNELS]</div>
-          <h3 class="contact-headline">Establish Connection with Security Architect</h3>
-          <p class="contact-sub">
+          <div class="card-hud-label" data-i18n="contact.channels_label">[SECURE COMMUNICATION CHANNELS]</div>
+          <h3 class="contact-headline" data-i18n="contact.headline">Establish Connection with Security Architect</h3>
+          <p class="contact-sub" data-i18n="contact.sub">
             Available for technical dialogues on enterprise defense architecture, AI agent safety research, threat modeling workshops, and community speaking engagements.
           </p>
         </div>
@@ -738,7 +757,7 @@
               </svg>
             </div>
             <div class="channel-info">
-              <span class="channel-label">PROFESSIONAL NETWORK</span>
+              <span class="channel-label" data-i18n="contact.linkedin_label">PROFESSIONAL NETWORK</span>
               <span class="channel-value">linkedin.com/in/dandga</span>
             </div>
             <span class="channel-arrow" aria-hidden="true">&gt;&gt;</span>
@@ -752,7 +771,7 @@
               </svg>
             </div>
             <div class="channel-info">
-              <span class="channel-label">SOURCE REPOSITORIES</span>
+              <span class="channel-label" data-i18n="contact.github_label">SOURCE REPOSITORIES</span>
               <span class="channel-value">github.com/dandgabr</span>
             </div>
             <span class="channel-arrow" aria-hidden="true">&gt;&gt;</span>
@@ -761,12 +780,12 @@
 
         <div class="transmission-status">
           <div class="status-line">
-            <span class="status-key">GEOLOCATION:</span>
-            <span class="status-val">Londrina, Paraná &mdash; Brazil (UTC-3)</span>
+            <span class="status-key" data-i18n="contact.geo_key">GEOLOCATION:</span>
+            <span class="status-val" data-i18n="contact.geo_val">Londrina, Paraná &mdash; Brazil (UTC-3)</span>
           </div>
           <div class="status-line">
-            <span class="status-key">POLICY:</span>
-            <span class="status-val text-dim">Zero spam, direct professional communication via LinkedIn/GitHub only.</span>
+            <span class="status-key" data-i18n="contact.policy_key">POLICY:</span>
+            <span class="status-val text-dim" data-i18n="contact.policy_val">Zero spam, direct professional communication via LinkedIn/GitHub only.</span>
           </div>
         </div>
       </div>
@@ -795,14 +814,14 @@
         <p id="modal-project-desc" class="modal-desc">Project description loading...</p>
 
         <div class="modal-tech-block">
-          <h4 class="modal-subheading">&gt; ARCHITECTURAL SUMMARY & KEY CHALLENGES</h4>
+          <h4 class="modal-subheading" data-i18n="modal.summary_title">&gt; ARCHITECTURAL SUMMARY & KEY CHALLENGES</h4>
           <div id="modal-project-details" class="modal-details-content">
             <!-- Dynamic architecture details populated by app.js -->
           </div>
         </div>
 
         <div class="modal-tech-block">
-          <h4 class="modal-subheading">&gt; STACK & SPECIFICATIONS</h4>
+          <h4 class="modal-subheading" data-i18n="modal.stack_title">&gt; STACK & SPECIFICATIONS</h4>
           <div id="modal-project-stack" class="modal-stack-tags">
             <!-- Badges populated by app.js -->
           </div>
@@ -810,10 +829,10 @@
 
         <div class="modal-actions">
           <a id="modal-repo-link" href="#" target="_blank" rel="noopener noreferrer" class="action-btn action-primary">
-            <span class="btn-prefix">↗</span> VISIT REPOSITORY ON GITHUB
+            <span class="btn-prefix">↗</span> <span data-i18n="modal.action.github">VISIT REPOSITORY ON GITHUB</span>
           </a>
           <button type="button" id="modal-dismiss-btn" class="action-btn action-ghost">
-            [ESC] CLOSE TERMINAL
+            <span data-i18n="modal.action.close">[ESC] CLOSE TERMINAL</span>
           </button>
         </div>
       </div>
@@ -827,10 +846,10 @@
         <span class="prompt-symbol">&gt;&gt;</span>
         <span>terminal&gt; EOF</span>
         <span class="footer-sep">|</span>
-        <span class="footer-spec">ZERO-FRAMEWORKS &bull; PURE HTML5/CSS3/ES6+</span>
+        <span class="footer-spec" data-i18n="footer.spec">ZERO-FRAMEWORKS &bull; PURE HTML5/CSS3/ES6+</span>
       </div>
       <div class="footer-right">
-        <span class="footer-copy">&copy; 2026 Daniel Gonçalves Araujo. High-assurance security architecture.</span>
+        <span class="footer-copy" data-i18n="footer.copy">&copy; 2026 Daniel Gonçalves Araujo. High-assurance security architecture.</span>
       </div>
     </div>
   </footer>

@@ -1830,6 +1830,16 @@ a:hover {
   }
 }
 
+@media (max-width: 600px) {
+  .hud-controls {
+    gap: 6px;
+  }
+  .hud-btn {
+    padding: 5px 6px;
+    font-size: 10.5px;
+  }
+}
+
 /* ==========================================================================
    Accessibility: Reduced Motion Preference
    ========================================================================== */
