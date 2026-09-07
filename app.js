@@ -1152,7 +1152,7 @@
           this.cmdClear();
           break;
         case 'sudo':
-          this.appendLog('dandga is not in the sudoers file. This incident will be reported to the Security Architect.', 'text-dim');
+          this.appendLog('dandga is not in the sudoers file. This incident will be reported to security.', 'text-dim');
           break;
         case 'date':
           this.appendLog(`UTC: ${new Date().toUTCString()} | LOCAL: ${new Date().toLocaleString()}`, 'text-main');
