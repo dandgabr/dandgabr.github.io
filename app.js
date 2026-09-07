@@ -1037,6 +1037,7 @@
       this.output = document.getElementById(outputId);
       this.history = [];
       this.historyIndex = -1;
+      this.netCmdRunning = false; // rate-limit: only one network probe at a time
 
       if (!this.form || !this.input || !this.output) return;
 
@@ -1100,7 +1101,11 @@
 
       switch (mainCmd) {
         case 'help':
-          this.cmdHelp();
+          if (arg === '--all' || arg === '-a') {
+            this.cmdHelpAll();
+          } else {
+            this.cmdHelp();
+          }
           break;
         case 'whoami':
           this.cmdWhoami();
@@ -1133,8 +1138,14 @@
           this.cmdCredentials();
           break;
         case 'contact':
-        case 'ping':
           this.cmdContact();
+          break;
+        case 'ping':
+          this.cmdPing(arg);
+          break;
+        case 'traceroute':
+        case 'trace':
+          this.cmdTraceroute(arg);
           break;
         case 'clear':
         case 'cls':
@@ -1511,7 +1522,287 @@ REPOSITORY: ${proj.repo}
       this.output.innerHTML = '';
       this.appendLog('Terminal console buffer cleared.', 'text-dim');
     }
-  }
+
+    cmdHelpAll() {
+      const lang = I18N.currentLang || 'en';
+      let base = '';
+      let classified = '';
+
+      if (lang === 'pt-br') {
+        base = `
+COMANDOS ARQUITETURAIS DISPONÍVEIS:
+  whoami        - Exibir identidade, cargo e credenciais ativas
+  about         - Revisar metodologia e filosofia de arquitetura de segurança
+  skills        - Listar competências técnicas nas 4 áreas de atuação
+  projects      - Listar repositórios de pesquisa abertos e ferramentas
+  cat <id>      - Inspecionar telemetria detalhada de um projeto específico
+  credentials   - Consultar certificações, pós-graduação e trajetória docente
+  contact       - Exibir canais verificados de comunicação (LinkedIn, GitHub)
+  stream        - Exibir estado da animação ou alternar fluxo (stream toggle)
+  date          - Exibir carimbo de data/hora atual UTC e local
+  clear         - Limpar histórico e mensagens do terminal`.trim();
+        classified = `
+
+[CLASSIFICADO / EASTER EGGS] — você encontrou. Bem-vindo ao nível root.
+  ping <host>        - Medir latência HTTPS (camada 7) para um host público (4 pacotes)
+  traceroute <host>  - Simular rota de rede até um host público via HTTPS
+  help --all         - Você já está usando. Parabéns.
+  sudo               - Boa tentativa.`.trim();
+      } else if (lang === 'es') {
+        base = `
+COMANDOS ARQUITECTÓNICOS DISPONIBLES:
+  whoami        - Mostrar identidad, rol y credenciales vigentes
+  about         - Revisar metodología y filosofía de arquitectura de seguridad
+  skills        - Listar capacidades técnicas en los 4 dominios operativos
+  projects      - Listar repositorios de investigación abiertos y herramientas
+  cat <id>      - Inspeccionar telemetría detallada de un proyecto específico
+  credentials   - Consultar certificaciones, posgrado y trayectoria docente
+  contact       - Mostrar canales verificados de transmisión (LinkedIn, GitHub)
+  stream        - Mostrar estado del flujo o alternar animación (stream toggle)
+  date          - Mostrar marca temporal actual UTC y local
+  clear         - Limpiar pantalla y búfer de la terminal`.trim();
+        classified = `
+
+[CLASIFICADO / EASTER EGGS] — lo encontraste. Bienvenido al nivel root.
+  ping <host>        - Medir latencia HTTPS (capa 7) a un host público (4 paquetes)
+  traceroute <host>  - Simular ruta de red a un host público vía HTTPS
+  help --all         - Ya lo estás usando. Felicitaciones.
+  sudo               - Buen intento.`.trim();
+      } else {
+        base = `
+AVAILABLE ARCHITECTURAL COMMANDS:
+  whoami        - Display identity, role, and current credentials
+  about         - Review security architecture methodology & philosophy
+  skills        - List technical capabilities across all 4 domains
+  projects      - Enumerate open research repositories & tools
+  cat <id>      - Inspect architectural telemetry of a specific project
+  credentials   - Review academic degrees, certifications & teaching career
+  contact       - Output verified transmission coordinates (LinkedIn, GitHub)
+  stream        - Display kernel stream status or toggle (stream toggle)
+  date          - Display current system UTC timestamp
+  clear         - Clear terminal output console buffer`.trim();
+        classified = `
+
+[CLASSIFIED / EASTER EGGS] — you found it. Welcome to root level.
+  ping <host>        - Probe HTTPS web latency to a public host (4 packets, Layer 7)
+  traceroute <host>  - Simulate network path to a public host via HTTPS
+  help --all         - You're already using it. Congratulations.
+  sudo               - Nice try.`.trim();
+      }
+
+      this.appendLog(base, 'text-main');
+      this.appendLog(classified, 'text-accent');
+    }
+
+    // ── AppSec-hardened host validator ─────────────────────────────────────────
+    // Returns the sanitized hostname string, or null if the input is invalid/blocked.
+    _sanitizeHost(raw) {
+      if (!raw || typeof raw !== 'string') return null;
+
+      // Strip leading/trailing whitespace and lowercase
+      const host = raw.trim().toLowerCase();
+
+      // Reject empty input
+      if (!host) return null;
+
+      // Reject if contains characters that indicate ports, paths, credentials, or params
+      if (/[/:@?#\\]/.test(host)) return null;
+
+      // Allow only valid FQDN characters (RFC 1123) or IPv4/IPv6 brackets
+      // FQDN: letters, digits, hyphens, dots — must have at least one dot and a TLD
+      const fqdnRe = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/;
+      // IPv4: four octets
+      const ipv4Re = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+
+      const isFQDN = fqdnRe.test(host);
+      const ipv4Match = host.match(ipv4Re);
+
+      if (!isFQDN && !ipv4Match) return null;
+
+      // Block internal/reserved TLDs
+      const blockedTLDs = ['.local', '.internal', '.lan', '.corp', '.home', '.onion', '.localhost'];
+      if (blockedTLDs.some(t => host.endsWith(t))) return null;
+
+      // Block localhost hostname directly
+      if (host === 'localhost') return null;
+
+      // Block known cloud-metadata hostnames
+      const blockedHostnames = ['metadata.google.internal', '169.254.169.254', 'instance-data'];
+      if (blockedHostnames.includes(host)) return null;
+
+      // Block private/reserved IPv4 ranges
+      if (ipv4Match) {
+        const [, a, b, c] = ipv4Match.map(Number);
+        const isPrivate =
+          a === 10 ||                                           // 10.0.0.0/8
+          (a === 172 && b >= 16 && b <= 31) ||                 // 172.16.0.0/12
+          (a === 192 && b === 168) ||                          // 192.168.0.0/16
+          a === 127 ||                                          // 127.0.0.0/8 loopback
+          (a === 169 && b === 254) ||                          // 169.254.0.0/16 link-local / metadata
+          a === 0 ||                                            // 0.0.0.0/8 reserved
+          (a === 100 && b >= 64 && b <= 127) ||               // 100.64.0.0/10 CGNAT
+          a >= 224;                                            // 224.0.0.0/4 multicast + 240.0.0.0/4 reserved
+        if (isPrivate) return null;
+      }
+
+      // Block IPv6 special addresses (literal notation)
+      if (['::1', '::'].includes(host)) return null;
+      if (host.startsWith('fe80') || host.startsWith('fd00') || host.startsWith('fc00')) return null;
+
+      return host;
+    }
+
+    // ── Easter Egg: ping ───────────────────────────────────────────────────────
+    async cmdPing(rawHost) {
+      if (this.netCmdRunning) {
+        this.appendLog('Network probe already running. Wait for it to complete.', 'text-dim');
+        return;
+      }
+
+      const host = this._sanitizeHost(rawHost);
+      if (!host) {
+        this.appendLog(
+          !rawHost
+            ? "Usage: ping <host>  (e.g., ping dan.seg.br)"
+            : `ping: ${rawHost}: invalid or blocked host (private/reserved addresses not allowed)`,
+          'text-dim'
+        );
+        return;
+      }
+
+      const url = new URL(`https://${host}/`).href;
+      const PACKETS = 4;
+      const INTERVAL_MS = 1000;
+      const TIMEOUT_MS = 5000;
+      const rtts = [];
+
+      this.netCmdRunning = true;
+      this.appendLog(`PING ${host} (HTTPS/443) — ${PACKETS} packets, web latency probe`, 'text-accent');
+      this.appendLog(`\u26a0  Note: browser RTT (HTTPS Layer 7), not ICMP — results may include TLS/TCP overhead.`, 'text-dim');
+
+      for (let i = 1; i <= PACKETS; i++) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+        const t0 = performance.now();
+
+        try {
+          await fetch(url, {
+            method: 'HEAD',
+            mode: 'no-cors',
+            cache: 'no-store',
+            credentials: 'omit',
+            signal: controller.signal,
+          });
+          const rtt = (performance.now() - t0).toFixed(1);
+          rtts.push(parseFloat(rtt));
+          this.appendLog(`  [${i}/${PACKETS}] seq=${i} ttl=64  time=${rtt} ms`, 'text-main');
+        } catch {
+          this.appendLog(`  [${i}/${PACKETS}] seq=${i}  Request timeout`, 'text-dim');
+        } finally {
+          clearTimeout(timer);
+        }
+
+        if (i < PACKETS) await new Promise(r => setTimeout(r, INTERVAL_MS));
+      }
+
+      // Statistics
+      const received = rtts.length;
+      const lost = PACKETS - received;
+      const loss = ((lost / PACKETS) * 100).toFixed(0);
+      const stats = received > 0
+        ? `rtt min/avg/max = ${Math.min(...rtts).toFixed(1)}/${(rtts.reduce((a, b) => a + b, 0) / received).toFixed(1)}/${Math.max(...rtts).toFixed(1)} ms`
+        : 'rtt: no response received';
+
+      this.appendLog(`\n--- ${host} ping statistics ---`, 'text-accent');
+      this.appendLog(`${PACKETS} packets transmitted, ${received} received, ${loss}% packet loss`, 'text-main');
+      this.appendLog(stats, 'text-main');
+
+      this.netCmdRunning = false;
+      this.output.scrollTop = this.output.scrollHeight;
+    }
+
+    // ── Easter Egg: traceroute ─────────────────────────────────────────────────
+    async cmdTraceroute(rawHost) {
+      if (this.netCmdRunning) {
+        this.appendLog('Network probe already running. Wait for it to complete.', 'text-dim');
+        return;
+      }
+
+      const host = this._sanitizeHost(rawHost);
+      if (!host) {
+        this.appendLog(
+          !rawHost
+            ? "Usage: traceroute <host>  (e.g., traceroute dan.seg.br)"
+            : `traceroute: ${rawHost}: invalid or blocked host (private/reserved addresses not allowed)`,
+          'text-dim'
+        );
+        return;
+      }
+
+      const url = new URL(`https://${host}/`).href;
+      const MAX_HOPS = 12;
+      const TIMEOUT_MS = 5000;
+
+      // Fictional intermediate hop labels (purely cosmetic)
+      const hopLabels = [
+        '_gateway.net', 'isp-edge-01.net', 'core-rtr-02.backbone.net',
+        'ae0.pe1.atl.backbone.net', 'be100.cr1.nyc.backbone.net',
+        'be200.cr2.mia.backbone.net', 'peer-gw.cdn-edge.net',
+        'cdn-anycast-01.edge.net', 'edge-pop-sao.cdn.net',
+        'cdn-cache-gru.edge.net', 'leaf-sw-01.dc-gru.net',
+      ];
+
+      // Gaussian-ish noise for simulated RTTs
+      const simRTT = (base) => {
+        const jitter = (Math.random() - 0.5) * base * 0.15;
+        return Math.max(0.5, base + jitter).toFixed(1);
+      };
+
+      this.netCmdRunning = true;
+      this.appendLog(`traceroute to ${host}, ${MAX_HOPS} hops max, HTTPS web probe`, 'text-accent');
+      this.appendLog(`[simulated intermediate hops — browsers cannot route ICMP]`, 'text-dim');
+
+      // Simulate intermediate hops with escalating latency
+      const simHops = Math.min(MAX_HOPS - 1, hopLabels.length);
+      for (let i = 1; i <= simHops; i++) {
+        const base = 2 + i * 5 + Math.random() * 4;
+        const label = hopLabels[i - 1].padEnd(28);
+        const r1 = simRTT(base), r2 = simRTT(base), r3 = simRTT(base);
+        await new Promise(r => setTimeout(r, 120 + Math.random() * 80));
+        this.appendLog(` ${String(i).padStart(2)}  ${label} [simulated]   ${r1} ms  ${r2} ms  ${r3} ms`, 'text-main');
+      }
+
+      // Final hop: real HTTPS probe
+      const hopNum = simHops + 1;
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+      const t0 = performance.now();
+
+      try {
+        await fetch(url, {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-store',
+          credentials: 'omit',
+          signal: controller.signal,
+        });
+        const rtt = (performance.now() - t0).toFixed(1);
+        const halfRtt = (parseFloat(rtt) / 2).toFixed(1);
+        const label = host.padEnd(28);
+        this.appendLog(` ${String(hopNum).padStart(2)}  ${label} [HTTPS/443]   ${rtt} ms  ${halfRtt} ms  ${rtt} ms`, 'text-accent');
+        this.appendLog(`\nTrace complete. ${host} is reachable via HTTPS (web latency: ${rtt} ms).`, 'text-accent');
+      } catch {
+        this.appendLog(` ${String(hopNum).padStart(2)}  ${host.padEnd(28)} [HTTPS/443]   * * * Request timeout`, 'text-dim');
+        this.appendLog(`\nTrace incomplete. ${host} did not respond within ${TIMEOUT_MS / 1000}s.`, 'text-dim');
+      } finally {
+        clearTimeout(timer);
+      }
+
+      this.netCmdRunning = false;
+      this.output.scrollTop = this.output.scrollHeight;
+    }
+
+  } // end class TerminalCLI
 
   /* ==========================================================================
      MODULE 4: Projects Filter & Modal Inspector
