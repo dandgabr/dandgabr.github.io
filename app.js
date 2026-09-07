@@ -1147,6 +1147,54 @@
         case 'trace':
           this.cmdTraceroute(arg);
           break;
+        case 'nmap':
+        case 'scan':
+        case 'portscan':
+          this.cmdNmap(arg);
+          break;
+        case 'hash':
+        case 'sha256':
+        case 'sha512':
+          this.cmdHash(mainCmd, arg);
+          break;
+        case 'base64':
+        case 'b64':
+          this.cmdBase64(arg);
+          break;
+        case 'rot13':
+        case 'rot':
+          this.cmdRot13(arg);
+          break;
+        case 'iptables':
+        case 'firewall':
+        case 'nftables':
+        case 'ufw':
+          this.cmdIptables(arg);
+          break;
+        case 'honey':
+        case 'honeypot':
+        case 'canary':
+        case 'trap':
+          this.cmdHoney();
+          break;
+        case 'cve':
+        case 'vuln':
+        case 'advisory':
+          this.cmdCve(arg);
+          break;
+        case 'sqlmap':
+        case 'exploit':
+        case 'hack':
+        case 'inject':
+        case "'":
+        case '"':
+          this.cmdSqlmap(cmdStr);
+          break;
+        case 'john':
+        case 'crack':
+        case 'hydra':
+          this.cmdJohn(arg);
+          break;
         case 'clear':
         case 'cls':
           this.cmdClear();
@@ -1161,7 +1209,11 @@
           this.appendLog(arg || '', 'text-main');
           break;
         default:
-          this.appendLog(`bash: command not found: ${mainCmd}. Type 'help' to inspect available instructions.`, 'text-dim');
+          if (cmdStr.toLowerCase().includes('or 1=1') || cmdStr.includes('<script') || cmdStr.includes('../')) {
+            this.cmdSqlmap(cmdStr);
+          } else {
+            this.appendLog(`bash: command not found: ${mainCmd}. Type 'help' to inspect available instructions.`, 'text-dim');
+          }
           break;
       }
 
@@ -1543,29 +1595,47 @@ COMANDOS ARQUITETURAIS DISPONÍVEIS:
   clear         - Limpar histórico e mensagens do terminal`.trim();
         classified = `
 
-[CLASSIFICADO / EASTER EGGS] — você encontrou. Bem-vindo ao nível root.
-  ping <host>        - Medir latência HTTPS (camada 7) para um host público (4 pacotes)
+[CLASSIFICADO / EASTER EGGS INFOSEC] — Nível Root liberado:
+  ping <host>        - Medir latência HTTPS (camada 7) para um host público
   traceroute <host>  - Simular rota de rede até um host público via HTTPS
+  nmap [host]        - Simular varredura de portas e postura defensiva de borda
+  hash [algo] <txt>  - Calcular hash criptográfico (SHA-256 / SHA-512) via Web Crypto
+  base64 <enc|dec>   - Codificar ou decodificar strings no navegador
+  rot13 <texto>      - Cifra clássica de rotação para ofuscação
+  iptables [-L]      - Inspecionar regras ativas de firewall e isolamento de agentes
+  honey              - Inspecionar telemetria de armadilha defensiva e canary tokens
+  cve [id|list]      - Consultar boletins de vulnerabilidades em IA e infraestrutura
+  sqlmap / exploit   - Testar o escudo de proteção WAF e sanitização client-side
+  john [hash]        - Simular análise de entropia e resistência de senhas
   help --all         - Você já está usando. Parabéns.
   sudo               - Boa tentativa.`.trim();
       } else if (lang === 'es') {
         base = `
 COMANDOS ARQUITECTÓNICOS DISPONIBLES:
   whoami        - Mostrar identidad, rol y credenciales vigentes
-  about         - Revisar metodología y filosofía de arquitectura de seguridad
+  about         - Revisar metodología e filosofía de arquitectura de seguridad
   skills        - Listar capacidades técnicas en los 4 dominios operativos
   projects      - Listar repositorios de investigación abiertos y herramientas
-  cat <id>      - Inspeccionar telemetría detallada de un proyecto específico
+  cat <id>      - Inspeccionar telemetría detalhada de un proyecto específico
   credentials   - Consultar certificaciones, posgrado y trayectoria docente
   contact       - Mostrar canales verificados de transmisión (LinkedIn, GitHub)
   stream        - Mostrar estado del flujo o alternar animación (stream toggle)
-  date          - Mostrar marca temporal actual UTC y local
+  date          - Mostrar marca temporal actual UTC e local
   clear         - Limpiar pantalla y búfer de la terminal`.trim();
         classified = `
 
-[CLASIFICADO / EASTER EGGS] — lo encontraste. Bienvenido al nivel root.
-  ping <host>        - Medir latencia HTTPS (capa 7) a un host público (4 paquetes)
+[CLASIFICADO / EASTER EGGS INFOSEC] — Nivel Root desbloqueado:
+  ping <host>        - Medir latencia HTTPS (capa 7) a un host público
   traceroute <host>  - Simular ruta de red a un host público vía HTTPS
+  nmap [host]        - Simular escaneo de puertos y postura defensiva de borde
+  hash [algo] <txt>  - Calcular hash criptográfico (SHA-256 / SHA-512) vía Web Crypto
+  base64 <enc|dec>   - Codificar o decodificar cadenas en el navegador
+  rot13 <texto>      - Cifrado clásico de rotación para ofuscación
+  iptables [-L]      - Inspeccionar reglas activas de firewall y aislamiento de agentes
+  honey              - Inspeccionar telemetría de trampa defensiva y canary tokens
+  cve [id|list]      - Consultar boletines de vulnerabilidades en IA e infraestructura
+  sqlmap / exploit   - Probar el escudo defensivo WAF y sanitización en cliente
+  john [hash]        - Simular análisis de entropía y resistencia de contraseñas
   help --all         - Ya lo estás usando. Felicitaciones.
   sudo               - Buen intento.`.trim();
       } else {
@@ -1583,9 +1653,18 @@ AVAILABLE ARCHITECTURAL COMMANDS:
   clear         - Clear terminal output console buffer`.trim();
         classified = `
 
-[CLASSIFIED / EASTER EGGS] — you found it. Welcome to root level.
-  ping <host>        - Probe HTTPS web latency to a public host (4 packets, Layer 7)
+[CLASSIFIED / INFOSEC EASTER EGGS] — Root level unlocked:
+  ping <host>        - Probe HTTPS web latency to a public host (Layer 7)
   traceroute <host>  - Simulate network path to a public host via HTTPS
+  nmap [host]        - Simulate port scan & edge defensive posture
+  hash [algo] <txt>  - Compute cryptographic hash (SHA-256 / SHA-512) via Web Crypto
+  base64 <enc|dec>   - Encode or decode strings client-side
+  rot13 <text>       - Classic Caesar cipher rotation for string obfuscation
+  iptables [-L]      - Inspect active firewall rules & agent isolation boundaries
+  honey              - Inspect cloud decoy telemetry & canary token tripwires
+  cve [id|list]      - Query security advisories on AI & infrastructure
+  sqlmap / exploit   - Test the client WAF shield & architecture resilience
+  john [hash]        - Simulate password entropy analysis & resistance
   help --all         - You're already using it. Congratulations.
   sudo               - Nice try.`.trim();
       }
@@ -1797,6 +1876,254 @@ AVAILABLE ARCHITECTURAL COMMANDS:
       } finally {
         clearTimeout(timer);
       }
+
+      this.netCmdRunning = false;
+      this.output.scrollTop = this.output.scrollHeight;
+    }
+
+    // ── Easter Egg: nmap ───────────────────────────────────────────────────────
+    cmdNmap(rawTarget) {
+      const target = (rawTarget || 'dan.seg.br').trim();
+      const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
+      const isDan = target.toLowerCase().includes('dan.seg.br') || target === '104.21.72.194' || !rawTarget;
+
+      const output = [
+        `Starting Nmap 7.94 ( https://nmap.org ) at ${now} UTC`,
+        `Nmap scan report for ${isDan ? 'dan.seg.br (104.21.72.194)' : target}`,
+        `Host is up (0.0019s latency).`,
+        `Not shown: 996 filtered tcp ports (no-response)`,
+        `PORT     STATE  SERVICE     VERSION`,
+        `80/tcp   open   http        Cloudflare edge proxy (301 redirect to HTTPS)`,
+        `443/tcp  open   ssl/https   Cloudflare TLS 1.3 / Strict-Transport-Security`,
+        `8443/tcp closed mcp-gateway Model Context Protocol Sandbox (mTLS required)`,
+        `22/tcp   closed ssh         Bastion access via Tailscale mesh boundary only`,
+        ``,
+        isDan
+          ? `Service detection performed. 0 exposed vulnerabilities. Zero-Trust posture confirmed.`
+          : `Note: Target ${target} host simulated in local sandbox. External probing restricted.`,
+        `Nmap done: 1 IP address (1 host up) scanned in 0.38 seconds`
+      ].join('\n');
+
+      this.appendLog(output, 'text-main');
+    }
+
+    // ── Easter Egg: hash (Web Crypto API SHA-256 / SHA-512) ───────────────────
+    async cmdHash(cmd, rawArgs) {
+      let algo = 'SHA-256';
+      let text = (rawArgs || '').trim();
+
+      if (cmd === 'sha512' || text.toLowerCase().startsWith('sha512 ')) {
+        algo = 'SHA-512';
+        text = text.replace(/^sha512\s+/i, '').trim();
+      } else if (cmd === 'sha256' || text.toLowerCase().startsWith('sha256 ')) {
+        algo = 'SHA-256';
+        text = text.replace(/^sha256\s+/i, '').trim();
+      } else if (text.toLowerCase().startsWith('md5')) {
+        this.appendLog('[SECURITY WARNING] MD5 is cryptographically broken (collision attacks since RFC 6151). Enforcing SHA-256.', 'text-dim');
+        algo = 'SHA-256';
+        text = text.replace(/^md5\s*/i, '').trim();
+      }
+
+      if (!text) {
+        text = 'zero-trust-architecture';
+        this.appendLog(`[INFO] No input string specified. Defaulting to: "${text}"`, 'text-dim');
+      }
+
+      // Remove quotes if present
+      text = text.replace(/^["'](.*)["']$/, '$1');
+
+      try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(text);
+        const hashBuffer = await crypto.subtle.digest(algo, data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        const res = [
+          `[ALGORITHM]   ${algo} (NIST FIPS 180-4 / W3C Web Cryptography API)`,
+          `[INPUT_BYTES] ${data.length} bytes | UTF-8`,
+          `[DIGEST]      ${hashHex}`,
+          `[VERDICT]     Cryptographic integrity verified client-side.`
+        ].join('\n');
+
+        this.appendLog(res, 'text-accent');
+      } catch (err) {
+        this.appendLog(`hash: Web Crypto API error: ${err.message}`, 'text-dim');
+      }
+    }
+
+    // ── Easter Egg: base64 encode/decode ───────────────────────────────────────
+    cmdBase64(args) {
+      const parts = (args || '').trim().split(/\s+/);
+      const sub = parts[0]?.toLowerCase();
+      let text = parts.slice(1).join(' ').trim();
+
+      if (!sub || parts.length === 1 && !['encode', 'decode', 'enc', 'dec'].includes(sub)) {
+        text = args || 'Welcome to dan.seg.br // High-Integrity Security Engineering';
+        try {
+          const encoded = btoa(unescape(encodeURIComponent(text)));
+          this.appendLog(`[TRANSFORMATION] Base64 Encode (default)\n[INPUT]          ${text}\n[OUTPUT]         ${encoded}`, 'text-main');
+        } catch {
+          this.appendLog(`base64: encoding error`, 'text-dim');
+        }
+        return;
+      }
+
+      if (sub === 'encode' || sub === 'enc') {
+        if (!text) text = 'Security Architecture';
+        try {
+          const encoded = btoa(unescape(encodeURIComponent(text)));
+          this.appendLog(`[TRANSFORMATION] Base64 Encode\n[INPUT]          ${text}\n[OUTPUT]         ${encoded}`, 'text-main');
+        } catch {
+          this.appendLog(`base64: encoding error`, 'text-dim');
+        }
+      } else if (sub === 'decode' || sub === 'dec') {
+        if (!text) text = 'V2VsY29tZSB0byBkYW4uc2VnLmJy';
+        try {
+          const decoded = decodeURIComponent(escape(atob(text)));
+          this.appendLog(`[TRANSFORMATION] Base64 Decode\n[INPUT]          ${text}\n[OUTPUT]         ${decoded}`, 'text-accent');
+        } catch {
+          this.appendLog(`base64: invalid base64 input string`, 'text-dim');
+        }
+      }
+    }
+
+    // ── Easter Egg: rot13 ──────────────────────────────────────────────────────
+    cmdRot13(rawText) {
+      const text = (rawText || 'Qnavry Tbaçnyirf Nenhwb').trim();
+      const rotated = text.replace(/[a-zA-Z]/g, (c) => {
+        const code = c.charCodeAt(0);
+        const base = code >= 97 ? 97 : 65;
+        return String.fromCharCode(((code - base + 13) % 26) + base);
+      });
+
+      this.appendLog(`[ROT13 CIPHER]\n[INPUT]  ${text}\n[OUTPUT] ${rotated}`, 'text-main');
+    }
+
+    // ── Easter Egg: iptables / firewall ────────────────────────────────────────
+    cmdIptables(arg) {
+      const output = [
+        `Chain INPUT (policy DROP 0 packets, 0 bytes)`,
+        ` pkts bytes target     prot opt in  out  source          destination`,
+        `  14k  1.8M ACCEPT     all  --  lo  *    0.0.0.0/0       0.0.0.0/0`,
+        ` 8.2k  620K ACCEPT     tcp  --  *   *    0.0.0.0/0       0.0.0.0/0     tcp dpt:443 ctstate NEW,ESTABLISHED`,
+        `   89  4200 DROP       all  --  *   *    0.0.0.0/0       0.0.0.0/0     ctstate INVALID`,
+        `  412   24K LOG_DROP   tcp  --  *   *    0.0.0.0/0       0.0.0.0/0     tcp dpt:22 recent: CHECK seconds:60 hit_count:4`,
+        `    0     0 SANDBOX_EN all  -- br0  *    10.99.0.0/16    0.0.0.0/0     /* AI Agent Isolation Boundary */`,
+        ``,
+        `Chain FORWARD (policy DROP 0 packets, 0 bytes)`,
+        `Chain OUTPUT (policy ACCEPT 12k packets, 1.4M bytes)`,
+        ``,
+        `[STATUS] Default Deny active. Ingress boundary strictly monitored.`
+      ].join('\n');
+
+      this.appendLog(output, 'text-main');
+    }
+
+    // ── Easter Egg: honey / canary ─────────────────────────────────────────────
+    cmdHoney() {
+      const output = [
+        `[!] HONEYPOT TRIPWIRE TRIGGERED // VIRTUAL CANARY ENGAGED`,
+        `----------------------------------------------------------------------`,
+        `[SEVERITY]     INFORMATIONAL / DEFENSIVE DECOY`,
+        `[TRAP_SERVICE] Cloud Infrastructure Decoy // Autonomous Agent Boundary`,
+        `[DETECTION]    Heuristic signature matched: "curious_security_researcher"`,
+        `[INTERACTION]  Viewport coordinates isolated. Client session marked benign.`,
+        `[PHILOSOPHY]   "The best threat containment is wasting an adversary's compute on decoys."`,
+        `[STATUS]       No alarms raised. You found the honey token. Have a coffee \u2615.`
+      ].join('\n');
+
+      this.appendLog(output, 'text-accent');
+    }
+
+    // ── Easter Egg: cve ────────────────────────────────────────────────────────
+    cmdCve(rawQuery) {
+      const query = (rawQuery || '').toLowerCase().trim();
+
+      if (!query || query === 'list') {
+        const list = [
+          `[CURATED THREAT INTELLIGENCE & ADVISORIES]`,
+          `Query a specific topic via 'cve <topic>' (e.g., 'cve llm', 'cve mcp', 'cve 2024'):`,
+          ``,
+          `  1. OWASP-LLM01   - Prompt Injection & Autonomous Agent Tool Misuse`,
+          `  2. MCP-SEC-01    - Model Context Protocol Sandbox Boundary Escape`,
+          `  3. CVE-2024-3094 - XZ Utils Supply Chain Backdoor & Compromise`,
+          `  4. OWASP-LLM02   - Insecure Output Handling & Indirect Payload Execution`
+        ].join('\n');
+        this.appendLog(list, 'text-main');
+        return;
+      }
+
+      if (query.includes('mcp')) {
+        this.appendLog([
+          `[CVE INTELLIGENCE REPORT: MCP-SEC-01]`,
+          `ID:          MCP-SEC-01 / PROTOCOL-SANDBOX-BOUNDARY`,
+          `NAME:        Model Context Protocol Server Capability Escalation`,
+          `CVSS 3.1:    8.8 [HIGH] (CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:N)`,
+          `TARGET:      Local Agent Runtime & Tool Calling Workspaces`,
+          `MITIGATION:  Enforce strict JSON schema capability contracts, read-only workspaces,`,
+          `             and auto-approved read-only bounds. (Ref: 'cat hardening-ia')`
+        ].join('\n'), 'text-accent');
+      } else if (query.includes('xz') || query.includes('3094')) {
+        this.appendLog([
+          `[CVE INTELLIGENCE REPORT: CVE-2024-3094]`,
+          `ID:          CVE-2024-3094 / XZ-BACKDOOR`,
+          `NAME:        Malicious code injection in XZ Utils / liblzma tarballs`,
+          `CVSS 3.1:    10.0 [CRITICAL] (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H)`,
+          `TARGET:      OpenSSH sshd pre-authentication daemon hooks`,
+          `LESSON:      Software Supply Chain Defense, multi-reviewer commit validation,`,
+          `             and binary build provenance verification (SLSA Level 3+).`
+        ].join('\n'), 'text-accent');
+      } else {
+        this.appendLog([
+          `[CVE INTELLIGENCE REPORT: OWASP-LLM01]`,
+          `ID:          OWASP-LLM01 / CVE-2024-AI-INJ`,
+          `NAME:        Direct & Indirect Prompt Injection in Autonomous LLM Systems`,
+          `CVSS 3.1:    8.6 [HIGH] (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N)`,
+          `TARGET:      Autonomous AI Coding Assistants & MCP Tools`,
+          `MITIGATION:  Implement deterministic boundary validation, prompt-data segregation,`,
+          `             and container sandboxing (Ref: 'cat hardening-ia').`
+        ].join('\n'), 'text-accent');
+      }
+    }
+
+    // ── Easter Egg: sqlmap / exploit / WAF shield ──────────────────────────────
+    cmdSqlmap(payload) {
+      const output = [
+        `[WAF / ZERO-TRUST CLIENT SHIELD] Inbound attack heuristic intercepted.`,
+        `----------------------------------------------------------------------`,
+        `[PAYLOAD]      Heuristic pattern detected: "${payload}"`,
+        `[ANALYSIS]     Target architecture is an immutable, static JAMstack client.`,
+        `               No SQL engine, no active server runtime, zero writable server state.`,
+        `[DOM DEFENSE]  Terminal stream writes strictly via node textContent (DOM XSS immune).`,
+        `[LESSON]       "Attack surface eliminated by architecture, not just firewalls."`,
+        `[ACTION]       Payload neutralized. To review real security architecture, type 'skills'.`
+      ].join('\n');
+
+      this.appendLog(output, 'text-accent');
+    }
+
+    // ── Easter Egg: john / crack (Password Entropy Simulation) ──────────────────
+    async cmdJohn(rawTarget) {
+      if (this.netCmdRunning) {
+        this.appendLog('A diagnostic process is already running. Please wait.', 'text-dim');
+        return;
+      }
+
+      this.netCmdRunning = true;
+      const hash = (rawTarget || '$6$randomSalt$encryptedPasswordHashString').trim();
+
+      this.appendLog(`Loaded 1 password hash (${hash.substring(0, 20)}...)`, 'text-main');
+      this.appendLog(`Cost 1 (iteration count) is 5000 for SHA-512 crypt`, 'text-dim');
+      this.appendLog(`Proceeding with dictionary: rockyou.txt (simulated 14.3M candidates)...`, 'text-dim');
+
+      await new Promise(r => setTimeout(r, 220));
+      this.appendLog(`[..] 0g 0:00:00:01 0.00% (ETA: 2098-07-14) 4320Kp/s...`, 'text-main');
+
+      await new Promise(r => setTimeout(r, 260));
+      this.appendLog(`[!] CRACKING HALTED: Target entropy exceeds feasibility limit (2^128 operations required).`, 'text-accent');
+      this.appendLog(`[SECURITY BASICS] High-entropy passphrases and modern hashes resist offline brute-force.`, 'text-main');
+      this.appendLog(`[RECOMMENDATION] Prefer Passkeys (FIDO2/WebAuthn) or Argon2id with >= 16 characters.`, 'text-dim');
 
       this.netCmdRunning = false;
       this.output.scrollTop = this.output.scrollHeight;
