@@ -1,11 +1,11 @@
 /* ==========================================================================
-   MATRIX PHOSPHOR DESIGN SYSTEM - DANIEL GONÇALVES ARAUJO (@dandgabr)
-   Anti-AI Slop: Bespoke, Handcrafted, Modern Matrix Security Aesthetic
+   TERMINAL PHOSPHOR DESIGN SYSTEM - DANIEL GONÇALVES ARAUJO (@dandgabr)
+   High-Assurance Security Architecture & Engineering Aesthetic
    Zero External Dependencies | Pure CSS3 Native
    ========================================================================== */
 
 :root {
-  /* Matrix Color Tokens - Dark Mode (Default) */
+  /* Phosphor Color Tokens - Dark Mode (Default) */
   --bg-void: #020403;
   --bg-base: #050807;
   --bg-surface: #0a0f0d;
@@ -65,7 +65,7 @@
 }
 
 /* ==========================================================================
-   Light Mode Theme (High-Tech Matrix Architect Room)
+   Light Mode Theme (High-Contrast Security Console)
    ========================================================================== */
 [data-theme="light"] {
   --bg-void: #edf2ee;
@@ -205,8 +205,8 @@ body {
   outline: 2px solid #ffffff;
 }
 
-/* Background Matrix Canvas */
-#matrix-canvas {
+/* Background Stream Canvas */
+#stream-canvas {
   position: fixed;
   top: 0;
   left: 0;
@@ -1108,7 +1108,7 @@ a:hover {
 }
 
 /* ==========================================================================
-   Section 04: Technical Capabilities Matrix (Skills)
+   Section 04: Technical Capabilities & Domains (Skills)
    ========================================================================== */
 .skills-grid {
   display: grid;
@@ -1778,7 +1778,7 @@ a:hover {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  #matrix-canvas {
+  #stream-canvas {
     display: none !important;
   }
 }

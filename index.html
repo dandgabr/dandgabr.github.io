@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="matrix-theme">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,14 +18,14 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dandgabr.github.io/">
   <meta property="og:title" content="Daniel Gonçalves Araujo | Information Security Architect">
-  <meta property="og:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps. Matrix-grade technical portfolio.">
+  <meta property="og:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps. Technical portfolio and security research.">
   <meta property="og:image" content="https://github.com/dandgabr.png">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://dandgabr.github.io/">
   <meta property="twitter:title" content="Daniel Gonçalves Araujo | Information Security Architect">
-  <meta property="twitter:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps. Matrix-grade technical portfolio.">
+  <meta property="twitter:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps. Technical portfolio and security research.">
   <meta property="twitter:image" content="https://github.com/dandgabr.png">
 
   <!-- Favicon / SVG Icon -->
@@ -38,8 +38,8 @@
   <!-- Accessibility Skip Link -->
   <a href="#main-content" class="skip-link">Skip to system interface [Enter]</a>
 
-  <!-- Background Matrix Rain Canvas -->
-  <canvas id="matrix-canvas" aria-hidden="true"></canvas>
+  <!-- Background Terminal Stream Canvas -->
+  <canvas id="stream-canvas" aria-hidden="true"></canvas>
 
   <!-- CRT Screen Glare & Scanline Filter Overlay -->
   <div class="crt-overlay" aria-hidden="true"></div>
@@ -49,7 +49,7 @@
     <div class="hud-container">
       <div class="sys-badge">
         <span class="status-led" aria-hidden="true"></span>
-        <span class="sys-title">matrix</span>
+        <span class="sys-title">terminal</span>
         <span class="sys-state" aria-label="System status operational">[ACTIVE]</span>
       </div>
 
@@ -58,7 +58,7 @@
           <li><a href="#hero" class="nav-item active"><span class="nav-num">01.</span>//ROOT</a></li>
           <li><a href="#terminal" class="nav-item"><span class="nav-num">02.</span>//TERMINAL</a></li>
           <li><a href="#about" class="nav-item"><span class="nav-num">03.</span>//INTEL</a></li>
-          <li><a href="#skills" class="nav-item"><span class="nav-num">04.</span>//MATRIX</a></li>
+          <li><a href="#skills" class="nav-item"><span class="nav-num">04.</span>//SKILLS</a></li>
           <li><a href="#projects" class="nav-item"><span class="nav-num">05.</span>//PROJECTS</a></li>
           <li><a href="#credentials" class="nav-item"><span class="nav-num">06.</span>//ACADEMIC</a></li>
           <li><a href="#contact" class="nav-item"><span class="nav-num">07.</span>//CONNECT</a></li>
@@ -73,8 +73,8 @@
         <button id="toggle-crt" class="hud-btn" type="button" aria-pressed="true" title="Toggle CRT Scanline Effect">
           <span class="btn-bracket">[</span>CRT: <span class="btn-val">ON</span><span class="btn-bracket">]</span>
         </button>
-        <button id="toggle-rain" class="hud-btn" type="button" aria-pressed="true" title="Toggle Matrix Digital Rain">
-          <span class="btn-bracket">[</span>RAIN: <span class="btn-val">RUN</span><span class="btn-bracket">]</span>
+        <button id="toggle-rain" class="hud-btn" type="button" aria-pressed="true" title="Toggle Background Stream">
+          <span class="btn-bracket">[</span>STREAM: <span class="btn-val">RUN</span><span class="btn-bracket">]</span>
         </button>
         <button id="mobile-menu-btn" class="hud-btn mobile-only" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle Navigation Menu">
           <span class="btn-bracket">[</span>MENU<span class="btn-bracket">]</span>
@@ -161,7 +161,7 @@
               </div>
             </div>
 
-            <!-- Profile Matrix Hologram HUD -->
+            <!-- Profile Hologram HUD -->
             <div class="hero-avatar-pane" aria-hidden="true">
               <div class="hud-reticle">
                 <div class="hud-corner top-left"></div>
@@ -225,14 +225,14 @@
             <button type="button" class="cmd-chip" data-cmd="projects">projects</button>
             <button type="button" class="cmd-chip" data-cmd="credentials">credentials</button>
             <button type="button" class="cmd-chip" data-cmd="contact">contact</button>
-            <button type="button" class="cmd-chip" data-cmd="matrix">matrix</button>
+            <button type="button" class="cmd-chip" data-cmd="stream">stream</button>
             <button type="button" class="cmd-chip" data-cmd="clear">clear</button>
           </div>
 
           <!-- Terminal Output Log -->
           <div id="terminal-output" class="terminal-output" role="log" aria-live="polite" aria-atomic="false">
             <div class="term-response">
-              <span class="text-dim">Matrix Security Shell v2.4.0 (x86_64-hardened-linux)</span><br>
+              <span class="text-dim">Security Shell v2.4.0 (x86_64-hardened-linux)</span><br>
               <span class="text-dim">Session initialized for peer review. Type </span><span class="text-accent">'help'</span><span class="text-dim"> for guidance.</span>
             </div>
           </div>
@@ -240,7 +240,7 @@
           <!-- Command Input Line -->
           <form id="terminal-form" class="terminal-input-row" autocomplete="off">
             <label for="cli-input" class="term-prompt">
-              <span class="term-user">matrix</span>&gt;&nbsp;
+              <span class="term-user">terminal</span>&gt;&nbsp;
             </label>
             <input type="text" id="cli-input" class="term-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Terminal command line input" placeholder="type a command...">
             <button type="submit" class="term-submit-btn" aria-label="Execute command">&gt;</button>
@@ -329,11 +329,11 @@
       </div>
     </section>
 
-    <!-- SECTION 04: Technical Capabilities Matrix (Skills) -->
+    <!-- SECTION 04: Technical Capabilities & Domains (Skills) -->
     <section id="skills" class="terminal-section" aria-labelledby="skills-heading">
       <div class="section-tag-header">
         <span class="tag-index">[SECTION 04]</span>
-        <h2 id="skills-heading" class="section-title">CORE EXPERTISE & TECHNICAL MATRIX</h2>
+        <h2 id="skills-heading" class="section-title">CORE EXPERTISE & TECHNICAL DOMAINS</h2>
         <span class="section-line"></span>
       </div>
 
@@ -809,12 +809,12 @@
     <div class="footer-container">
       <div class="footer-left">
         <span class="prompt-symbol">&gt;&gt;</span>
-        <span>matrix&gt; EOF</span>
+        <span>terminal&gt; EOF</span>
         <span class="footer-sep">|</span>
         <span class="footer-spec">ZERO-FRAMEWORKS &bull; PURE HTML5/CSS3/ES6+</span>
       </div>
       <div class="footer-right">
-        <span class="footer-copy">&copy; 2026 Daniel Gonçalves Araujo. Matrix-hardened architecture.</span>
+        <span class="footer-copy">&copy; 2026 Daniel Gonçalves Araujo. High-assurance security architecture.</span>
       </div>
     </div>
   </footer>

@@ -1,7 +1,7 @@
 /**
  * ============================================================================
- * MATRIX ENGINE & INTERACTIVE TERMINAL CORE - DANIEL GONÇALVES ARAUJO (@dandgabr)
- * Pure Native ES6+ | Zero Dependencies | Anti-AI Slop Handcrafted Architecture
+ * TERMINAL ENGINE & INTERACTIVE CORE - DANIEL GONÇALVES ARAUJO (@dandgabr)
+ * Pure Native ES6+ | Zero Dependencies | High-Assurance Architecture
  * ============================================================================
  */
 
@@ -100,9 +100,9 @@
   };
 
   /* ==========================================================================
-     MODULE 1: Matrix Rain Canvas Engine (Ultra-Performant)
+     MODULE 1: Terminal Stream Canvas Engine (Ultra-Performant)
      ========================================================================== */
-  class MatrixRain {
+  class TerminalStream {
     constructor(canvasId) {
       this.canvas = document.getElementById(canvasId);
       if (!this.canvas) return;
@@ -138,7 +138,7 @@
         "0000111100000101", // syscall
         "11000011", // ret
         "01000100011000010111001101100001", // Dasa
-        "010011010110000101110100011100100110100101111000", // Matrix
+        "01000001011100100110001101101000", // Arch
         "01110011011110010111001101100011011000010110110001101100" // syscall
       ].join('');
 
@@ -288,7 +288,7 @@
             this.ctx.fillText(prevChar, x, y - this.fontSize);
           }
         } else {
-          // Dark Mode: Classic Matrix Phosphor Neon
+          // Dark Mode: High-Assurance Phosphor Neon
           this.ctx.fillStyle = '#ffffff';
           this.ctx.shadowBlur = 6;
           this.ctx.shadowColor = '#00ff66';
@@ -433,7 +433,7 @@
       const arg = parts.slice(1).join(' ').toLowerCase();
 
       // Echo command
-      this.appendLog(`matrix> ${cmdStr}`, 'term-cmd-echo');
+      this.appendLog(`terminal> ${cmdStr}`, 'term-cmd-echo');
 
       switch (mainCmd) {
         case 'help':
@@ -447,13 +447,13 @@
           this.cmdAbout();
           break;
         case 'skills':
-        case 'matrix':
-          if (mainCmd === 'matrix' && arg === 'toggle') {
-            this.toggleMatrixRain();
-          } else if (mainCmd === 'matrix') {
-            this.cmdMatrixInfo();
+          this.cmdSkills();
+          break;
+        case 'stream':
+          if (arg === 'toggle') {
+            this.toggleStream();
           } else {
-            this.cmdSkills();
+            this.cmdStreamInfo();
           }
           break;
         case 'projects':
@@ -519,7 +519,7 @@ AVAILABLE ARCHITECTURAL COMMANDS:
                   (e.g., 'cat hardening-ia', 'cat mcp-cheatengine')
   credentials   - Review academic degrees, certifications & teaching career
   contact       - Output verified transmission coordinates (LinkedIn, GitHub)
-  matrix        - Display Matrix canvas status or toggle rain (matrix toggle)
+  stream        - Display kernel/binary stream status or toggle (stream toggle)
   date          - Display current system UTC timestamp
   clear         - Clear terminal output console buffer
       `.trim();
@@ -533,7 +533,7 @@ ROLE:         Information Security Architect @ Dasa
 DOMAINS:      Enterprise Security Architecture | AI Safety & Hardening | AppSec & DevSecOps | Cloud Security
 ACCREDITATION:CompTIA Security+ ce
 LOCATION:     Londrina, PR — Brazil
-PHILOSOPHY:   Anti-AI Slop. Defense-in-depth from cloud infrastructure to autonomous agent sandboxes.
+PHILOSOPHY:   Bespoke, high-assurance security engineering. Defense-in-depth from cloud infrastructure to autonomous agent sandboxes.
       `.trim();
       this.appendLog(text, 'text-accent');
     }
@@ -640,14 +640,14 @@ REPOSITORY: ${proj.repo}
       this.appendLog(text, 'text-accent');
     }
 
-    cmdMatrixInfo() {
-      this.appendLog("Matrix Engine: 32 FPS, Katakana + Binary characters. Type 'matrix toggle' to toggle rain.", 'text-main');
+    cmdStreamInfo() {
+      this.appendLog("Stream Engine: 32 FPS, Linux Kernel C source + Binary stream. Type 'stream toggle' to toggle stream.", 'text-main');
     }
 
-    toggleMatrixRain() {
-      if (window.matrixInstance) {
-        const active = window.matrixInstance.toggle();
-        this.appendLog(`Matrix Rain status: ${active ? 'ACTIVE' : 'PAUSED'}`, 'text-accent');
+    toggleStream() {
+      if (window.streamInstance) {
+        const active = window.streamInstance.toggle();
+        this.appendLog(`Terminal Stream status: ${active ? 'ACTIVE' : 'PAUSED'}`, 'text-accent');
         const rainBtn = document.getElementById('toggle-rain');
         if (rainBtn) {
           rainBtn.querySelector('.btn-val').textContent = active ? 'RUN' : 'PAUSED';
@@ -800,7 +800,7 @@ REPOSITORY: ${proj.repo}
 
       const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
       const getSystemTheme = () => (mediaQuery.matches ? 'light' : 'dark');
-      const savedTheme = localStorage.getItem('matrix_theme');
+      const savedTheme = localStorage.getItem('theme_preference');
 
       const applyTheme = (theme, persist = false) => {
         if (theme === 'light') {
@@ -814,11 +814,11 @@ REPOSITORY: ${proj.repo}
         }
 
         if (persist) {
-          localStorage.setItem('matrix_theme', theme);
+          localStorage.setItem('theme_preference', theme);
         }
 
-        if (window.matrixInstance && typeof window.matrixInstance.setTheme === 'function') {
-          window.matrixInstance.setTheme(theme);
+        if (window.streamInstance && typeof window.streamInstance.setTheme === 'function') {
+          window.streamInstance.setTheme(theme);
         }
       };
 
@@ -828,7 +828,7 @@ REPOSITORY: ${proj.repo}
 
       // Listen for system theme changes if user hasn't explicitly set a preference
       mediaQuery.addEventListener('change', (e) => {
-        if (!localStorage.getItem('matrix_theme')) {
+        if (!localStorage.getItem('theme_preference')) {
           applyTheme(e.matches ? 'light' : 'dark', false);
         }
       });
@@ -843,7 +843,7 @@ REPOSITORY: ${proj.repo}
 
     initCRT() {
       if (!this.crtBtn) return;
-      const isCrtOff = localStorage.getItem('matrix_crt_off') === 'true';
+      const isCrtOff = localStorage.getItem('crt_scanline_off') === 'true';
       if (isCrtOff) {
         document.body.classList.add('crt-off');
         this.crtBtn.querySelector('.btn-val').textContent = 'OFF';
@@ -854,15 +854,15 @@ REPOSITORY: ${proj.repo}
         const off = document.body.classList.toggle('crt-off');
         this.crtBtn.querySelector('.btn-val').textContent = off ? 'OFF' : 'ON';
         this.crtBtn.setAttribute('aria-pressed', (!off).toString());
-        localStorage.setItem('matrix_crt_off', off.toString());
+        localStorage.setItem('crt_scanline_off', off.toString());
       });
     }
 
     initRainToggle() {
       if (!this.rainBtn) return;
       this.rainBtn.addEventListener('click', () => {
-        if (window.matrixInstance) {
-          const active = window.matrixInstance.toggle();
+        if (window.streamInstance) {
+          const active = window.streamInstance.toggle();
           this.rainBtn.querySelector('.btn-val').textContent = active ? 'RUN' : 'PAUSED';
           this.rainBtn.setAttribute('aria-pressed', active.toString());
         }
@@ -915,8 +915,8 @@ REPOSITORY: ${proj.repo}
      APPLICATION BOOTSTRAPPER
      ========================================================================== */
   document.addEventListener('DOMContentLoaded', () => {
-    // 1. Matrix Digital Rain Canvas
-    window.matrixInstance = new MatrixRain('matrix-canvas');
+    // 1. Terminal Background Stream Canvas
+    window.streamInstance = new TerminalStream('stream-canvas');
 
     // 2. Hero Boot Sequence Typing
     new HeroBootSequence('boot-log');
@@ -930,7 +930,7 @@ REPOSITORY: ${proj.repo}
     // 5. HUD Controls
     new HUDManager();
 
-    console.info('%c[SYS_KERNEL] Daniel Gonçalves Araujo portfolio online. Matrix interface initialized.', 'color: #00ff66; font-weight: bold; background: #050807; padding: 4px;');
+    console.info('%c[SYS_KERNEL] Daniel Gonçalves Araujo portfolio online. System initialized.', 'color: #00ff66; font-weight: bold; background: #050807; padding: 4px;');
   });
 
 })();
