@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://github.com data:; font-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none';">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <!-- Primary Meta Tags -->
   <title>Daniel Gonçalves Araujo (@dandgabr) | Information Security Architect</title>
@@ -11,7 +13,7 @@
   <meta name="description" content="Portfolio and Security Research of Daniel Gonçalves Araujo (@dandgabr). Information Security Architect @ Dasa. Specializing in Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps.">
   <meta name="keywords" content="Daniel Gonçalves Araujo, dandgabr, Security Architect, Dasa, AI Safety, AI Hardening, AppSec, DevSecOps, Threat Modeling, CIS Benchmarks, MCP, Model Context Protocol, Cloud Security, CompTIA Security+">
   <meta name="author" content="Daniel Gonçalves Araujo (@dandgabr)">
-  <meta name="theme-color" content="#050807">
+  <meta name="theme-color" content="#061109">
   <meta name="color-scheme" content="dark light">
 
   <!-- Open Graph / Facebook -->
@@ -29,23 +31,25 @@
   <meta property="twitter:image" content="https://github.com/dandgabr.png">
 
   <!-- Favicon / SVG Icon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050807' rx='6'/%3E%3Cpath d='M16 4 L28 9 V18 C28 24 16 28 16 28 C16 28 4 24 4 18 V9 Z' fill='none' stroke='%2300ff66' stroke-width='2'/%3E%3Cpath d='M11 16 L15 20 L21 12' fill='none' stroke='%2300ff66' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23061109' rx='6'/%3E%3Cpath d='M16 4 L28 9 V18 C28 24 16 28 16 28 C16 28 4 24 4 18 V9 Z' fill='none' stroke='%2300ff66' stroke-width='2'/%3E%3Cpath d='M11 16 L15 20 L21 12' fill='none' stroke='%2300ff66' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
-  <!-- Stylesheet -->
+  <!-- Stylesheet & Deferred Scripts -->
   <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 
   <!-- Early Theme and Language Detection (System Preference Default / Zero Flash) -->
   <script>
     (function() {
       try {
         // Theme Detection
-        var savedTheme = localStorage.getItem('theme_preference');
+        var rawTheme = localStorage.getItem('theme_preference');
+        var savedTheme = (rawTheme === 'light' || rawTheme === 'dark') ? rawTheme : null;
         var systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
         var activeTheme = savedTheme || systemTheme;
         document.documentElement.setAttribute('data-theme', activeTheme);
         var metaTheme = document.querySelector('meta[name="theme-color"]');
         if (metaTheme) {
-          metaTheme.setAttribute('content', activeTheme === 'light' ? '#ffffff' : '#050807');
+          metaTheme.setAttribute('content', activeTheme === 'light' ? '#ffffff' : '#061109');
         }
 
         // Language Detection
@@ -204,7 +208,10 @@
                 <div class="hud-corner bottom-left"></div>
                 <div class="hud-corner bottom-right"></div>
                 <div class="avatar-frame">
-                  <img src="assets/avatar.png" alt="Daniel Gonçalves Araujo Avatar" class="avatar-img" onerror="this.style.display='none'; document.getElementById('ascii-avatar').style.display='block';">
+                  <picture>
+                    <source srcset="assets/avatar.webp" type="image/webp">
+                    <img id="avatar-img" src="assets/avatar.png" alt="Daniel Gonçalves Araujo Avatar" class="avatar-img" width="208" height="208" decoding="async" fetchpriority="high">
+                  </picture>
                   <pre id="ascii-avatar" class="ascii-fallback" style="display:none;">
     [ SEC_ARCH ]
       .---.
@@ -854,7 +861,5 @@
     </div>
   </footer>
 
-  <!-- Native JavaScript -->
-  <script src="app.js"></script>
 </body>
 </html>

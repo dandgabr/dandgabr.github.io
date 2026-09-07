@@ -6,14 +6,14 @@
 
 :root {
   /* Phosphor Color Tokens - Dark Mode (Default) */
-  --bg-void: #020403;
-  --bg-base: #050807;
-  --bg-surface: #0a0f0d;
-  --bg-card: rgba(12, 20, 16, 0.88);
-  --bg-card-hover: rgba(17, 29, 23, 0.95);
+  --bg-void: #030a06;
+  --bg-base: #061109;
+  --bg-surface: #0b1810;
+  --bg-card: rgba(12, 24, 18, 0.88);
+  --bg-card-hover: rgba(18, 34, 25, 0.95);
   --bg-card-active: #15241d;
-  --bg-input: #060a08;
-  --bg-header: rgba(5, 8, 7, 0.88);
+  --bg-input: #08140b;
+  --bg-header: rgba(6, 17, 9, 0.88);
 
   /* Phosphor Green Palette */
   --green-core: #00ff66;
@@ -227,10 +227,10 @@ body {
   z-index: 10;
   pointer-events: none;
   background:
-    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%),
-    radial-gradient(circle at center, transparent 65%, rgba(0, 0, 0, 0.75) 100%);
+    linear-gradient(rgba(18, 28, 20, 0) 50%, rgba(0, 0, 0, 0.45) 50%),
+    radial-gradient(circle at center, transparent 60%, rgba(0, 5, 2, 0.7) 100%);
   background-size: 100% 3px, 100% 100%;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 body.crt-off .crt-overlay {
@@ -454,6 +454,11 @@ a:hover {
   scroll-margin-top: calc(var(--header-height) + 24px);
 }
 
+#skills, #projects, #credentials, #contact {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
+}
+
 /* Section Tag Header */
 .section-tag-header {
   display: flex;
@@ -606,8 +611,10 @@ a:hover {
   margin-bottom: 28px;
   font-size: 12.5px;
   line-height: 1.7;
+  min-height: 140px;
   max-height: 160px;
   overflow-y: auto;
+  contain: layout;
 }
 
 .log-line {
@@ -857,14 +864,15 @@ a:hover {
   background: var(--green-core);
   box-shadow: 0 0 8px var(--green-core);
   opacity: 0.6;
+  will-change: transform;
   animation: scanAvatar 3.5s linear infinite;
 }
 
 @keyframes scanAvatar {
-  0% { top: 0%; opacity: 0; }
+  0% { transform: translateY(0); opacity: 0; }
   10% { opacity: 0.7; }
   90% { opacity: 0.7; }
-  100% { top: 100%; opacity: 0; }
+  100% { transform: translateY(208px); opacity: 0; }
 }
 
 .telemetry-hud-data {

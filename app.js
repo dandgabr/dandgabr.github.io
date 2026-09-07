@@ -47,13 +47,13 @@
         "nav.connect": "//CONNECT",
         "hero.badge.role": "SECURITY ARCHITECT @ DASA",
         "hero.badge.geo": "LONDRINA, PR — BRAZIL",
-        "hero.subline": "Architecting resilient enterprise defenses, forging containment frameworks for autonomous AI agents, and establishing continuous DevSecOps governance.",
+        "hero.subline": "Architecting resilient enterprise defenses, developing containment frameworks for autonomous AI agents, and establishing continuous DevSecOps governance.",
         "hero.pillar1.title": "Enterprise Security",
         "hero.pillar1.sub": "Threat Modeling & DevSecOps",
         "hero.pillar2.title": "AI Safety & Hardening",
         "hero.pillar2.sub": "MCP & Agent Containment",
         "hero.pillar3.title": "Cloud & Infrastructure",
-        "hero.pillar3.sub": "AWS, Azure, CIS Hardening",
+        "hero.pillar3.sub": "AWS, Azure, and CIS Hardening",
         "hero.action.terminal": "INTERACTIVE TERMINAL",
         "hero.action.projects": "INSPECT RESEARCH",
         "hero.action.github": "GITHUB PROFILE",
@@ -85,7 +85,7 @@
         "triad.p1.title": "Enterprise Security Architecture & AppSec",
         "triad.p1.desc": "Establishing defense-in-depth through systematic threat modeling (STRIDE, PASTA), OWASP ASVS/SAMM frameworks, and automated DevSecOps pipelines integrated into CI/CD environments.",
         "triad.p2.title": "AI Safety & Agent Containment",
-        "triad.p2.desc": "Pioneering practical sandboxing for developer AI tooling. Designing MCP (Model Context Protocol) validation layers and agent skill frameworks to prevent prompt injection and tool misuse.",
+        "triad.p2.desc": "Engineering practical sandboxing for developer AI tooling. Designing MCP (Model Context Protocol) validation layers and agent skill frameworks to prevent prompt injection and tool misuse.",
         "triad.p3.title": "Cloud Security & DevSecOps",
         "triad.p3.desc": "Automating security policy enforcement, infrastructure hardening (CIS Benchmarks), container integrity, and compliance controls across multi-cloud environments (AWS & Azure).",
         "sec.skills.title": "CORE EXPERTISE & TECHNICAL DOMAINS",
@@ -202,11 +202,11 @@
         "dossier.org_label": "ORGANIZAÇÃO:",
         "dossier.org_name": "Dasa (Maior rede de saúde integrada da América Latina)",
         "dossier.p1": "Atuando na convergência entre Arquitetura de Defesa Corporativa e Tecnologias Autônomas Emergentes, projeto estruturas de segurança para mitigar vulnerabilidades antes da publicação de código e isolar agentes autônomos em ambientes de desenvolvimento.",
-        "dossier.p2": "Minha base de engenharia fundamenta-se em programação de sistemas, diagnóstico de microcontroladores e contenção de ameaças. Com mais de 4 anos de experiência docente universitária lecionando algoritmos, segurança computacional e eletrônica, unifico didática clara a rigor técnico em segurança de aplicações, modelagem de ameaças e ciclos de desenvolvimento seguro.",
+        "dossier.p2": "Minha base de engenharia fundamenta-se em programação de sistemas, diagnóstico de microcontroladores e contenção de ameaças. Com mais de 4 anos de experiência docente universitária lecionando algoritmos, segurança computacional e eletrônica, unifico didática clara ao rigor técnico em segurança de aplicações, modelagem de ameaças e ciclos de desenvolvimento seguro.",
         "dossier.spec.discipline_label": "DISCIPLINA:",
         "dossier.spec.discipline_val": "Arquitetura de Segurança e DevSecOps",
         "dossier.spec.focus_label": "FOCO_DE_PESQUISA:",
-        "dossier.spec.focus_val": "Segurança em IA, Sandboxing MCP, Análise Forense",
+        "dossier.spec.focus_val": "Segurança em IA, Sandboxing MCP, Forense de Memória",
         "dossier.spec.accred_label": "CERTIFICAÇÃO:",
         "dossier.spec.community_label": "COMUNIDADE:",
         "dossier.spec.community_val": "Palestrante no Google Developer Groups (GDG)",
@@ -222,7 +222,7 @@
         "skills.q1.title": "Arquitetura de Segurança e Governança",
         "skills.q1.desc": "Projetos de defesa corporativa, aplicação de diretrizes e integração resiliente de DevSecOps.",
         "skills.q2.title": "Segurança em IA e Sistemas Autônomos",
-        "skills.q2.desc": "Hardening de agentes autônomos, contenção em sandbox e integração ao nível de protocolo.",
+        "skills.q2.desc": "Hardening de agentes autônomos, contenção em sandbox e integração em nível de protocolo.",
         "skills.q3.title": "Segurança em Nuvem e Infraestrutura",
         "skills.q3.desc": "Defesa de nuvem corporativa, hardening de sistemas operacionais, baselines de conformidade e segurança estrutural.",
         "skills.q4.title": "Linguagens, Automação e Ferramental",
@@ -335,19 +335,19 @@
         "dossier.p2": "Mi enfoque se fundamenta en la programación de sistemas, diagnóstico de microcontroladores y contención de amenazas. Con más de 4 años de docencia universitaria impartiendo algoritmos, seguridad informática y electrónica, uno la pedagogía clara con el rigor técnico en seguridad de aplicaciones, modelado de amenazas y ciclo de vida de desarrollo seguro.",
         "dossier.spec.discipline_label": "DISCIPLINA:",
         "dossier.spec.discipline_val": "Arquitectura de Seguridad y DevSecOps",
-        "dossier.spec.focus_label": "ENFOQUE_INVESTIGACIÓN:",
-        "dossier.spec.focus_val": "Seguridad en IA, Sandboxing MCP, Informática Forense",
+        "dossier.spec.focus_label": "ENFOQUE_DE_INVESTIGACIÓN:",
+        "dossier.spec.focus_val": "Seguridad en IA, Sandboxing MCP, Análisis Forense de Memoria",
         "dossier.spec.accred_label": "CERTIFICACIÓN:",
         "dossier.spec.community_label": "COMUNIDAD:",
         "dossier.spec.community_val": "Ponente en Google Developer Groups (GDG)",
         "triad.label": "[METODOLOGÍA DE DEFENSA]",
         "triad.title": "Los Tres Pilares de Defensa",
         "triad.p1.title": "Arquitectura de Seguridad Corporativa y AppSec",
-        "triad.p1.desc": "Implementación de defensa en profundidad mediante modelado sistemático de amenazas (STRIDE, PASTA), marcos OWASP ASVS/SAMM y canales de DevSecOps automatizados integrados en CI/CD.",
+        "triad.p1.desc": "Implementación de defensa en profundidad mediante modelado sistemático de amenazas (STRIDE, PASTA), marcos OWASP ASVS/SAMM y canalizaciones de DevSecOps automatizadas integradas en CI/CD.",
         "triad.p2.title": "Seguridad y Contención de Agentes de IA",
         "triad.p2.desc": "Desarrollo de mecanismos prácticos de aislamiento para herramientas de IA en entornos de ingeniería. Diseño de capas de validación MCP (Model Context Protocol) para mitigar la inyección de prompts y el uso indebido de herramientas.",
         "triad.p3.title": "Seguridad en la Nube y DevSecOps",
-        "triad.p3.desc": "Automatización de políticas de seguridad, hardening de sistemas operativos (Puntos de Referencia CIS), integridad de contenedores y controles de cumplimiento en entornos multinube (AWS y Azure).",
+        "triad.p3.desc": "Automatización de políticas de seguridad, hardening de sistemas operativos (benchmarks de CIS), integridad de contenedores y controles de cumplimiento en entornos multinube (AWS y Azure).",
         "sec.skills.title": "EXPERIENCIA PRINCIPAL Y DOMINIOS TÉCNICOS",
         "skills.q1.title": "Arquitectura de Seguridad y Gobernanza",
         "skills.q1.desc": "Diseño de defensa corporativa, aplicación de directrices e integración robusta de DevSecOps.",
@@ -445,6 +445,16 @@
 
       // Update static DOM elements
       const dict = this.translations[lang] || this.translations["en"];
+
+      // Update document title for accessibility and SEO
+      if (lang === "pt-br") {
+        document.title = "Daniel Gonçalves Araujo (@dandgabr) | Arquiteto de Segurança da Informação";
+      } else if (lang === "es") {
+        document.title = "Daniel Gonçalves Araujo (@dandgabr) | Arquitecto de Seguridad de la Información";
+      } else {
+        document.title = "Daniel Gonçalves Araujo (@dandgabr) | Information Security Architect";
+      }
+
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
         if (dict[key]) {
@@ -534,7 +544,7 @@
             desc: 'Scripts automatizados para auditoria de segurança, validação de baselines CIS e checagem de permissões em servidores e estações Linux.',
             details: `[CAPACIDADES DE AUDITORIA]
 • Validação de sistemas com base nas diretrizes do Center for Internet Security (CIS) para Linux.
-• Localização de binários com bits SUID/SGID indevidos, privilégios anômalos e diretórios abertos a escrita global.
+• Localização de binários com bits SUID/SGID indevidos, privilégios anômalos e diretórios abertos à escrita global.
 • Hardening de parâmetros de kernel (/etc/sysctl.d - ASLR, TCP SYN cookies, proteção de escopo ptrace).
 • Auditoria de integridade em arquivos críticos de autenticação (/etc/passwd, /etc/shadow, /etc/sudoers).
 
@@ -571,7 +581,7 @@
 • Creación irrestricta de sockets de red y movimiento lateral por parte de agentes autónomos.
 • Filtración de credenciales mediante variables de entorno e inyección maliciosa de scripts.
 
-[ARQUITECTURA DE IMPLEMENTAÇÃO]
+[ARQUITECTURA DE IMPLEMENTACIÓN]
 • Perfiles de aislamiento en contenedores (Docker / Podman / perfiles Bubblewrap).
 • Scripts en Python para auditoría continua de ACLs, aislamiento de procesos y reglas de tráfico saliente.
 • Alineado con OWASP Top 10 para Aplicaciones LLM (LLM02: Divulgación de Información Sensible, LLM06: Agencia Excesiva).`
@@ -597,7 +607,7 @@
             desc: 'Interfaz de servidor Model Context Protocol (MCP) para Cheat Engine, que permite inspección programática, automatización de procesos y telemetría de seguridad para asistentes de IA.',
             details: `[ARQUITECTURA DEL SISTEMA]
 • Integra llamadas de herramientas de LLM con la API nativa de Cheat Engine para inspección de procesos.
-• Expone lectura, escaneo y fijación de memoria bajo el estándar abierto Model Context Protocol.
+• Expone lectura, escaneo y congelamiento de memoria bajo el estándar abierto Model Context Protocol.
 • Permite a modelos de IA examinar estructuras en memoria, depurar estados de ejecución y automatizar pruebas.
 
 [CONTENCIÓN Y SEGURIDAD]
@@ -626,7 +636,7 @@
             details: `[COMPOSICIÓN TÉCNICA]
 • Plantillas de diapositivas reproducibles y programáticas mediante Typst y Polylux.
 • Adopción de la identidad visual de Google Developer Groups (GDG) sin programas ofimáticos pesados.
-• Diapositivas controladas por versiones que compilan de manera determinista en canales de CI/CD.
+• Diapositivas controladas por versiones que compilan de manera determinista en canalizaciones de CI/CD.
 
 [PARTICIPACIÓN EN LA COMUNIDAD]
 • Acompañado de diapositivas didácticas, incluyendo fundamentos de Computación Cuántica en encuentros técnicos.`
@@ -785,6 +795,7 @@
         (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 
       this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.cachedFont = `${this.fontSize}px monospace`;
 
       this.init();
     }
@@ -796,8 +807,9 @@
         return;
       }
 
+      this.updateFont();
       this.resize();
-      window.addEventListener('resize', () => this.debounceResize());
+      window.addEventListener('resize', () => this.debounceResize(), { passive: true });
 
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
@@ -810,10 +822,20 @@
       this.start();
     }
 
+    updateFont() {
+      try {
+        const family = getComputedStyle(document.documentElement).getPropertyValue('--font-mono') || 'monospace';
+        this.cachedFont = `${this.fontSize}px ${family}`;
+      } catch (e) {
+        this.cachedFont = `${this.fontSize}px monospace`;
+      }
+    }
+
     setTheme(theme) {
       this.theme = theme;
+      this.updateFont();
       if (this.ctx && this.canvas) {
-        this.ctx.fillStyle = theme === 'light' ? '#f8faf9' : '#020403';
+        this.ctx.fillStyle = theme === 'light' ? '#f8faf9' : '#030a06';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       }
     }
@@ -838,7 +860,7 @@
         this.colOffsets[i] = Math.floor(Math.random() * (this.colTypes[i] === 'kernel' ? this.kernelStream.length : this.binaryStream.length));
       }
 
-      this.ctx.fillStyle = this.theme === 'light' ? '#f8faf9' : '#020403';
+      this.ctx.fillStyle = this.theme === 'light' ? '#f8faf9' : '#030a06';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -883,15 +905,19 @@
 
       this.lastFrameTime = currentTime - (elapsed % this.frameInterval);
 
-      // Trailing fade effect: dark obsidian or light pure canvas
+      // Trailing fade effect: dark obsidian/green or light pure canvas
       if (this.theme === 'light') {
         this.ctx.fillStyle = 'rgba(248, 250, 249, 0.18)';
       } else {
-        this.ctx.fillStyle = 'rgba(2, 4, 3, 0.12)';
+        this.ctx.fillStyle = 'rgba(3, 10, 6, 0.12)';
       }
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-      this.ctx.font = `${this.fontSize}px ${getComputedStyle(document.documentElement).getPropertyValue('--font-mono') || 'monospace'}`;
+      this.ctx.font = this.cachedFont;
+
+      const isLight = this.theme === 'light';
+      const headColor = isLight ? '#c2410c' : '#ffffff';
+      const trailColor = isLight ? '#ea580c' : '#00ff66';
 
       for (let i = 0; i < this.drops.length; i++) {
         const isKernel = this.colTypes[i] === 'kernel';
@@ -902,37 +928,16 @@
         const x = i * this.fontSize;
         const y = this.drops[i] * this.fontSize;
 
-        if (this.theme === 'light') {
-          // Light Mode: High-contrast technical orange & amber on clean white
-          this.ctx.fillStyle = '#c2410c';
-          this.ctx.shadowBlur = 4;
-          this.ctx.shadowColor = '#ea580c';
-          this.ctx.fillText(char, x, y);
+        // Leading character (high intensity)
+        this.ctx.fillStyle = headColor;
+        this.ctx.fillText(char, x, y);
 
-          if (this.drops[i] > 1) {
-            const prevChar = stream[(this.colOffsets[i] - 1 + stream.length) % stream.length];
-            this.ctx.fillStyle = '#ea580c';
-            this.ctx.shadowBlur = 1;
-            this.ctx.shadowColor = '#f97316';
-            this.ctx.fillText(prevChar, x, y - this.fontSize);
-          }
-        } else {
-          // Dark Mode: High-Assurance Phosphor Neon
-          this.ctx.fillStyle = '#ffffff';
-          this.ctx.shadowBlur = 6;
-          this.ctx.shadowColor = '#00ff66';
-          this.ctx.fillText(char, x, y);
-
-          if (this.drops[i] > 1) {
-            const prevChar = stream[(this.colOffsets[i] - 1 + stream.length) % stream.length];
-            this.ctx.fillStyle = '#00ff66';
-            this.ctx.shadowBlur = 2;
-            this.ctx.shadowColor = '#00cc55';
-            this.ctx.fillText(prevChar, x, y - this.fontSize);
-          }
+        // Previous character in trail
+        if (this.drops[i] > 1) {
+          const prevChar = stream[(this.colOffsets[i] - 1 + stream.length) % stream.length];
+          this.ctx.fillStyle = trailColor;
+          this.ctx.fillText(prevChar, x, y - this.fontSize);
         }
-
-        this.ctx.shadowBlur = 0;
 
         if (y > this.canvas.height && Math.random() > 0.975) {
           this.drops[i] = 0;
@@ -960,7 +965,7 @@
       const l = lang || I18N.currentLang || 'en';
       if (l === 'pt-br') {
         return [
-          { text: '> [INIT] SEC_ARCH_KERNEL_v6.12-hardened ... MEMORIA_VERIFICADA: 64TB_OK', type: 'dim' },
+          { text: '> [INIT] SEC_ARCH_KERNEL_v6.12-hardened ... MEMÓRIA_VERIFICADA: 64TB_OK', type: 'dim' },
           { text: '> [AUTH] IDENTIDADE CONFIRMADA: Daniel Gonçalves Araujo [@dandgabr]', type: 'accent' },
           { text: '> [ROLE] Arquiteto de Segurança da Informação @ Dasa', type: 'highlight' },
           { text: '> [CORE] Defesa Corporativa | Segurança e Hardening em IA | AppSec & DevSecOps | Nuvem', type: 'dim' },
@@ -969,7 +974,7 @@
       }
       if (l === 'es') {
         return [
-          { text: '> [INIT] SEC_ARCH_KERNEL_v6.12-hardened ... MEMORIA_VERIFICADA: 64TB_OK', type: 'dim' },
+          { text: '> [INIT] SEC_ARCH_KERNEL_v6.12-hardened ... MEMÓRIA_VERIFICADA: 64TB_OK', type: 'dim' },
           { text: '> [AUTH] IDENTIDAD CONFIRMADA: Daniel Gonçalves Araujo [@dandgabr]', type: 'accent' },
           { text: '> [ROLE] Arquitecto de Seguridad de la Información @ Dasa', type: 'highlight' },
           { text: '> [CORE] Defensa Corporativa | Seguridad y Hardening en IA | AppSec & DevSecOps | Nube', type: 'dim' },
@@ -1159,13 +1164,6 @@
       this.output.appendChild(div);
     }
 
-    appendHtmlLog(html) {
-      const div = document.createElement('div');
-      div.className = 'term-response';
-      div.innerHTML = html;
-      this.output.appendChild(div);
-    }
-
     cmdHelp() {
       const lang = I18N.currentLang || 'en';
       let helpText = '';
@@ -1235,7 +1233,7 @@ FILOSOFIA:    Engenharia de segurança de alta integridade. Defesa em profundida
 NOMBRE:       Daniel Gonçalves Araujo (@dandgabr)
 ROL:          Arquitecto de Seguridad de la Información @ Dasa
 DOMINIOS:     Arquitectura de Seguridad Corporativa | Seguridad y Hardening en IA | AppSec & DevSecOps | Nube
-CERTIFICACIÓN:CompTIA Security+ ce
+CERTIFICACIÓN: CompTIA Security+ ce
 UBICACIÓN:    Londrina, PR — Brasil
 FILOSOFÍA:    Ingeniería de seguridad de alta integridad. Defensa en profundidad desde la nube hasta el aislamiento de agentes.
         `.trim();
@@ -1244,7 +1242,7 @@ FILOSOFÍA:    Ingeniería de seguridad de alta integridad. Defensa en profundid
 NAME:         Daniel Gonçalves Araujo (@dandgabr)
 ROLE:         Information Security Architect @ Dasa
 DOMAINS:      Enterprise Security Architecture | AI Safety & Hardening | AppSec & DevSecOps | Cloud Security
-ACCREDITATION:CompTIA Security+ ce
+ACCREDITATION: CompTIA Security+ ce
 LOCATION:     Londrina, PR — Brazil
 PHILOSOPHY:   Bespoke, high-assurance security engineering. Defense-in-depth from cloud infrastructure to autonomous agent sandboxes.
         `.trim();
@@ -1686,7 +1684,7 @@ REPOSITORY: ${proj.repo}
           document.documentElement.setAttribute('data-theme', 'dark');
           if (this.themeVal) this.themeVal.textContent = 'DARK';
           this.themeBtn.setAttribute('aria-pressed', 'false');
-          if (metaTheme) metaTheme.setAttribute('content', '#050807');
+          if (metaTheme) metaTheme.setAttribute('content', '#061109');
         }
 
         if (persist) {
@@ -1764,26 +1762,43 @@ REPOSITORY: ${proj.repo}
     initActiveScrollSpy() {
       const sections = document.querySelectorAll('section[id]');
       const navItems = document.querySelectorAll('.nav-item');
+      if (!sections.length || !navItems.length) return;
 
-      window.addEventListener('scroll', () => {
-        let current = '';
-        const scrollPos = window.scrollY + 120;
-
-        sections.forEach(sec => {
-          const top = sec.offsetTop;
-          const height = sec.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            current = sec.getAttribute('id');
-          }
-        });
-
+      const setActive = (id) => {
+        if (!id) return;
         navItems.forEach(item => {
-          item.classList.remove('active');
-          if (item.getAttribute('href') === `#${current}`) {
+          if (item.getAttribute('href') === `#${id}`) {
             item.classList.add('active');
+          } else {
+            item.classList.remove('active');
           }
         });
-      }, { passive: true });
+      };
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              setActive(entry.target.getAttribute('id'));
+            }
+          });
+        }, { rootMargin: '-20% 0px -65% 0px', threshold: 0 });
+
+        sections.forEach(sec => observer.observe(sec));
+      } else {
+        window.addEventListener('scroll', () => {
+          let current = '';
+          const scrollPos = window.scrollY + 120;
+          sections.forEach(sec => {
+            const top = sec.offsetTop;
+            const height = sec.offsetHeight;
+            if (scrollPos >= top && scrollPos < top + height) {
+              current = sec.getAttribute('id');
+            }
+          });
+          setActive(current);
+        }, { passive: true });
+      }
     }
   }
 
@@ -1809,6 +1824,16 @@ REPOSITORY: ${proj.repo}
 
     // 5. HUD Controls
     new HUDManager();
+
+    // 6. Avatar Image Fallback Listener
+    const avatarImg = document.getElementById('avatar-img');
+    if (avatarImg) {
+      avatarImg.addEventListener('error', () => {
+        avatarImg.style.display = 'none';
+        const asciiFallback = document.getElementById('ascii-avatar');
+        if (asciiFallback) asciiFallback.style.display = 'block';
+      });
+    }
 
     console.info('%c[SYS_KERNEL] Daniel Gonçalves Araujo portfolio online. System initialized.', 'color: #00ff66; font-weight: bold; background: #050807; padding: 4px;');
   });

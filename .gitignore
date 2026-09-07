@@ -1,0 +1,13 @@
+# Infrastructure & Cloudflare Local Cache
+.cloudflare/
+.env
+.env.*
+!.env.example
+
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
