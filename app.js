@@ -136,9 +136,9 @@
         "010010000011000101100000", // xor %rax, %rax
         "010010000011000101111111", // xor %rdi, %rdi
         "0000111100000101", // syscall
-        "11000011", // ret
-        "01000100011000010111001101100001", // Dasa
-        "01000001011100100110001101101000", // Arch
+        "010000110111001001111001011100000111010001101111", // Crypto
+        "010010110110010101110010011011100110010101101100", // Kernel
+        "01010011011000010110111001100100011000100110111101111000", // Sandbox
         "01110011011110010111001101100011011000010110110001101100" // syscall
       ].join('');
 
@@ -184,7 +184,7 @@
     setTheme(theme) {
       this.theme = theme;
       if (this.ctx && this.canvas) {
-        this.ctx.fillStyle = theme === 'light' ? '#edf2ee' : '#020403';
+        this.ctx.fillStyle = theme === 'light' ? '#f8faf9' : '#020403';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
       }
     }
@@ -209,7 +209,7 @@
         this.colOffsets[i] = Math.floor(Math.random() * (this.colTypes[i] === 'kernel' ? this.kernelStream.length : this.binaryStream.length));
       }
 
-      this.ctx.fillStyle = this.theme === 'light' ? '#edf2ee' : '#020403';
+      this.ctx.fillStyle = this.theme === 'light' ? '#f8faf9' : '#020403';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -254,9 +254,9 @@
 
       this.lastFrameTime = currentTime - (elapsed % this.frameInterval);
 
-      // Trailing fade effect: dark obsidian or light cyber silver
+      // Trailing fade effect: dark obsidian or light pure canvas
       if (this.theme === 'light') {
-        this.ctx.fillStyle = 'rgba(237, 242, 238, 0.16)';
+        this.ctx.fillStyle = 'rgba(248, 250, 249, 0.18)';
       } else {
         this.ctx.fillStyle = 'rgba(2, 4, 3, 0.12)';
       }
@@ -274,17 +274,17 @@
         const y = this.drops[i] * this.fontSize;
 
         if (this.theme === 'light') {
-          // Light Mode: High-contrast deep cyber emerald
-          this.ctx.fillStyle = '#004d1f';
+          // Light Mode: High-contrast technical orange & amber on clean white
+          this.ctx.fillStyle = '#c2410c';
           this.ctx.shadowBlur = 4;
-          this.ctx.shadowColor = '#008736';
+          this.ctx.shadowColor = '#ea580c';
           this.ctx.fillText(char, x, y);
 
           if (this.drops[i] > 1) {
             const prevChar = stream[(this.colOffsets[i] - 1 + stream.length) % stream.length];
-            this.ctx.fillStyle = '#008736';
+            this.ctx.fillStyle = '#ea580c';
             this.ctx.shadowBlur = 1;
-            this.ctx.shadowColor = '#00a843';
+            this.ctx.shadowColor = '#f97316';
             this.ctx.fillText(prevChar, x, y - this.fontSize);
           }
         } else {
