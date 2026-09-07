@@ -297,6 +297,8 @@ a:hover {
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .status-led {
@@ -306,6 +308,7 @@ a:hover {
   background-color: var(--green-core);
   box-shadow: 0 0 10px var(--green-core);
   animation: pulseLed 2s infinite ease-in-out;
+  flex-shrink: 0;
 }
 
 @keyframes pulseLed {
@@ -316,22 +319,36 @@ a:hover {
 .sys-title {
   color: var(--green-bright);
   letter-spacing: 0.5px;
+  line-height: 1;
 }
 
 .sys-state {
   color: var(--text-dim);
   font-size: 11.5px;
+  line-height: 1;
 }
 
 /* Navigation Links */
 .hud-nav {
   display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .nav-links {
   display: flex;
+  align-items: center;
   list-style: none;
-  gap: 18px;
+  gap: 16px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .nav-item {
@@ -339,14 +356,18 @@ a:hover {
   font-weight: 500;
   color: var(--text-muted);
   letter-spacing: 0.5px;
-  padding: 4px 6px;
+  padding: 6px 6px;
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
   transition: color var(--transition-fast);
 }
 
 .nav-num {
   color: var(--text-dim);
   margin-right: 2px;
+  line-height: 1;
 }
 
 .nav-item:hover {
@@ -361,7 +382,7 @@ a:hover {
 .nav-item.active::after {
   content: '';
   position: absolute;
-  bottom: -4px;
+  bottom: 8px;
   left: 6px;
   right: 6px;
   height: 2px;
@@ -374,6 +395,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .hud-btn {
@@ -382,9 +404,14 @@ a:hover {
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: 11.5px;
-  padding: 4px 9px;
+  line-height: 1;
+  padding: 6px 10px;
   border-radius: var(--radius-xs);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   transition: all var(--transition-fast);
 }
 
@@ -396,11 +423,13 @@ a:hover {
 
 .hud-btn .btn-bracket {
   color: var(--text-dim);
+  line-height: 1;
 }
 
 .hud-btn .btn-val {
   color: var(--green-core);
   font-weight: 600;
+  line-height: 1;
 }
 
 .mobile-only {
@@ -1757,7 +1786,11 @@ a:hover {
     flex-direction: column;
     padding: 16px 20px;
     gap: 12px;
+    height: auto;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+  }
+  .nav-links li {
+    height: auto;
   }
   .nav-links.mobile-open {
     display: flex;
