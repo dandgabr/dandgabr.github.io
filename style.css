@@ -836,14 +836,26 @@ a:hover {
 }
 
 [data-theme="light"] .avatar-img {
-  filter: contrast(1.05) brightness(1);
+  filter: grayscale(1) contrast(1.05) brightness(1);
+  mix-blend-mode: normal;
+  opacity: 0.92;
+}
+
+[data-theme="light"] .avatar-frame:hover .avatar-img {
+  filter: grayscale(0) contrast(1.05) brightness(1);
   mix-blend-mode: normal;
   opacity: 1;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) .avatar-img {
-    filter: contrast(1.05) brightness(1);
+    filter: grayscale(1) contrast(1.05) brightness(1);
+    mix-blend-mode: normal;
+    opacity: 0.92;
+  }
+
+  :root:not([data-theme="dark"]) .avatar-frame:hover .avatar-img {
+    filter: grayscale(0) contrast(1.05) brightness(1);
     mix-blend-mode: normal;
     opacity: 1;
   }
