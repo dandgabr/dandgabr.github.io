@@ -835,7 +835,12 @@ a:hover {
   transition: filter 0.3s ease, opacity 0.3s ease;
 }
 
-[data-theme="light"] .avatar-img,
+[data-theme="light"] .avatar-img {
+  filter: contrast(1.05) brightness(1);
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) .avatar-img {
     filter: contrast(1.05) brightness(1);
@@ -1209,7 +1214,20 @@ a:hover {
   box-shadow: var(--green-glow-sm);
 }
 
-[data-theme="light"] .skill-pill,
+[data-theme="light"] .skill-pill {
+  background-color: #ffffff;
+  border: 1px solid rgba(234, 88, 12, 0.4);
+  color: #c2410c;
+  font-weight: 600;
+}
+
+[data-theme="light"] .skill-pill:hover {
+  background-color: #ea580c;
+  color: #ffffff;
+  border-color: #ea580c;
+  box-shadow: 0 2px 10px rgba(234, 88, 12, 0.35);
+}
+
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) .skill-pill {
     background-color: #ffffff;
