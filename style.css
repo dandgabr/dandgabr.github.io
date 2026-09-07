@@ -1,18 +1,19 @@
 /* ==========================================================================
    MATRIX PHOSPHOR DESIGN SYSTEM - DANIEL GONÇALVES ARAUJO (@dandgabr)
-   Anti-AI Slop: Bespoke, Handcrafted, Low-Level Security Aesthetic
+   Anti-AI Slop: Bespoke, Handcrafted, Modern Matrix Security Aesthetic
    Zero External Dependencies | Pure CSS3 Native
    ========================================================================== */
 
 :root {
-  /* Matrix Color Tokens */
+  /* Matrix Color Tokens - Dark Mode (Default) */
   --bg-void: #020403;
   --bg-base: #050807;
   --bg-surface: #0a0f0d;
-  --bg-card: #0c1410;
-  --bg-card-hover: #111d17;
+  --bg-card: rgba(12, 20, 16, 0.88);
+  --bg-card-hover: rgba(17, 29, 23, 0.95);
   --bg-card-active: #15241d;
   --bg-input: #060a08;
+  --bg-header: rgba(5, 8, 7, 0.88);
 
   /* Phosphor Green Palette */
   --green-core: #00ff66;
@@ -46,6 +47,9 @@
   --text-muted: #82ab8e;
   --text-dim: #4c6e56;
 
+  /* Card Shadows */
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+
   /* Monospace Typography Stack */
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
@@ -58,6 +62,91 @@
   /* Smooth Transitions */
   --transition-fast: 0.15s cubic-bezier(0.2, 0, 0, 1);
   --transition-smooth: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Light Mode Theme (High-Tech Matrix Architect Room)
+   ========================================================================== */
+[data-theme="light"] {
+  --bg-void: #edf2ee;
+  --bg-base: #f5f8f6;
+  --bg-surface: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.92);
+  --bg-card-hover: rgba(240, 248, 243, 0.96);
+  --bg-card-active: #e2ede5;
+  --bg-input: #ffffff;
+  --bg-header: rgba(245, 248, 246, 0.92);
+
+  --green-core: #008736;
+  --green-bright: #006b2b;
+  --green-dim: #00a843;
+  --green-dark: #d5eddb;
+  --green-ultradark: #eaf5ec;
+
+  --green-glow-sm: 0 0 8px rgba(0, 135, 54, 0.18);
+  --green-glow-md: 0 0 16px rgba(0, 135, 54, 0.12);
+  --green-glow-lg: 0 0 28px rgba(0, 135, 54, 0.08);
+  --green-subtle: rgba(0, 135, 54, 0.06);
+  --green-subtle-hover: rgba(0, 135, 54, 0.1);
+
+  --border-subtle: rgba(0, 135, 54, 0.2);
+  --border-medium: rgba(0, 135, 54, 0.4);
+  --border-bright: #008736;
+  --border-dim: rgba(0, 135, 54, 0.26);
+
+  --amber-alert: #b86200;
+  --red-alert: #d61a1a;
+  --cyan-intel: #0369a1;
+  --purple-cert: #6d28d9;
+
+  --text-white: #06170d;
+  --text-main: #10291a;
+  --text-muted: #385944;
+  --text-dim: #60806c;
+
+  --card-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg-void: #edf2ee;
+    --bg-base: #f5f8f6;
+    --bg-surface: #ffffff;
+    --bg-card: rgba(255, 255, 255, 0.92);
+    --bg-card-hover: rgba(240, 248, 243, 0.96);
+    --bg-card-active: #e2ede5;
+    --bg-input: #ffffff;
+    --bg-header: rgba(245, 248, 246, 0.92);
+
+    --green-core: #008736;
+    --green-bright: #006b2b;
+    --green-dim: #00a843;
+    --green-dark: #d5eddb;
+    --green-ultradark: #eaf5ec;
+
+    --green-glow-sm: 0 0 8px rgba(0, 135, 54, 0.18);
+    --green-glow-md: 0 0 16px rgba(0, 135, 54, 0.12);
+    --green-glow-lg: 0 0 28px rgba(0, 135, 54, 0.08);
+    --green-subtle: rgba(0, 135, 54, 0.06);
+    --green-subtle-hover: rgba(0, 135, 54, 0.1);
+
+    --border-subtle: rgba(0, 135, 54, 0.2);
+    --border-medium: rgba(0, 135, 54, 0.4);
+    --border-bright: #008736;
+    --border-dim: rgba(0, 135, 54, 0.26);
+
+    --amber-alert: #b86200;
+    --red-alert: #d61a1a;
+    --cyan-intel: #0369a1;
+    --purple-cert: #6d28d9;
+
+    --text-white: #06170d;
+    --text-main: #10291a;
+    --text-muted: #385944;
+    --text-dim: #60806c;
+
+    --card-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+  }
 }
 
 /* ==========================================================================
@@ -183,11 +272,12 @@ a:hover {
   top: 0;
   z-index: 100;
   height: var(--header-height);
-  background-color: rgba(5, 8, 7, 0.88);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: var(--bg-header);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: background-color var(--transition-smooth), border-color var(--transition-smooth);
 }
 
 .hud-container {
@@ -368,11 +458,14 @@ a:hover {
    ========================================================================== */
 .terminal-card {
   background-color: var(--bg-surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--card-shadow);
   overflow: hidden;
   position: relative;
+  transition: background-color var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
 }
 
 .terminal-card::before {
@@ -432,11 +525,14 @@ a:hover {
 /* HUD Tactical Cards */
 .hud-card {
   background-color: var(--bg-surface);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   padding: 24px;
   position: relative;
-  transition: border-color var(--transition-smooth), transform var(--transition-smooth), box-shadow var(--transition-smooth);
+  box-shadow: var(--card-shadow);
+  transition: border-color var(--transition-smooth), transform var(--transition-smooth), box-shadow var(--transition-smooth), background-color var(--transition-smooth);
 }
 
 .hud-card:hover {

@@ -49,19 +49,19 @@
     },
     'mcp-cheatengine': {
       title: 'mcp-cheatengine',
-      subtitle: 'Model Context Protocol Server for Memory Analysis & Reversing',
-      tag: 'Low-Level Systems & MCP',
+      subtitle: 'Model Context Protocol Server for Process Automation & Inspection',
+      tag: 'AI Tooling & MCP Integration',
       status: 'INTEGRATION',
-      desc: 'Model Context Protocol (MCP) server interface for Cheat Engine, bringing programmatic memory scanning, pointer disassembly, and reverse engineering tools to AI assistants.',
+      desc: 'Model Context Protocol (MCP) server interface for Cheat Engine, enabling programmatic inspection, process automation, and security telemetry for AI assistants.',
       details: `[SYSTEM ARCHITECTURE]
-• Bridges LLM tool-calling interfaces with Cheat Engine's native memory scanning API.
+• Bridges LLM tool-calling interfaces with Cheat Engine's native process inspection API.
 • Exposes memory read/scan/freeze capabilities over the standardized Model Context Protocol.
-• Allows AI models to inspect process address spaces, trace pointer paths, and disassemble opcodes.
+• Allows AI models to inspect process structures, trace execution states, and automate workflows.
 
 [CONTAINMENT & SAFETY]
-• Memory operations restricted to pre-authorized target process IDs.
-• Audit logging of memory offsets and read operations to ensure system stability.`,
-      stack: ['Model Context Protocol (MCP)', 'Cheat Engine', 'Memory Scanning', 'Reverse Engineering', 'Low-Level Systems', 'C# / Python'],
+• Process operations restricted to pre-authorized target process IDs.
+• Audit logging of offsets and read operations to ensure system stability.`,
+      stack: ['Model Context Protocol (MCP)', 'Cheat Engine', 'Process Automation', 'Security Tooling', 'Python / C#'],
       repo: 'https://github.com/dandgabr/mcp-cheatengine'
     },
     'linux-security-validator': {
@@ -107,17 +107,54 @@
       this.canvas = document.getElementById(canvasId);
       if (!this.canvas) return;
       this.ctx = this.canvas.getContext('2d', { alpha: false });
-      this.characters = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ1023456789010101ABCDEFXYZ$#%&*+-=<>{}[]';
+      
+      // Authentic Linux Kernel source code (init/main.c start_kernel + Linus release announcement)
+      this.kernelStream = [
+        "asmlinkage __visible void __init __no_sanitize_address start_kernel(void) {",
+        "char *command_line; char *after_dashes; set_task_stack_end_magic(&init_task);",
+        "smp_setup_processor_id(); cgroup_init_early(); local_irq_disable();",
+        "early_boot_irqs_disabled = true; boot_cpu_init(); page_address_init();",
+        "pr_notice(\"%s\", linux_banner); early_security_init(); setup_arch(&command_line);",
+        "setup_command_line(command_line); setup_nr_cpu_ids(); setup_per_cpu_areas();",
+        "smp_prepare_boot_cpu(); build_all_zonelists(NULL); page_alloc_init();",
+        "pr_notice(\"Kernel command line: %s\\n\", boot_command_line); jump_label_init();",
+        "trap_init(); mm_init(); sched_init(); time_init(); workqueue_init_early();",
+        "rcu_init(); trace_init(); context_tracking_init(); security_init();",
+        "vfs_caches_init(); signals_init(); proc_root_init(); cpuset_init();",
+        "taskstats_init_early(); check_bugs(); rest_init(); }",
+        "/* Linus Torvalds: Hello everybody out there using minix - I'm doing a (free) operating system */",
+        "static int __ref kernel_init(void *unused) { kernel_init_freeable(); async_synchronize_full();",
+        "system_state = SYSTEM_RUNNING; run_init_process(ramdisk_execute_command); }"
+      ].join('  ');
+
+      // True binary streams (representing 'Linux', 'Security', 'Dasa', ELF headers, and x86_64 opcodes)
+      this.binaryStream = [
+        "0100110001101001011011100111010101111000", // Linux
+        "0101001101100101011000110111010101110010011010010111010001111001", // Security
+        "01111111010001010100110001000110", // \x7fELF
+        "00000010000000010000000100000000",
+        "010010000011000101100000", // xor %rax, %rax
+        "010010000011000101111111", // xor %rdi, %rdi
+        "0000111100000101", // syscall
+        "11000011", // ret
+        "01000100011000010111001101100001", // Dasa
+        "010011010110000101110100011100100110100101111000", // Matrix
+        "01110011011110010111001101100011011000010110110001101100" // syscall
+      ].join('');
+
       this.fontSize = 14;
       this.columns = 0;
       this.drops = [];
+      this.colTypes = [];
+      this.colOffsets = [];
       this.animationId = null;
       this.isRunning = true;
       this.lastFrameTime = 0;
-      this.targetFps = 32; // Optimized for smooth phosphor rain with low CPU/GPU footprint
+      this.targetFps = 32;
       this.frameInterval = 1000 / this.targetFps;
+      this.theme = document.documentElement.getAttribute('data-theme') || 
+        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 
-      // Check prefers-reduced-motion
       this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       this.init();
@@ -133,7 +170,6 @@
       this.resize();
       window.addEventListener('resize', () => this.debounceResize());
 
-      // Auto-pause when tab is inactive to save battery and resources
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
           this.pause();
@@ -143,6 +179,14 @@
       });
 
       this.start();
+    }
+
+    setTheme(theme) {
+      this.theme = theme;
+      if (this.ctx && this.canvas) {
+        this.ctx.fillStyle = theme === 'light' ? '#edf2ee' : '#020403';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      }
     }
 
     debounceResize() {
@@ -155,12 +199,17 @@
       this.canvas.height = window.innerHeight;
       this.columns = Math.floor(this.canvas.width / this.fontSize);
       this.drops = [];
+      this.colTypes = [];
+      this.colOffsets = [];
+
       for (let i = 0; i < this.columns; i++) {
-        // Stagger initial Y positions above viewport for continuous rain flow
         this.drops[i] = Math.floor(Math.random() * -this.canvas.height / this.fontSize);
+        // Alternate columns: half stream authentic Linux Kernel C code, half stream true binary
+        this.colTypes[i] = (i % 2 === 0) ? 'kernel' : 'binary';
+        this.colOffsets[i] = Math.floor(Math.random() * (this.colTypes[i] === 'kernel' ? this.kernelStream.length : this.binaryStream.length));
       }
-      // Fill canvas background once with solid dark obsidian
-      this.ctx.fillStyle = '#020403';
+
+      this.ctx.fillStyle = this.theme === 'light' ? '#edf2ee' : '#020403';
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -189,7 +238,7 @@
         return false;
       } else {
         this.isRunning = true;
-        this.canvas.style.opacity = '0.38';
+        this.canvas.style.opacity = this.theme === 'light' ? '0.22' : '0.38';
         this.start();
         return true;
       }
@@ -205,38 +254,60 @@
 
       this.lastFrameTime = currentTime - (elapsed % this.frameInterval);
 
-      // Semi-transparent overlay to create trailing fade effect
-      this.ctx.fillStyle = 'rgba(2, 4, 3, 0.12)';
+      // Trailing fade effect: dark obsidian or light cyber silver
+      if (this.theme === 'light') {
+        this.ctx.fillStyle = 'rgba(237, 242, 238, 0.16)';
+      } else {
+        this.ctx.fillStyle = 'rgba(2, 4, 3, 0.12)';
+      }
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.ctx.font = `${this.fontSize}px ${getComputedStyle(document.documentElement).getPropertyValue('--font-mono') || 'monospace'}`;
 
       for (let i = 0; i < this.drops.length; i++) {
-        const char = this.characters[Math.floor(Math.random() * this.characters.length)];
+        const isKernel = this.colTypes[i] === 'kernel';
+        const stream = isKernel ? this.kernelStream : this.binaryStream;
+        const char = stream[this.colOffsets[i] % stream.length];
+        this.colOffsets[i]++;
+
         const x = i * this.fontSize;
         const y = this.drops[i] * this.fontSize;
 
-        // Draw bright glowing head of stream
-        this.ctx.fillStyle = '#ffffff';
-        this.ctx.shadowBlur = 6;
-        this.ctx.shadowColor = '#00ff66';
-        this.ctx.fillText(char, x, y);
+        if (this.theme === 'light') {
+          // Light Mode: High-contrast deep cyber emerald
+          this.ctx.fillStyle = '#004d1f';
+          this.ctx.shadowBlur = 4;
+          this.ctx.shadowColor = '#008736';
+          this.ctx.fillText(char, x, y);
 
-        // Draw trailing phosphor body
-        if (this.drops[i] > 1) {
-          const prevChar = this.characters[Math.floor(Math.random() * this.characters.length)];
-          this.ctx.fillStyle = '#00ff66';
-          this.ctx.shadowBlur = 2;
-          this.ctx.shadowColor = '#00cc55';
-          this.ctx.fillText(prevChar, x, y - this.fontSize);
+          if (this.drops[i] > 1) {
+            const prevChar = stream[(this.colOffsets[i] - 1 + stream.length) % stream.length];
+            this.ctx.fillStyle = '#008736';
+            this.ctx.shadowBlur = 1;
+            this.ctx.shadowColor = '#00a843';
+            this.ctx.fillText(prevChar, x, y - this.fontSize);
+          }
+        } else {
+          // Dark Mode: Classic Matrix Phosphor Neon
+          this.ctx.fillStyle = '#ffffff';
+          this.ctx.shadowBlur = 6;
+          this.ctx.shadowColor = '#00ff66';
+          this.ctx.fillText(char, x, y);
+
+          if (this.drops[i] > 1) {
+            const prevChar = stream[(this.colOffsets[i] - 1 + stream.length) % stream.length];
+            this.ctx.fillStyle = '#00ff66';
+            this.ctx.shadowBlur = 2;
+            this.ctx.shadowColor = '#00cc55';
+            this.ctx.fillText(prevChar, x, y - this.fontSize);
+          }
         }
 
-        // Reset shadow
         this.ctx.shadowBlur = 0;
 
-        // Reset drop to top with randomized delay when it hits the bottom
         if (y > this.canvas.height && Math.random() > 0.975) {
           this.drops[i] = 0;
+          this.colOffsets[i] = Math.floor(Math.random() * stream.length);
         }
 
         this.drops[i]++;
@@ -256,7 +327,7 @@
         { text: '> [INIT] SEC_ARCH_KERNEL_v6.12-hardened ... MEMORY_CHECK: 64TB_OK', type: 'dim' },
         { text: '> [AUTH] IDENTITY CONFIRMED: Daniel Gonçalves Araujo [@dandgabr]', type: 'accent' },
         { text: '> [ROLE] Information Security Architect @ Dasa', type: 'highlight' },
-        { text: '> [CORE] Enterprise Defense | AI Safety & Hardening | AppSec | Low-Level Systems', type: 'dim' },
+        { text: '> [CORE] Enterprise Defense | AI Safety & Hardening | AppSec & DevSecOps | Cloud Security', type: 'dim' },
         { text: '> [STATE] SYSTEM READY. INTERACTIVE SHELL SPAWNED.', type: 'accent' }
       ];
 
@@ -362,7 +433,7 @@
       const arg = parts.slice(1).join(' ').toLowerCase();
 
       // Echo command
-      this.appendLog(`dandga@sec-node:~$ ${cmdStr}`, 'term-cmd-echo');
+      this.appendLog(`matrix> ${cmdStr}`, 'term-cmd-echo');
 
       switch (mainCmd) {
         case 'help':
@@ -459,10 +530,10 @@ AVAILABLE ARCHITECTURAL COMMANDS:
       const text = `
 NAME:         Daniel Gonçalves Araujo (@dandgabr)
 ROLE:         Information Security Architect @ Dasa
-DOMAINS:      Enterprise Security Architecture | AI Safety & Hardening | AppSec | Low-Level
+DOMAINS:      Enterprise Security Architecture | AI Safety & Hardening | AppSec & DevSecOps | Cloud Security
 ACCREDITATION:CompTIA Security+ ce
 LOCATION:     Londrina, PR — Brazil
-PHILOSOPHY:   Anti-AI Slop. Defense-in-depth from microcontroller bare-metal to autonomous agent sandboxes.
+PHILOSOPHY:   Anti-AI Slop. Defense-in-depth from cloud infrastructure to autonomous agent sandboxes.
       `.trim();
       this.appendLog(text, 'text-accent');
     }
@@ -473,7 +544,7 @@ PHILOSOPHY:   Anti-AI Slop. Defense-in-depth from microcontroller bare-metal to 
 • Enterprise Security Architect at Dasa (largest integrated healthcare network in Latin America).
 • Specializing in threat modeling (STRIDE), DevSecOps automated pipelines, and cloud defense governance.
 • Actively researching containment frameworks and boundary validation for autonomous AI developer tooling.
-• Former University Professor (4+ years) teaching Information Security, Algorithms, Electronics & Microcontrollers.
+• Former University Professor (4+ years) teaching Information Security, Algorithms, Electronics & Computing.
       `.trim();
       this.appendLog(text, 'text-main');
     }
@@ -490,10 +561,10 @@ PHILOSOPHY:   Anti-AI Slop. Defense-in-depth from microcontroller bare-metal to 
 • AI Workspace Hardening            • Modular Agentic Skills
 • Prompt Injection Mitigation       • Academic AI Research (UTFPR)
 
-[03_LOW_LEVEL_&_REVERSING]
-• C Systems & Pointer Forensics     • x86 / x64 Assembly Basics
-• Cheat Engine Memory Scanning      • Embedded Microcontrollers
-• Linux Process & Kernel Internals  • Hardware & Circuit Design
+[03_CLOUD_&_INFRASTRUCTURE]
+• Cloud Security (AWS / Azure)      • Linux CIS Benchmark Hardening
+• Container & K8s Security          • Infrastructure as Code (IaC)
+• IAM & Identity Governance         • OS Hardening & Auditing
 
 [04_LANGUAGES_&_TOOLING]
 • Python • Bash • C# • Typst • Git / GitHub Actions
@@ -710,15 +781,64 @@ REPOSITORY: ${proj.repo}
      ========================================================================== */
   class HUDManager {
     constructor() {
+      this.themeBtn = document.getElementById('toggle-theme');
+      this.themeVal = document.getElementById('theme-val');
       this.crtBtn = document.getElementById('toggle-crt');
       this.rainBtn = document.getElementById('toggle-rain');
       this.menuBtn = document.getElementById('mobile-menu-btn');
       this.navLinks = document.getElementById('nav-links');
 
+      this.initThemeToggle();
       this.initCRT();
       this.initRainToggle();
       this.initMobileMenu();
       this.initActiveScrollSpy();
+    }
+
+    initThemeToggle() {
+      if (!this.themeBtn) return;
+
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+      const getSystemTheme = () => (mediaQuery.matches ? 'light' : 'dark');
+      const savedTheme = localStorage.getItem('matrix_theme');
+
+      const applyTheme = (theme, persist = false) => {
+        if (theme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+          if (this.themeVal) this.themeVal.textContent = 'LIGHT';
+          this.themeBtn.setAttribute('aria-pressed', 'true');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          if (this.themeVal) this.themeVal.textContent = 'DARK';
+          this.themeBtn.setAttribute('aria-pressed', 'false');
+        }
+
+        if (persist) {
+          localStorage.setItem('matrix_theme', theme);
+        }
+
+        if (window.matrixInstance && typeof window.matrixInstance.setTheme === 'function') {
+          window.matrixInstance.setTheme(theme);
+        }
+      };
+
+      // Determine initial theme: saved preference takes precedence, otherwise system theme
+      const initialTheme = savedTheme || getSystemTheme();
+      applyTheme(initialTheme, false);
+
+      // Listen for system theme changes if user hasn't explicitly set a preference
+      mediaQuery.addEventListener('change', (e) => {
+        if (!localStorage.getItem('matrix_theme')) {
+          applyTheme(e.matches ? 'light' : 'dark', false);
+        }
+      });
+
+      // Toggle theme on button click
+      this.themeBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || getSystemTheme();
+        const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+        applyTheme(nextTheme, true);
+      });
     }
 
     initCRT() {

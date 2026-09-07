@@ -8,24 +8,24 @@
   <!-- Primary Meta Tags -->
   <title>Daniel Gonçalves Araujo (@dandgabr) | Information Security Architect</title>
   <meta name="title" content="Daniel Gonçalves Araujo (@dandgabr) | Information Security Architect">
-  <meta name="description" content="Portfolio and Security Research of Daniel Gonçalves Araujo (@dandgabr). Information Security Architect @ Dasa. Specializing in Enterprise Security Architecture, AI Safety & Hardening, AppSec, DevSecOps, and Low-Level Systems.">
-  <meta name="keywords" content="Daniel Gonçalves Araujo, dandgabr, Security Architect, Dasa, AI Safety, AI Hardening, AppSec, DevSecOps, Threat Modeling, CIS Benchmarks, MCP, Model Context Protocol, Low-Level, C, Assembly, Reverse Engineering, CompTIA Security+">
+  <meta name="description" content="Portfolio and Security Research of Daniel Gonçalves Araujo (@dandgabr). Information Security Architect @ Dasa. Specializing in Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps.">
+  <meta name="keywords" content="Daniel Gonçalves Araujo, dandgabr, Security Architect, Dasa, AI Safety, AI Hardening, AppSec, DevSecOps, Threat Modeling, CIS Benchmarks, MCP, Model Context Protocol, Cloud Security, CompTIA Security+">
   <meta name="author" content="Daniel Gonçalves Araujo (@dandgabr)">
   <meta name="theme-color" content="#050807">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="dark light">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://dandgabr.github.io/">
   <meta property="og:title" content="Daniel Gonçalves Araujo | Information Security Architect">
-  <meta property="og:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and Low-Level Systems. Matrix-grade technical portfolio.">
+  <meta property="og:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps. Matrix-grade technical portfolio.">
   <meta property="og:image" content="https://github.com/dandgabr.png">
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://dandgabr.github.io/">
   <meta property="twitter:title" content="Daniel Gonçalves Araujo | Information Security Architect">
-  <meta property="twitter:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and Low-Level Systems. Matrix-grade technical portfolio.">
+  <meta property="twitter:description" content="Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps. Matrix-grade technical portfolio.">
   <meta property="twitter:image" content="https://github.com/dandgabr.png">
 
   <!-- Favicon / SVG Icon -->
@@ -49,7 +49,7 @@
     <div class="hud-container">
       <div class="sys-badge">
         <span class="status-led" aria-hidden="true"></span>
-        <span class="sys-title">dandga@matrix-sec:~#</span>
+        <span class="sys-title">matrix</span>
         <span class="sys-state" aria-label="System status operational">[ACTIVE]</span>
       </div>
 
@@ -67,6 +67,9 @@
 
       <!-- System Controls & Diagnostics -->
       <div class="hud-controls">
+        <button id="toggle-theme" class="hud-btn" type="button" aria-label="Toggle Theme Mode" title="Toggle Light / Dark Mode">
+          <span class="btn-bracket">[</span>THEME: <span class="btn-val" id="theme-val">DARK</span><span class="btn-bracket">]</span>
+        </button>
         <button id="toggle-crt" class="hud-btn" type="button" aria-pressed="true" title="Toggle CRT Scanline Effect">
           <span class="btn-bracket">[</span>CRT: <span class="btn-val">ON</span><span class="btn-bracket">]</span>
         </button>
@@ -102,7 +105,7 @@
             <p class="log-line text-dim">&gt; BIOS_CHECKSUM: OK | KERNEL_LOAD: 0x00007FFD... ACCESS_GRANTED</p>
             <p class="log-line text-accent">&gt; IDENTITY: Daniel Gonçalves Araujo [@dandgabr]</p>
             <p class="log-line text-highlight">&gt; ROLE: Information Security Architect @ Dasa</p>
-            <p class="log-line text-dim">&gt; SPECIALIZATION: Enterprise Defense | AI Safety & Hardening | AppSec | Low-Level Systems</p>
+            <p class="log-line text-dim">&gt; SPECIALIZATION: Enterprise Defense | AI Safety & Hardening | AppSec & DevSecOps</p>
           </div>
 
           <div class="hero-identity-grid">
@@ -118,7 +121,7 @@
               </h1>
 
               <p class="hero-subline">
-                Architecting resilient enterprise defenses, forging containment frameworks for autonomous AI agents, and deconstructing low-level software boundaries.
+                Architecting resilient enterprise defenses, forging containment frameworks for autonomous AI agents, and establishing continuous DevSecOps governance.
               </p>
 
               <div class="hero-pillars">
@@ -137,10 +140,10 @@
                   </div>
                 </div>
                 <div class="pillar-chip">
-                  <span class="chip-icon" aria-hidden="true">⚡</span>
+                  <span class="chip-icon" aria-hidden="true">☁️</span>
                   <div class="chip-body">
-                    <strong>Low-Level Systems</strong>
-                    <small>Memory & Reverse Engineering</small>
+                    <strong>Cloud & Infrastructure</strong>
+                    <small>AWS, Azure, CIS Hardening</small>
                   </div>
                 </div>
               </div>
@@ -237,7 +240,7 @@
           <!-- Command Input Line -->
           <form id="terminal-form" class="terminal-input-row" autocomplete="off">
             <label for="cli-input" class="term-prompt">
-              <span class="term-user">dandga</span><span class="term-at">@</span><span class="term-host">sec-node</span>:<span class="term-path">~</span>$&nbsp;
+              <span class="term-user">matrix</span>&gt;&nbsp;
             </label>
             <input type="text" id="cli-input" class="term-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Terminal command line input" placeholder="type a command...">
             <button type="submit" class="term-submit-btn" aria-label="Execute command">&gt;</button>
@@ -317,8 +320,8 @@
             <article class="triad-item">
               <div class="triad-num">03</div>
               <div class="triad-content">
-                <h4>Low-Level Systems & Reverse Engineering</h4>
-                <p>Drawing upon hardware engineering, microcontrollers, and C/Assembly fundamentals to analyze memory layouts, inspect process execution, and conduct baseline OS hardening.</p>
+                <h4>Cloud Security & DevSecOps</h4>
+                <p>Automating security policy enforcement, infrastructure hardening (CIS Benchmarks), container integrity, and compliance controls across multi-cloud environments (AWS & Azure).</p>
               </div>
             </article>
           </div>
@@ -372,21 +375,21 @@
           </ul>
         </div>
 
-        <!-- Quadrant 3: Low-Level & Systems -->
+        <!-- Quadrant 3: Cloud Security & Infrastructure -->
         <div class="hud-card skill-card">
           <div class="card-hud-label">[DOMAIN: 0x03]</div>
           <div class="skill-header">
-            <span class="domain-icon" aria-hidden="true">⚡</span>
-            <h3 class="skill-title">Low-Level & Reverse Engineering</h3>
+            <span class="domain-icon" aria-hidden="true">☁️</span>
+            <h3 class="skill-title">Cloud Security & Infrastructure</h3>
           </div>
-          <p class="skill-desc">Deep hardware awareness, memory scanning, process inspection, and systems code.</p>
-          <ul class="skill-pill-list" aria-label="Low-Level skills list">
-            <li class="skill-pill">C Programming (Memory & Pointers)</li>
-            <li class="skill-pill">x86 / x64 Assembly Basics</li>
-            <li class="skill-pill">Cheat Engine Memory Scanning</li>
-            <li class="skill-pill">Embedded Microcontrollers</li>
-            <li class="skill-pill">Linux Process & Kernel Internals</li>
-            <li class="skill-pill">Hardware / Digital Electronics</li>
+          <p class="skill-desc">Enterprise cloud defense, operating system hardening, compliance baselines, and infrastructure security.</p>
+          <ul class="skill-pill-list" aria-label="Cloud Security skills list">
+            <li class="skill-pill">AWS Security Architecture</li>
+            <li class="skill-pill">Microsoft Azure Security</li>
+            <li class="skill-pill">Linux OS Baseline Hardening</li>
+            <li class="skill-pill">CIS Benchmarks & Controls</li>
+            <li class="skill-pill">Container & K8s Security</li>
+            <li class="skill-pill">IAM & Identity Governance</li>
           </ul>
         </div>
 
@@ -429,8 +432,8 @@
         <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="ai">
           [ AI & AGENTS (2) ]
         </button>
-        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="low-level">
-          [ LOW-LEVEL (1) ]
+        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="tools">
+          [ TOOLING (1) ]
         </button>
         <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="community">
           [ COMMUNITY (1) ]
@@ -445,23 +448,23 @@
           <div class="project-card-header">
             <div class="proj-telemetry">
               <span class="proj-id">PRJ-01</span>
-              <span class="proj-status status-active">ACTIVE_RESEARCH</span>
+              <span class="proj-status status-active">PRODUCTION</span>
             </div>
             <div class="proj-category-tags">
-              <span class="mini-tag">AI Security</span>
-              <span class="mini-tag">Python</span>
+              <span class="mini-tag">AI Safety</span>
+              <span class="mini-tag">Hardening</span>
             </div>
           </div>
           <h3 class="proj-title">
             <span class="proj-icon">🛡️</span> hardening-ia
           </h3>
           <p class="proj-desc">
-            Automated security hardening framework and validation scripts designed for AI-assisted development tools, sandboxing environments, and developer workspace security containment.
+            Automated security hardening framework designed for AI-assisted development environments. Implements sandbox verification, API token boundary enforcement, and permission audits.
           </p>
           <div class="proj-capabilities">
-            <div class="cap-item">&gt; Sandboxing validation for LLM developer tools</div>
-            <div class="cap-item">&gt; Workspace permission & escape vector auditing</div>
-            <div class="cap-item">&gt; Hardened isolation profiles for agent execution</div>
+            <div class="cap-item">&gt; Zero-trust isolation for local AI coding CLI tools</div>
+            <div class="cap-item">&gt; Workspace token and credential leakage prevention</div>
+            <div class="cap-item">&gt; Automated compliance and baseline validation audits</div>
           </div>
           <div class="proj-actions">
             <button type="button" class="inspect-btn" data-project="hardening-ia" aria-haspopup="dialog">
@@ -478,23 +481,23 @@
           <div class="project-card-header">
             <div class="proj-telemetry">
               <span class="proj-id">PRJ-02</span>
-              <span class="proj-status status-active">STANDARDIZED</span>
+              <span class="proj-status status-active">PRODUCTION</span>
             </div>
             <div class="proj-category-tags">
               <span class="mini-tag">Agentic AI</span>
-              <span class="mini-tag">Architecture</span>
+              <span class="mini-tag">Modular Skills</span>
             </div>
           </div>
           <h3 class="proj-title">
             <span class="proj-icon">🧠</span> skills
           </h3>
           <p class="proj-desc">
-            A comprehensive, battle-tested repository of standardized skills and domain capabilities for autonomous AI coding agents, enforcing deterministic tool execution and security constraints.
+            A battle-tested ecosystem of standardized, modular skills engineered for AI coding agents, multi-agent orchestration, and developer assistants.
           </p>
           <div class="proj-capabilities">
-            <div class="cap-item">&gt; Modular domain skills for AI software engineering</div>
-            <div class="cap-item">&gt; Enforces input sanitization & boundary validation</div>
-            <div class="cap-item">&gt; Multi-agent orchestration protocols</div>
+            <div class="cap-item">&gt; Standardized capability contracts across 50+ domains</div>
+            <div class="cap-item">&gt; Multi-agent supervisory and governance patterns</div>
+            <div class="cap-item">&gt; Deterministic execution paths for autonomous coding</div>
           </div>
           <div class="proj-actions">
             <button type="button" class="inspect-btn" data-project="skills" aria-haspopup="dialog">
@@ -507,7 +510,7 @@
         </article>
 
         <!-- Project 3: mcp-cheatengine -->
-        <article class="project-card" data-category="low-level ai" data-project-id="mcp-cheatengine">
+        <article class="project-card" data-category="ai tools" data-project-id="mcp-cheatengine">
           <div class="project-card-header">
             <div class="proj-telemetry">
               <span class="proj-id">PRJ-03</span>
@@ -515,19 +518,19 @@
             </div>
             <div class="proj-category-tags">
               <span class="mini-tag">Model Context Protocol</span>
-              <span class="mini-tag">Memory Analysis</span>
+              <span class="mini-tag">Process Automation</span>
             </div>
           </div>
           <h3 class="proj-title">
             <span class="proj-icon">🧩</span> mcp-cheatengine
           </h3>
           <p class="proj-desc">
-            Model Context Protocol (MCP) server interface for Cheat Engine, enabling programmatic memory scanning, pointer disassembly, and reverse engineering telemetry for AI assistants.
+            Model Context Protocol (MCP) server interface for Cheat Engine, enabling programmatic inspection, process automation, and security telemetry for AI assistants.
           </p>
           <div class="proj-capabilities">
-            <div class="cap-item">&gt; MCP server bridging LLMs to process memory</div>
-            <div class="cap-item">&gt; Real-time process address scanning and reading</div>
-            <div class="cap-item">&gt; Reverse engineering tooling for AI workflows</div>
+            <div class="cap-item">&gt; MCP server bridging LLMs to process inspection</div>
+            <div class="cap-item">&gt; Real-time process address inspection and automation</div>
+            <div class="cap-item">&gt; Autonomous agent inspection tooling for developer workflows</div>
           </div>
           <div class="proj-actions">
             <button type="button" class="inspect-btn" data-project="mcp-cheatengine" aria-haspopup="dialog">
@@ -806,7 +809,7 @@
     <div class="footer-container">
       <div class="footer-left">
         <span class="prompt-symbol">&gt;&gt;</span>
-        <span>ROOT@DANDGABR:~# EOF</span>
+        <span>matrix&gt; EOF</span>
         <span class="footer-sep">|</span>
         <span class="footer-spec">ZERO-FRAMEWORKS &bull; PURE HTML5/CSS3/ES6+</span>
       </div>
