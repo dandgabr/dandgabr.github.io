@@ -271,7 +271,7 @@ a:hover {
   position: sticky;
   top: 0;
   z-index: 100;
-  height: var(--header-height);
+  min-height: var(--header-height);
   background-color: var(--bg-header);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -283,11 +283,12 @@ a:hover {
 .hud-container {
   max-width: var(--max-width);
   margin: 0 auto;
-  height: 100%;
+  min-height: var(--header-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
+  gap: 8px;
 }
 
 /* System State Badge */
@@ -1803,10 +1804,11 @@ a:hover {
   .hero-pillars {
     grid-template-columns: 1fr;
   }
+  /* Nav links colapsam em menu dropdown */
   .nav-links {
     display: none;
     position: absolute;
-    top: var(--header-height);
+    top: 100%;
     left: 0;
     right: 0;
     background-color: var(--bg-surface);
@@ -1824,7 +1826,7 @@ a:hover {
     display: flex;
   }
   .mobile-only {
-    display: block;
+    display: inline-flex;
   }
   .footer-container {
     flex-direction: column;
@@ -1836,15 +1838,78 @@ a:hover {
   .timeline-marker {
     left: -24px;
   }
-}
 
-@media (max-width: 600px) {
+  /* Controles: reduz gap e padding */
   .hud-controls {
     gap: 6px;
   }
   .hud-btn {
-    padding: 5px 6px;
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}
+
+/* Telas estreitas: esconde labels textuais, mantém apenas o valor do botão */
+@media (max-width: 520px) {
+  .hud-controls {
+    gap: 5px;
+  }
+  /* Oculta o texto fixo "LANG:", "THEME:", "CRT:", "STREAM:" — mantém só o valor */
+  .hud-btn .btn-label,
+  .hud-btn .btn-bracket {
+    display: none;
+  }
+  .hud-btn {
+    padding: 5px 7px;
     font-size: 10.5px;
+    letter-spacing: 0;
+  }
+  /* Badge: oculta [ACTIVE] para liberar espaço */
+  .sys-state {
+    display: none;
+  }
+}
+
+/* Telas muito estreitas: scroll horizontal interno nos controles como fallback */
+@media (max-width: 380px) {
+  .hud-container {
+    flex-wrap: wrap;
+    padding: 6px 12px;
+    row-gap: 0;
+  }
+  .hud-controls {
+    flex: 0 0 100%;
+    justify-content: flex-end;
+    padding-bottom: 5px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .hud-controls::-webkit-scrollbar {
+    display: none;
+  }
+  .sys-badge {
+    flex: 1;
+  }
+  .hud-nav {
+    flex: 0 0 auto;
+  }
+}
+
+/* Landscape em dispositivos móveis (pouca altura vertical) */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --header-height: 44px;
+  }
+  .hud-btn {
+    padding: 4px 7px;
+    font-size: 10.5px;
+  }
+  .sys-state {
+    display: none;
+  }
+  .hud-controls {
+    gap: 5px;
   }
 }
 
