@@ -62,7 +62,7 @@ function selectFilter(section, button) {
 
 /** Populate the dialog from one project record. Pure DOM writes, no HTML. */
 function renderModal(data) {
-  setText('modal-terminal-title', `${data.title}.sys // architecture_telemetry.log`);
+  setText('modal-terminal-title', `Workbench:Projects/${data.title}`);
   setText('modal-project-title', data.title);
   setText('modal-project-desc', `${data.subtitle}. ${data.desc}`);
   setText('modal-project-tag', data.tag);
