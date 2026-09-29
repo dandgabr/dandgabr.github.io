@@ -271,10 +271,13 @@ export class TerminalCLI {
     // itself, or it becomes a second writer.
     const active = flipStreamPreference(localStorage);
     this.appendLog(I18N.t(active ? 'cmd.stream.output_on' : 'cmd.stream.output_off'), 'text-accent');
-    const rainBtn = document.getElementById('toggle-rain');
-    if (rainBtn) {
-      rainBtn.querySelector('.btn-val').textContent = active ? 'RUN' : 'PAUSED';
-      rainBtn.setAttribute('aria-pressed', active.toString());
+    // Keep the PREFS toggle truthful: the command is a second route into the
+    // same preference, so the button must reflect the new state rather than
+    // wait for a reload. `aria-pressed` and the label are re-derived together.
+    const streamBtn = document.querySelector('[data-toggle="stream"]');
+    if (streamBtn) {
+      streamBtn.setAttribute('aria-pressed', active.toString());
+      streamBtn.textContent = I18N.t(active ? 'prefs.on' : 'prefs.off');
     }
   }
 }

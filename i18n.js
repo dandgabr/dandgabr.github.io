@@ -38,6 +38,12 @@ export const I18N = {
         "dock.connect": "CONNECT",
         "dock.shell": "SHELL",
         "dock.prefs": "PREFS",
+        "prefs.lang": "Language",
+        "prefs.crt": "CRT scanlines",
+        "prefs.stream": "Background stream",
+        "prefs.replay_tour": "Replay tour",
+        "prefs.on": "ON",
+        "prefs.off": "OFF",
         "nav.terminal": "//TERMINAL",
         "nav.intel": "//INTEL",
         "nav.skills": "//SKILLS",
@@ -212,6 +218,12 @@ export const I18N = {
         "dock.connect": "CONTATO",
         "dock.shell": "SHELL",
         "dock.prefs": "PREFS",
+        "prefs.lang": "Idioma",
+        "prefs.crt": "Scanlines CRT",
+        "prefs.stream": "Fluxo de fundo",
+        "prefs.replay_tour": "Repetir tour",
+        "prefs.on": "ON",
+        "prefs.off": "OFF",
         "nav.terminal": "//TERMINAL",
         "nav.intel": "//DOSSIÊ",
         "nav.skills": "//DOMÍNIOS",
@@ -386,6 +398,12 @@ export const I18N = {
         "dock.connect": "CONTACTO",
         "dock.shell": "SHELL",
         "dock.prefs": "PREFS",
+        "prefs.lang": "Idioma",
+        "prefs.crt": "Scanlines CRT",
+        "prefs.stream": "Flujo de fondo",
+        "prefs.replay_tour": "Repetir recorrido",
+        "prefs.on": "ON",
+        "prefs.off": "OFF",
         "nav.terminal": "//TERMINAL",
         "nav.intel": "//DOSIER",
         "nav.skills": "//DOMINIOS",
@@ -560,12 +578,6 @@ export const I18N = {
       // Update HTML attributes
       document.documentElement.setAttribute("lang", lang === "pt-br" ? "pt-BR" : lang);
       document.documentElement.setAttribute("data-lang", lang);
-
-      // Update HUD button indicator
-      const langVal = document.getElementById("lang-val");
-      if (langVal) {
-        langVal.textContent = lang === "pt-br" ? "PT" : lang.toUpperCase();
-      }
 
       // Update document title for accessibility and SEO
       if (lang === "pt-br") {

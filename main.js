@@ -1,10 +1,9 @@
 /**
  * ============================================================================
  * BOOTSTRAP - the page's single entry point
- * Wires the modules together in one place. `app.js` keeps the HUD controls
- * (deleted in a later Phase 3 task, so this task must keep them working rather
- * than drop them); the Projects modal engine now lives in `projects.js`. This
- * file owns the `DOMContentLoaded` handler that used to live in `app.js`.
+ * Wires the modules together in one place. The Projects modal engine lives in
+ * `projects.js`, the preferences application in `prefs.js`, and this file owns
+ * the `DOMContentLoaded` handler that used to live in `app.js`.
  * ============================================================================
  */
 
@@ -14,7 +13,7 @@ import { renderDock, initDockNav } from './dock.js';
 import { showApp } from './windows.js';
 import { TerminalCLI } from './terminal.js';
 import { TerminalStream, readStreamPreference, writeStreamPreference, flipStreamPreference } from './effects.js';
-import { HUDManager } from './app.js';
+import { initPrefs } from './prefs.js';
 import { initProjects, openProject, closeProject } from './projects.js';
 
 /** The dock list is stable markup, so resolve it once, not per route. */
@@ -52,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Terminal background stream canvas - opt-in, persisted, desktop only.
   //    This is the single reader of the preference; every toggle writes it
   //    through effects.js. `window.__effects` is the cross-module handle and is
-  //    set BEFORE HUDManager is constructed, so the STREAM control reads it.
+  //    set here, before any toggle can read it.
   const stream = new TerminalStream('stream-canvas');
   window.__effects = { stream, readStreamPreference, writeStreamPreference, flipStreamPreference };
   if (readStreamPreference() && !window.matchMedia('(max-width: 767px)').matches) {
@@ -66,10 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Projects grid, filter tabs and inspection modal.
   initProjects();
 
-  // 5. HUD controls (transitional; Phase 3 moves them to Prefs). The stream
-  //    writer is injected rather than re-imported inside app.js: effects.js
-  //    stays the single write path and app.js keeps no dependency on it.
-  new HUDManager(flipStreamPreference);
+  // 5. Prefs controls: language, CRT, background stream and replay tour. The
+  //    listener is delegated from the PREFS window itself, so this is the only
+  //    wiring the page needs for the whole preference surface.
+  initPrefs();
 
   // 6. Avatar image fallback, moved here from app.js.
   const avatarImg = document.getElementById('avatar-img');

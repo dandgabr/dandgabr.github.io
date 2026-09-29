@@ -55,62 +55,9 @@
   <!-- CRT Screen Glare & Scanline Filter Overlay -->
   <div class="crt-overlay" aria-hidden="true"></div>
 
-  <!-- SYS-CTRL: Vertical Side Panel (controls moved from header) -->
-  <aside class="sys-ctrl-panel" aria-label="System Controls">
-    <div class="ctrl-header">
-      <span class="ctrl-title">SYS-CTRL</span>
-    </div>
-    <div class="ctrl-group">
-      <button id="toggle-lang" class="ctrl-item" type="button" aria-label="Switch language (EN, PT, ES)" title="Switch Language (EN / PT / ES)">
-        <span class="ctrl-item-label">&gt; LANG</span>
-        <span class="btn-val" id="lang-val">EN</span>
-      </button>
-      <button id="toggle-theme" class="ctrl-item" type="button" aria-label="Toggle Theme Mode" title="Toggle Light / Dark Mode">
-        <span class="ctrl-item-label">&gt; THEME</span>
-        <span class="btn-val" id="theme-val">DARK</span>
-      </button>
-      <button id="toggle-crt" class="ctrl-item" type="button" aria-pressed="true" title="Toggle CRT Scanline Effect">
-        <span class="ctrl-item-label">&gt; CRT</span>
-        <span class="btn-val">ON</span>
-      </button>
-      <button id="toggle-rain" class="ctrl-item" type="button" aria-pressed="true" title="Toggle Background Stream">
-        <span class="ctrl-item-label">&gt; STREAM</span>
-        <span class="btn-val">RUN</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- HUD Top Bar / System Navigation -->
-  <header class="hud-header" role="banner">
-    <div class="hud-container">
-      <div class="sys-badge">
-        <span class="status-led" aria-hidden="true"></span>
-        <span class="sys-title">terminal</span>
-        <span class="sys-state" aria-label="System status operational" data-i18n="hud.active">[ACTIVE]</span>
-      </div>
-
-      <nav class="hud-nav" aria-label="Main system navigation">
-        <ul class="nav-links" id="nav-links">
-          <li><a href="#hero" class="nav-item active"><span class="nav-num">01.</span><span data-i18n="nav.root">//ROOT</span></a></li>
-          <li><a href="#terminal" class="nav-item"><span class="nav-num">02.</span><span data-i18n="nav.terminal">//TERMINAL</span></a></li>
-          <li><a href="#about" class="nav-item"><span class="nav-num">03.</span><span data-i18n="nav.intel">//INTEL</span></a></li>
-          <li><a href="#skills" class="nav-item"><span class="nav-num">04.</span><span data-i18n="nav.skills">//SKILLS</span></a></li>
-          <li><a href="#projects" class="nav-item"><span class="nav-num">05.</span><span data-i18n="nav.projects">//PROJECTS</span></a></li>
-          <li><a href="#credentials" class="nav-item"><span class="nav-num">06.</span><span data-i18n="nav.academic">//ACADEMIC</span></a></li>
-          <li><a href="#contact" class="nav-item"><span class="nav-num">07.</span><span data-i18n="nav.connect">//CONNECT</span></a></li>
-        </ul>
-      </nav>
-
-      <!-- Mobile: hamburger menu toggle only -->
-      <button id="mobile-menu-btn" class="hud-btn mobile-only" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle Navigation Menu">
-        <span class="btn-bracket">[</span>MENU<span class="btn-bracket">]</span>
-      </button>
-    </div>
-  </header>
-
   <!-- Workbench screen title bar: the top edge of the screen (Phase 2 shell).
-       The legacy HUD header still carries its own banner role and is removed
-       in a later phase; the duplicate landmark is transitional. -->
+       The legacy HUD header is gone, so this is the page's only banner
+       landmark, and nothing collides with it at `top:0`. -->
   <div class="screen-bar bevel" role="banner">
     <span class="screen-gadget bevel" aria-hidden="true"></span>
     <span class="screen-title">Workbench — dan.seg.br</span>
@@ -849,8 +796,31 @@
     
         </section>
 
-        <!-- PREFS placeholder: wired in Task 13, which adds its heading. -->
-        <section class="app" data-app="prefs" hidden></section>
+        <!-- PREFS: the preferences application. Its controls (language, CRT
+             scanlines, background stream, replay tour) are wired by prefs.js,
+             which delegates from this section, not from `document`. -->
+        <section class="app" data-app="prefs" aria-labelledby="win-prefs-heading" hidden>
+          <h2 class="window-heading" id="win-prefs-heading" tabindex="-1" data-i18n="dock.prefs">Prefs</h2>
+          <div class="prefs-panel bevel" role="toolbar" aria-label="Preferences">
+            <div class="prefs-row">
+              <span data-i18n="prefs.lang">Language</span>
+              <button type="button" class="bevel" data-lang="pt-br">PT-BR</button>
+              <button type="button" class="bevel" data-lang="en">EN</button>
+              <button type="button" class="bevel" data-lang="es">ES</button>
+            </div>
+            <div class="prefs-row">
+              <span data-i18n="prefs.crt">CRT scanlines</span>
+              <button type="button" class="bevel" data-toggle="crt" aria-pressed="false"></button>
+            </div>
+            <div class="prefs-row">
+              <span data-i18n="prefs.stream">Background stream</span>
+              <button type="button" class="bevel" data-toggle="stream" aria-pressed="false"></button>
+            </div>
+            <div class="prefs-row">
+              <button type="button" class="bevel" data-action="replay-tour" data-i18n="prefs.replay_tour">Replay tour</button>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
 
