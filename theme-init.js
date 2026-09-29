@@ -5,6 +5,13 @@
   try {
     var root = document.documentElement;
 
+    // Locked decision: this project is dark only; the light theme is being
+    // removed. Set the attribute unconditionally, before first paint, so the
+    // legacy light-preference media block is inert during the pre-paint window
+    // and the CRT-off token guard behaves as designed. No detection: no
+    // localStorage, no matchMedia, no light/dark branch — just dark.
+    root.setAttribute('data-theme', 'dark');
+
     // Legacy builds stored 'true'/'false'; current builds store '1'/'0'.
     // Accept both so a returning visitor who had the overlay off keeps it
     // off instead of being silently reset to on.
