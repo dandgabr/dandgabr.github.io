@@ -3,11 +3,42 @@ import assert from 'node:assert/strict';
 import { COMMANDS } from '../terminal.js';
 import { I18N } from '../i18n.js';
 
-const REMOVED = ['nmap', 'sqlmap', 'john', 'hash', 'base64', 'rot13', 'iptables', 'honey', 'cve', 'ping', 'traceroute'];
+// Canonical names AND aliases of every command the security refactor removed.
+// Dispatch resolves both: `terminal.js` falls back from `COMMANDS[mainCmd]` to
+// the `ALIASES` map, which is built from each surviving command's `aliases`
+// array. So an egg can return by either route, and the guard must deny both.
+// Verified against the base revision's command switch, not trusted from memory:
+//   git show 48dfcc3:app.js   (the `switch (mainCmd)` inside TerminalCLI)
+const REMOVED = [
+  // Canonical names (the removed registry keys).
+  'nmap', 'sqlmap', 'john', 'hash', 'base64', 'rot13',
+  'iptables', 'honey', 'cve', 'ping', 'traceroute',
+  // Aliases that dispatched the same handlers in the base revision.
+  'scan', 'portscan',            // nmap
+  'trace',                       // traceroute
+  'sha256', 'sha512',            // hash
+  'b64',                         // base64
+  'rot',                         // rot13
+  'firewall', 'nftables', 'ufw', // iptables
+  'honeypot', 'canary', 'trap',  // honey
+  'vuln', 'advisory',            // cve
+  'exploit', 'hack', 'inject',   // sqlmap
+  'crack', 'hydra',              // john
+  // Quote-character triggers that also invoked `cmdSqlmap` in the base revision
+  // (`case "'": case '"':`). Not names, but still dispatchable tokens.
+  "'", '"',
+];
 
 test('no network or easter-egg command survives', () => {
+  // The flat denylist is checked against the union of canonical names and
+  // every declared alias, so an egg cannot return by hiding in an alias.
+  // This subsumes the old `COMMANDS[name] === undefined` key check.
+  const live = new Set([
+    ...Object.keys(COMMANDS),
+    ...Object.values(COMMANDS).flatMap((c) => c.aliases || []),
+  ]);
   for (const name of REMOVED) {
-    assert.equal(COMMANDS[name], undefined, `${name} should be removed`);
+    assert.ok(!live.has(name), `${name} should be removed`);
   }
 });
 
@@ -26,6 +57,22 @@ test('aliases do not collide with command names', () => {
   for (const [, cmd] of Object.entries(COMMANDS)) {
     for (const a of cmd.aliases || []) {
       assert.ok(!names.has(a), `alias ${a} shadows a command`);
+    }
+  }
+});
+
+// `ALIASES` is a plain object built by iterating `COMMANDS`, so a string claimed
+// by two commands is silently won by whichever was enumerated last. Nothing else
+// catches it; assert every alias is claimed exactly once.
+test('no alias string is claimed by two commands', () => {
+  const owner = new Map();
+  for (const [name, cmd] of Object.entries(COMMANDS)) {
+    for (const a of cmd.aliases || []) {
+      assert.ok(
+        !owner.has(a),
+        `alias ${a} is claimed by both ${owner.get(a)} and ${name}`,
+      );
+      owner.set(a, name);
     }
   }
 });
