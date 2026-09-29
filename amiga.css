@@ -80,10 +80,10 @@
   }
 }
 
-/* The reduced-transparency fallback lives at the end of this file, after the
-   chrome rules: at equal specificity a later source order wins, so keeping it
-   here would let `.screen-bar`'s flat background override the fallback and the
-   media feature would never apply. */
+/* The reduced-transparency fallback and the bevel re-assertion both live at the
+   end of this file, after the chrome rules: at equal specificity a later source
+   order wins, so keeping either here would let `.screen-bar`'s flat background
+   override the fallback and the media feature would never apply. */
 
 .bevel { border-top:2px solid var(--bevel-lit); border-left:2px solid var(--bevel-lit);
          border-bottom:2px solid var(--bevel-shadow); border-right:2px solid var(--bevel-shadow); }
@@ -407,7 +407,11 @@ html[data-crt="off"] .crt-overlay { display:none; }
 .term-prompt { font-size:13px; font-weight:600; user-select:none; display:inline-flex; white-space:nowrap; }
 .term-user { color:var(--win-body-fg); }
 .term-input {
-  flex:1; background:transparent; border:none; outline:none;
+  /* `min-width:0` is load-bearing: a flex item's `auto` minimum is its
+     min-content width, and Unscii's wide 1:1 advance makes the placeholder
+     wider than the row can spare, so the field refuses to shrink and pushes
+     the submit gadget past `.terminal-card`'s `overflow:hidden` edge. */
+  flex:1; min-width:0; background:transparent; border:none; outline:none;
   color:var(--win-body-fg); font-family:var(--font-mono); font-size:13px; letter-spacing:.5px;
 }
 .term-input::placeholder { color:var(--bevel-shadow); }
@@ -528,6 +532,11 @@ html[data-crt="off"] .crt-overlay { display:none; }
 .cred-title { font-size:16px; color:var(--win-body-fg); font-weight:700; margin-bottom:8px; }
 .cred-detail { font-size:13.5px; color:var(--win-body-fg); line-height:1.6; }
 
+/* Credential cards keep the legacy 20/24 rhythm rather than the shared
+   `.hud-card { padding:24px }`: the timeline spine's marker column is sized to
+   this inset at both breakpoints. */
+.timeline-card { padding:20px 24px; }
+
 /* --- CONNECT: coordinates and telemetry ----------------------------------- */
 .contact-panel { padding:32px; }
 .contact-headline { font-size:22px; color:var(--win-body-fg); font-weight:700; margin-bottom:10px; }
@@ -566,7 +575,10 @@ html[data-crt="off"] .crt-overlay { display:none; }
 .modal-subheading { font-size:12px; color:var(--win-body-fg); letter-spacing:.8px; font-weight:700; }
 .modal-details-content { font-size:13px; color:var(--win-body-fg); line-height:1.65; white-space:pre-wrap; }
 .modal-stack-tags { display:flex; flex-wrap:wrap; gap:6px; }
-.modal-actions { display:flex; gap:12px; padding-top:10px; }
+/* `flex-wrap:wrap` is required under the pixel font: the two action buttons
+   total wider than the 301px column at 390px, and without wrapping the row
+   overflows `.modal-card`'s `overflow:hidden` edge and clips the ghost button. */
+.modal-actions { display:flex; flex-wrap:wrap; gap:12px; padding-top:10px; }
 
 /* --- Terminal system footer ----------------------------------------------- */
 .hud-footer {
@@ -1715,12 +1727,42 @@ html[data-crt="off"] .crt-overlay { display:none; }
 }
 
 /* ==========================================================================
-   Preference fallbacks (last: they must out-order the flat chrome above)
+   Bevel re-assertion (last, and load-bearing)
+
+   The `.bevel` / `.bevel-inset` primitives are declared once near the top (the
+   documentation order), but the BASE SURFACE component rules further down set a
+   `border` shorthand at the SAME (0,1,0) specificity. At equal specificity the
+   later source order wins, so those shorthands were collapsing every gadget to
+   a 1px single-colour border. In the legacy layout this could not happen: the
+   primitives lived in a stylesheet that loaded last.
+
+   Re-asserting the four longhands here restores the 2px two-tone frame for
+   every element that carries the class. This is intentionally NOT done by
+   converting the component rules to longhands: `.terminal-card` also serves the
+   INTEL `.hero-card` and `.hud-card` also serves the dossier cards, none of
+   which carry a bevel class — stripping the shorthand would leave those without
+   a border at all. The class selector is what scopes the correction to the
+   actual gadgets.
+
+   Colour-only overrides in the per-app scoped blocks (`:hover` re-assertions,
+   the pressed `.filter-btn.active`, the modal tag badges) sit at (0,2,0)+ and
+   still out-rank this block, so the deliberate pressed and hover states are
+   untouched; only the width and any un-overridden colour come from here.
+   ========================================================================== */
+
+.bevel { border-top:2px solid var(--bevel-lit); border-left:2px solid var(--bevel-lit);
+         border-bottom:2px solid var(--bevel-shadow); border-right:2px solid var(--bevel-shadow); }
+.bevel-inset { border-top:2px solid var(--bevel-shadow); border-left:2px solid var(--bevel-shadow);
+               border-bottom:2px solid var(--bevel-lit); border-right:2px solid var(--bevel-lit); }
+
+/* ==========================================================================
+   Preference fallbacks (after the flat chrome so they out-order it)
    ========================================================================== */
 
 /* No blur in the design, so this is a belt-and-braces guard: if a later phase
    reintroduces any translucency, a visitor who asked for less transparency gets
-   an opaque grey bar instead. */
+   an opaque grey bar instead. Touches `background` only, so it does not
+   interact with the bevel re-assertion above. */
 @media (prefers-reduced-transparency:reduce) {
   .dock, .screen-bar { backdrop-filter:none; background:var(--grey-aa); }
 }

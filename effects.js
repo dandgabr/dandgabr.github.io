@@ -13,6 +13,12 @@
 
 const STREAM_KEY = 'stream_preference';
 
+/** The stream's opaque ground. Dark-only surface, so a single constant. */
+const STREAM_BG = '#030a06';
+
+/** A running stream's canvas opacity over the page. */
+const STREAM_OPACITY = '0.38';
+
 /**
  * Read the persisted stream preference. A missing or malformed value is OFF:
  * only an explicit '1' turns the stream on.
@@ -108,8 +114,10 @@ export class TerminalStream {
     this.lastFrameTime = 0;
     this.targetFps = 32;
     this.frameInterval = 1000 / this.targetFps;
-    this.theme = document.documentElement.getAttribute('data-theme') ||
-      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    // Locked decision: the Workbench surface is dark only. `theme-init.js`
+    // pins `data-theme="dark"` pre-paint and no caller changes it, so the
+    // legacy light branch (which read `data-theme` / `prefers-color-scheme`)
+    // was unreachable and has been removed rather than kept as dead code.
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.cachedFont = `${this.fontSize}px monospace`;
@@ -151,18 +159,6 @@ export class TerminalStream {
     }
   }
 
-  setTheme(theme) {
-    this.theme = theme;
-    this.updateFont();
-    if (this.ctx && this.canvas) {
-      this.ctx.fillStyle = theme === 'light' ? '#f8faf9' : '#030a06';
-      this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-    if (this.isRunning) {
-      this.canvas.style.opacity = theme === 'light' ? '0.22' : '0.38';
-    }
-  }
-
   debounceResize() {
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => this.resize(), 150);
@@ -183,7 +179,7 @@ export class TerminalStream {
       this.colOffsets[i] = Math.floor(Math.random() * (this.colTypes[i] === 'kernel' ? this.kernelStream.length : this.binaryStream.length));
     }
 
-    this.ctx.fillStyle = this.theme === 'light' ? '#f8faf9' : '#030a06';
+    this.ctx.fillStyle = STREAM_BG;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     // A viewport can narrow AFTER the stream is already running (rotate a
@@ -207,7 +203,7 @@ export class TerminalStream {
     if (isNarrowViewport()) return;
 
     this.isRunning = true;
-    this.canvas.style.opacity = this.theme === 'light' ? '0.22' : '0.38';
+    this.canvas.style.opacity = STREAM_OPACITY;
     if (!this.animationId) {
       this.lastFrameTime = performance.now();
       this.loop(this.lastFrameTime);
@@ -250,19 +246,15 @@ export class TerminalStream {
 
     this.lastFrameTime = currentTime - (elapsed % this.frameInterval);
 
-    // Trailing fade effect: dark obsidian/green or light pure canvas
-    if (this.theme === 'light') {
-      this.ctx.fillStyle = 'rgba(248, 250, 249, 0.18)';
-    } else {
-      this.ctx.fillStyle = 'rgba(3, 10, 6, 0.12)';
-    }
+    // Trailing fade effect. The surface is dark only, so the fade is the
+    // obsidian wash with no light-canvas branch.
+    this.ctx.fillStyle = 'rgba(3, 10, 6, 0.12)';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.font = this.cachedFont;
 
-    const isLight = this.theme === 'light';
-    const headColor = isLight ? '#c2410c' : '#ffffff';
-    const trailColor = isLight ? '#ea580c' : '#00ff66';
+    const headColor = '#ffffff';
+    const trailColor = '#00ff66';
 
     for (let i = 0; i < this.drops.length; i++) {
       const isKernel = this.colTypes[i] === 'kernel';

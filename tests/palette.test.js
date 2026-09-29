@@ -20,9 +20,9 @@ export function findHexColours(css) {
   return [...css.matchAll(/#[0-9a-fA-F]{3,8}\b/g)].map((m) => m[0]);
 }
 
-// Read every stylesheet that exists, so the guard covers style.css today and
-// keeps covering it once amiga.css is added (rather than falling back to one).
-const CSS_FILES = ['amiga.css', 'style.css'];
+// The Amiga design system is the only project stylesheet (the legacy
+// terminal-HUD style.css was deleted), so it is the only file the guard reads.
+const CSS_FILES = ['amiga.css'];
 
 test('every hex colour in every stylesheet is RGB444-legal', () => {
   const css = CSS_FILES.map((name) => new URL(`../${name}`, import.meta.url))
