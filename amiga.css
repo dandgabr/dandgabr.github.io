@@ -205,11 +205,66 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 .dock-list {
   display: flex;
   align-items: center;
-  gap: calc(2 * var(--px));
+  /* Wrapping is the narrow-viewport guarantee: seven labelled launchers cannot
+     fit one 390px row, and a wrap keeps every item on-screen with no horizontal
+     overflow. The document's scrollWidth therefore stays equal to the viewport. */
+  flex-wrap: wrap;
+  gap: calc(1 * var(--px)) calc(2 * var(--px));
   min-height: calc(12 * var(--px));
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* Dock item: a real link (<a href="#/app">), not a button. Square gadget with
+   the standard raised bevel; the focus ring comes from the shared
+   :focus-visible rule above. */
+.dock-item {
+  display: flex;
+  align-items: center;
+  gap: calc(1 * var(--px));
+  min-height: calc(10 * var(--px));
+  padding: calc(1 * var(--px)) calc(2 * var(--px));
+  background: var(--control-face);
+  color: var(--text-on-face);
+  border-top: 2px solid var(--bevel-lit);
+  border-left: 2px solid var(--bevel-lit);
+  border-bottom: 2px solid var(--bevel-shadow);
+  border-right: 2px solid var(--bevel-shadow);
+  font-family: inherit;
+  font-size: calc(4 * var(--px));
+  line-height: calc(6 * var(--px));
+  letter-spacing: calc(1 * var(--px));
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dock-item:hover { background: var(--grey-dd); }
+
+/* The active app reads as a pressed gadget, and stays legible because the text
+   token flips to the Workbench blue rather than relying on the bevel alone. */
+.dock-item[aria-current="page"] {
+  background: var(--grey-dd);
+  color: var(--link);
+  border-top-color: var(--bevel-shadow);
+  border-left-color: var(--bevel-shadow);
+  border-bottom-color: var(--bevel-lit);
+  border-right-color: var(--bevel-lit);
+}
+
+/* Icon slot. Task 15 / Phase 3 paints the per-app SVG into
+   `.dock-icon[data-icon="<app>"]`; this task only reserves the space so the
+   rows do not reflow when the art lands. */
+.dock-icon {
+  display: inline-block;
+  flex: none;
+  width: calc(6 * var(--px));
+  height: calc(5 * var(--px));
+  background: var(--grey-dd);
+  border-top: 2px solid var(--bevel-shadow);
+  border-left: 2px solid var(--bevel-shadow);
+  border-bottom: 2px solid var(--bevel-lit);
+  border-right: 2px solid var(--bevel-lit);
 }
 
 /* ==========================================================================
