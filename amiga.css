@@ -192,6 +192,55 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
   border-right: 2px solid var(--bevel-lit);
 }
 
+/* Application window. Exactly one `.app` is un-hidden at a time (Task 7);
+   `hidden` is the whole visibility model, not a class. `display` is set here
+   so the routed window lays out, which means the UA `[hidden] { display:none }`
+   rule is outbid by this author rule — hence the explicit `!important` guard
+   below. Without it every window would paint stacked. */
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: calc(4 * var(--px));
+  margin: 0;
+}
+
+/* The window heading is the title bar of the application and the focus target
+   on every switch (`tabindex="-1"`), so it is styled like `.window-title h2`.
+   It is intentionally not `aria-hidden`: it names its `<section
+   aria-labelledby>` and must stay in the tree to receive focus. The orange
+   dithered ground comes from `.dither-title` (added in the markup) rather than
+   a second copy of the gradient. */
+.window-heading {
+  margin: 0;
+  padding: 0 calc(2 * var(--px));
+  min-height: calc(6 * var(--px));
+  font-size: calc(7 * var(--px));
+  line-height: calc(8 * var(--px));
+  font-weight: 700;
+  letter-spacing: calc(1 * var(--px));
+  color: var(--win-title-fg);
+}
+
+/* Visually hidden but screen-reader available (clip-rect pattern). Used by the
+   `#app-status` polite live region that announces each window switch. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The `hidden` attribute must always win, including over the `.app`/`.window-body`
+   flex rules above. Scoped to the shell so it cannot fight a component that sets
+   a display on an element it then reveals another way. */
+[hidden] { display: none !important; }
+
 /* Dock container: raised grey control strip along the bottom. Contents arrive
    in Task 6; the empty list still reserves one control row. */
 .dock {
