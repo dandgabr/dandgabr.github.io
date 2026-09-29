@@ -234,11 +234,11 @@ body {
   opacity: 0.7;
 }
 
-body.crt-off .crt-overlay {
+html[data-crt="off"] .crt-overlay {
   display: none;
 }
 
-:root:not([data-theme="light"]) body.crt-off {
+html[data-crt="off"] body {
   --text-main: #dcf5e3;
 }
 
@@ -954,6 +954,10 @@ a:hover {
   font-size: 11px;
   line-height: 1.2;
   text-align: center;
+}
+
+.ascii-fallback[hidden] {
+  display: none;
 }
 
 .scan-bar {

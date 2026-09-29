@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://github.com data:; font-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' https://github.com data:; font-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none';">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <!-- Primary Meta Tags -->
@@ -13,8 +13,13 @@
   <meta name="description" content="Portfolio and Security Research of Daniel Gonçalves Araujo (@dandgabr). Information Security Architect @ Dasa. Specializing in Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps.">
   <meta name="keywords" content="Daniel Gonçalves Araujo, dandgabr, Security Architect, Dasa, AI Safety, AI Hardening, AppSec, DevSecOps, Threat Modeling, CIS Benchmarks, MCP, Model Context Protocol, Cloud Security, CompTIA Security+">
   <meta name="author" content="Daniel Gonçalves Araujo (@dandgabr)">
-  <meta name="theme-color" content="#061109">
+  <meta name="theme-color" content="#0055AA">
   <meta name="color-scheme" content="dark light">
+
+  <!-- Pre-paint CRT, language and theme-colour setup. Classic script, first in
+       <head>: it must run before the body paints so a visitor who disabled the
+       scanlines never sees them flash. No defer/async/module. -->
+  <script src="theme-init.js"></script>
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -36,41 +41,8 @@
   <!-- Stylesheet & Deferred Scripts -->
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
-
-  <!-- Early Theme and Language Detection (System Preference Default / Zero Flash) -->
-  <script>
-    (function() {
-      try {
-        // Theme Detection
-        var rawTheme = localStorage.getItem('theme_preference');
-        var savedTheme = (rawTheme === 'light' || rawTheme === 'dark') ? rawTheme : null;
-        var systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        var activeTheme = savedTheme || systemTheme;
-        document.documentElement.setAttribute('data-theme', activeTheme);
-        var metaTheme = document.querySelector('meta[name="theme-color"]');
-        if (metaTheme) {
-          metaTheme.setAttribute('content', activeTheme === 'light' ? '#ffffff' : '#061109');
-        }
-
-        // Language Detection
-        var savedLang = localStorage.getItem('lang_preference');
-        var activeLang = 'en';
-        if (savedLang && ['en', 'pt-br', 'es'].indexOf(savedLang) !== -1) {
-          activeLang = savedLang;
-        } else {
-          var navLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-          if (navLang.indexOf('pt') === 0) activeLang = 'pt-br';
-          else if (navLang.indexOf('es') === 0) activeLang = 'es';
-          else if (navLang.indexOf('en') === 0) activeLang = 'en';
-          else activeLang = 'en';
-        }
-        document.documentElement.setAttribute('lang', activeLang === 'pt-br' ? 'pt-BR' : activeLang);
-        document.documentElement.setAttribute('data-lang', activeLang);
-      } catch (e) {}
-    })();
-  </script>
 </head>
-<body class="crt-scanlines">
+<body>
   <!-- Accessibility Skip Link -->
   <a href="#main-content" class="skip-link" data-i18n="a11y.skip">Skip to system interface [Enter]</a>
 
@@ -223,7 +195,7 @@
                     <source srcset="assets/avatar.webp" type="image/webp">
                     <img id="avatar-img" src="assets/avatar.png" alt="Daniel Gonçalves Araujo Avatar" class="avatar-img" width="208" height="208" decoding="async" fetchpriority="high">
                   </picture>
-                  <pre id="ascii-avatar" class="ascii-fallback" style="display:none;">
+                  <pre id="ascii-avatar" class="ascii-fallback" hidden>
     [ SEC_ARCH ]
       .---.
      /     \

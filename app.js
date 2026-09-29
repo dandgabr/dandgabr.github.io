@@ -1608,18 +1608,23 @@ AVAILABLE ARCHITECTURAL COMMANDS:
 
     initCRT() {
       if (!this.crtBtn) return;
-      const isCrtOff = localStorage.getItem('crt_scanline_off') === 'true';
-      if (isCrtOff) {
-        document.body.classList.add('crt-off');
-        this.crtBtn.querySelector('.btn-val').textContent = 'OFF';
-        this.crtBtn.setAttribute('aria-pressed', 'false');
+
+      const applyCrt = (off) => {
+        document.documentElement.setAttribute('data-crt', off ? 'off' : 'on');
+        this.crtBtn.querySelector('.btn-val').textContent = off ? 'OFF' : 'ON';
+        this.crtBtn.setAttribute('aria-pressed', (!off).toString());
+      };
+
+      // theme-init.js already set data-crt pre-paint from the stored preference,
+      // so the attribute is the single source of truth here.
+      if (document.documentElement.getAttribute('data-crt') === 'off') {
+        applyCrt(true);
       }
 
       this.crtBtn.addEventListener('click', () => {
-        const off = document.body.classList.toggle('crt-off');
-        this.crtBtn.querySelector('.btn-val').textContent = off ? 'OFF' : 'ON';
-        this.crtBtn.setAttribute('aria-pressed', (!off).toString());
-        localStorage.setItem('crt_scanline_off', off.toString());
+        const off = document.documentElement.getAttribute('data-crt') !== 'off';
+        applyCrt(off);
+        localStorage.setItem('crt_scanline_off', off ? '1' : '0');
       });
     }
 
@@ -1720,9 +1725,9 @@ AVAILABLE ARCHITECTURAL COMMANDS:
     const avatarImg = document.getElementById('avatar-img');
     if (avatarImg) {
       avatarImg.addEventListener('error', () => {
-        avatarImg.style.display = 'none';
+        avatarImg.hidden = true;
         const asciiFallback = document.getElementById('ascii-avatar');
-        if (asciiFallback) asciiFallback.style.display = 'block';
+        if (asciiFallback) asciiFallback.hidden = false;
       });
     }
 
