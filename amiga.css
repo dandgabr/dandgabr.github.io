@@ -1157,6 +1157,15 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
   padding: calc(1 * var(--px)) calc(2 * var(--px));
 }
 
+/* The library's resting close-button colour is a very pale grey: 1.51:1 on the
+   popover body and 1.58:1 on the orange title bar it sits over. That fails
+   WCAG 2.2 SC 1.4.11 (3:1 for UI components), and this close button is the
+   tour's primary visible skip affordance. The library's own :hover/:focus rule
+   is more specific and still darkens it further. */
+.driver-popover-close-btn {
+  color: var(--grey-55);
+}
+
 .driver-popover-description {
   font-family: inherit;
   color: var(--win-body-fg);

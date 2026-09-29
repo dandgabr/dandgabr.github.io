@@ -26,7 +26,6 @@ test('every step element selector exists in index.html', () => {
     // and look for it as a class or id occurrence in the markup.
     const token = sel.replace(/^[.#]/, '');
     const attr = sel.startsWith('.') ? `class="${token}` : `id="${token}"`;
-    const found = html.includes(attr) || html.includes(` ${token}`) || html.includes(`${token}"`);
-    assert.ok(found, `no target for ${s.element}`);
+    assert.ok(html.includes(attr), `no target for ${s.element}`);
   }
 });

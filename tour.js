@@ -15,8 +15,10 @@
  *     size   3042 bytes
  * The files are served from `vendor/driver/`, never from a CDN, so
  * `script-src 'self'` / `style-src 'self'` hold and the page works offline.
- * Driver.js injects no <style> element and sets no `style` attribute; its
- * only DOM styling is CSSOM property assignment, which CSP permits.
+ * Driver.js injects no <style> element and never calls `setAttribute('style',`
+ * `…)`; it materialises `style` attributes at runtime only by CSSOM property
+ * assignment (13 of them during an active tour), which CSP permits while
+ * `setAttribute('style', …)` is blocked under `style-src 'self'`.
  *
  * Security note: Driver.js renders popover copy with `innerHTML`. Only our own
  * translated strings (from `I18N`) are ever passed to it; no user input
