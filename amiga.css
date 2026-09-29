@@ -34,7 +34,18 @@
 /* Touch layouts step the typographic grid up one integer multiple (never a
    fractional scale). */
 @media (max-width:767px) { :root { --px:3px; } }
-@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation-duration:.01ms!important;
+    /* `animation-iteration-count` and `scroll-behavior` mirror style.css's
+       legacy block: without the iteration clamp the two `infinite` keyframes
+       (`pulseLed`, `scanAvatar`) keep looping once this file is the sole
+       stylesheet (Task 15) and style.css's protection is gone. */
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
 
 /* The reduced-transparency fallback lives at the end of this file, after the
    chrome rules: at equal specificity a later source order wins, so keeping it
@@ -56,8 +67,14 @@
    black inner / white outer — pixel-verified — the inverse of both the token
    names (`--focus-inner` is white) and the locked decision. At offset 0 the
    outline hugs the control and the 4px box-shadow begins exactly beneath it, so
-   the white band sits inside and the black band outside. */
-:focus-visible { outline:var(--focus-inner); outline-offset:0; box-shadow:var(--focus-outer); }
+   the white band sits inside and the black band outside.
+   `.ctrl-item:focus-visible` is added as an arm on this same rule: style.css
+   still declares `.ctrl-item:focus-visible { outline:1px solid ... }` at
+   (0,2,0), which outbids a bare `:focus-visible` (0,1,0) on the four SYS-CTRL
+   controls. Matching its specificity here and winning on source order keeps
+   the design-system ring on those controls during the transition. */
+:focus-visible,
+.ctrl-item:focus-visible { outline:var(--focus-inner); outline-offset:0; box-shadow:var(--focus-outer); }
 
 body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--font-mono); margin:0; }
 
