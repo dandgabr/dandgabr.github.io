@@ -3,131 +3,14 @@
  * TERMINAL ENGINE & INTERACTIVE CORE - DANIEL GONÇALVES ARAUJO (@dandgabr)
  * Pure Native ES6+ | Zero Dependencies | High-Assurance Architecture
  *
- * Transitional module during Phase 3: it still owns the Projects modal engine
- * and the HUD controls, both of which later tasks (T11 projects.js, T13
- * prefs.js) replace. The bootstrap that used to live at the bottom of this file
- * now lives in `main.js`, which imports the two classes below. Neither is
- * deleted in this task so the branch keeps working at every phase boundary.
+ * Transitional module during Phase 3: it still owns the HUD controls, which a
+ * later task (T13 prefs.js) replaces. The Projects modal engine that used to
+ * live here was extracted to `projects.js` (T11), and the bootstrap that used
+ * to live at the bottom of this file now lives in `main.js`.
  * ============================================================================
  */
 
 import { I18N } from './i18n.js';
-import { getProjectData } from './projects-data.js';
-
-/* ==========================================================================
-   MODULE 4: Projects Filter & Modal Inspector
-   ========================================================================== */
-export class ProjectsEngine {
-  constructor() {
-    this.filterButtons = document.querySelectorAll('.filter-btn');
-    this.projectCards = document.querySelectorAll('.project-card');
-    this.modal = document.getElementById('project-modal');
-    this.modalCloseBtn = document.getElementById('modal-close-btn');
-    this.modalDismissBtn = document.getElementById('modal-dismiss-btn');
-
-    this.initFilters();
-    this.initModal();
-  }
-
-  initFilters() {
-    this.filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        this.filterButtons.forEach(b => {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-
-        const filter = btn.getAttribute('data-filter');
-        this.applyFilter(filter);
-      });
-    });
-  }
-
-  applyFilter(filter) {
-    this.projectCards.forEach(card => {
-      const categories = card.getAttribute('data-category') || '';
-      if (filter === 'all' || categories.split(/\s+/).includes(filter)) {
-        card.classList.remove('is-hidden');
-      } else {
-        card.classList.add('is-hidden');
-      }
-    });
-  }
-
-  initModal() {
-    if (!this.modal) return;
-
-    // Handle inspect buttons
-    document.querySelectorAll('.inspect-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const projId = btn.getAttribute('data-project');
-        this.openModal(projId);
-      });
-    });
-
-    // Close buttons
-    if (this.modalCloseBtn) {
-      this.modalCloseBtn.addEventListener('click', () => this.closeModal());
-    }
-    if (this.modalDismissBtn) {
-      this.modalDismissBtn.addEventListener('click', () => this.closeModal());
-    }
-
-    // Close on backdrop click
-    this.modal.addEventListener('click', (e) => {
-      if (e.target === this.modal) {
-        this.closeModal();
-      }
-    });
-
-    // Close on Escape
-    this.modal.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        this.closeModal();
-      }
-    });
-  }
-
-  openModal(projId) {
-    const data = getProjectData(projId, I18N.currentLang);
-    if (!data) return;
-
-    document.getElementById('modal-terminal-title').textContent = `${data.title}.sys // architecture_telemetry.log`;
-    document.getElementById('modal-project-title').textContent = data.title;
-    document.getElementById('modal-project-desc').textContent = `${data.subtitle}. ${data.desc}`;
-    document.getElementById('modal-project-tag').textContent = data.tag;
-    document.getElementById('modal-project-status').textContent = data.status;
-    document.getElementById('modal-project-details').textContent = data.details;
-
-    const stackContainer = document.getElementById('modal-project-stack');
-    stackContainer.innerHTML = '';
-    data.stack.forEach(item => {
-      const span = document.createElement('span');
-      span.className = 'skill-pill';
-      span.textContent = item;
-      stackContainer.appendChild(span);
-    });
-
-    const repoLink = document.getElementById('modal-repo-link');
-    repoLink.href = data.repo;
-
-    if (typeof this.modal.showModal === 'function') {
-      this.modal.showModal();
-    } else {
-      this.modal.setAttribute('open', '');
-    }
-  }
-
-  closeModal() {
-    if (typeof this.modal.close === 'function') {
-      this.modal.close();
-    } else {
-      this.modal.removeAttribute('open');
-    }
-  }
-}
 
 /* ==========================================================================
    MODULE 5: HUD System Controls & Navigation

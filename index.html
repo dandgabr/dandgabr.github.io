@@ -431,189 +431,159 @@
             <span class="section-line"></span>
           </div>
 
-          <!-- Category Filter Tabs -->
+          <!-- Category Filter Tabs. Four featured repos: ALL (4), the two MCP
+               repos under TOOLING, AnvilAI + the mitmproxy proxy under SECURITY,
+               Coacus + AnvilAI under AI. The COMMUNITY tab is gone with the GDG
+               theme it filtered. -->
           <div class="filter-bar" role="tablist" aria-label="Filter projects by discipline">
-            <button type="button" class="filter-btn active" role="tab" aria-selected="true" data-filter="all">
-              <span data-i18n="projects.tab.all">[ ALL (5) ]</span>
+            <button type="button" class="filter-btn bevel active" role="tab" aria-selected="true" data-filter="all">
+              <span data-i18n="projects.tab.all">[ ALL (4) ]</span>
             </button>
-            <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="security">
+            <button type="button" class="filter-btn bevel" role="tab" aria-selected="false" data-filter="security">
               <span data-i18n="projects.tab.security">[ SECURITY (2) ]</span>
             </button>
-            <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="ai">
+            <button type="button" class="filter-btn bevel" role="tab" aria-selected="false" data-filter="ai">
               <span data-i18n="projects.tab.ai">[ AI & AGENTS (2) ]</span>
             </button>
-            <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="tools">
-              <span data-i18n="projects.tab.tools">[ TOOLING (1) ]</span>
-            </button>
-            <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="community">
-              <span data-i18n="projects.tab.community">[ COMMUNITY (1) ]</span>
+            <button type="button" class="filter-btn bevel" role="tab" aria-selected="false" data-filter="tools">
+              <span data-i18n="projects.tab.tools">[ TOOLING (2) ]</span>
             </button>
           </div>
 
-          <!-- Projects Grid -->
+          <!-- Projects Grid: the four featured repositories, in the order the
+               GitHub profile features them. Each card's `data-project-id` is a
+               `PROJECTS_DATA` key and its inspect button deep-links the modal. -->
           <div class="projects-grid" id="projects-grid">
 
-            <!-- Project 1: hardening-ia -->
-            <article class="project-card" data-category="security ai" data-project-id="hardening-ia">
+            <!-- Project 1: Coacus -->
+            <article class="project-card bevel" data-category="ai" data-project-id="coacus">
               <div class="project-card-header">
                 <div class="proj-telemetry">
                   <span class="proj-id">PRJ-01</span>
-                  <span class="proj-status status-active" data-i18n="proj.status.prod">PRODUCTION</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span>
                 </div>
                 <div class="proj-category-tags">
-                  <span class="mini-tag" data-i18n="proj.tag.aisafety">AI Safety</span>
-                  <span class="mini-tag" data-i18n="proj.tag.hardening">Hardening</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.framework">Skill &amp; Agent Framework</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.agentic">Agentic AI</span>
                 </div>
               </div>
               <h3 class="proj-title">
-                <span class="proj-icon">🛡️</span> hardening-ia
+                Coacus
               </h3>
-              <p class="proj-desc" data-i18n="proj.hardening_ia.desc">
-                Automated security hardening framework designed for AI-assisted development environments. Implements sandbox verification, API token boundary enforcement, and permission audits.
+              <p class="proj-desc" data-i18n="proj.coacus.desc">
+                A dependency-free skill and agent framework that packages engineering judgment as reusable, versioned artifacts, with a concurrency governor that caps and accounts for every agent a workflow spawns.
               </p>
-              <div class="proj-capabilities">
-                <div class="cap-item" data-i18n="proj.hardening_ia.c1">&gt; Zero-trust isolation for local AI coding CLI tools</div>
-                <div class="cap-item" data-i18n="proj.hardening_ia.c2">&gt; Workspace token and credential leakage prevention</div>
-                <div class="cap-item" data-i18n="proj.hardening_ia.c3">&gt; Automated compliance and baseline validation audits</div>
+              <div class="proj-capabilities bevel-inset">
+                <div class="cap-item" data-i18n="proj.coacus.c1">&gt; Skill catalog as the single source of truth for agent definitions</div>
+                <div class="cap-item" data-i18n="proj.coacus.c2">&gt; A governor that enforces a hard concurrency cap instead of documenting one</div>
+                <div class="cap-item" data-i18n="proj.coacus.c3">&gt; Handoffs between agents use compact TOON payloads</div>
               </div>
               <div class="proj-actions">
-                <button type="button" class="inspect-btn" data-project="hardening-ia" aria-haspopup="dialog">
+                <button type="button" class="inspect-btn bevel" data-project="coacus" aria-haspopup="dialog">
                   <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
                 </button>
-                <a href="https://github.com/dandgabr/hardening-ia" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View hardening-ia on GitHub">
-                  REPO ↗
+                <a href="https://github.com/dandgabr/Coacus" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View Coacus on GitHub">
+                  REPO <span aria-hidden="true">&#8599;</span>
                 </a>
               </div>
             </article>
 
-            <!-- Project 2: skills -->
-            <article class="project-card" data-category="ai" data-project-id="skills">
+            <!-- Project 2: AnvilAI (the harness-hardening tool, formerly named
+                 differently; this is the only live repository link). -->
+            <article class="project-card bevel" data-category="security ai" data-project-id="anvilai">
               <div class="project-card-header">
                 <div class="proj-telemetry">
                   <span class="proj-id">PRJ-02</span>
-                  <span class="proj-status status-active" data-i18n="proj.status.prod">PRODUCTION</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.research">ACTIVE RESEARCH</span>
                 </div>
                 <div class="proj-category-tags">
-                  <span class="mini-tag" data-i18n="proj.tag.agentic">Agentic AI</span>
-                  <span class="mini-tag" data-i18n="proj.tag.modular">Modular Skills</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.aisafety">AI Safety</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.hardening">Hardening</span>
                 </div>
               </div>
               <h3 class="proj-title">
-                <span class="proj-icon">🧠</span> skills
+                AnvilAI
               </h3>
-              <p class="proj-desc" data-i18n="proj.skills.desc">
-                A battle-tested ecosystem of standardized, modular skills engineered for AI coding agents, multi-agent orchestration, and developer assistants.
+              <p class="proj-desc" data-i18n="proj.anvilai.desc">
+                An automated hardening and governance layer for third-party AI harnesses, validating sandbox isolation, enforcing API token boundaries, and auditing permissions on tooling you do not control.
               </p>
-              <div class="proj-capabilities">
-                <div class="cap-item" data-i18n="proj.skills.c1">&gt; Standardized capability contracts across 50+ domains</div>
-                <div class="cap-item" data-i18n="proj.skills.c2">&gt; Multi-agent supervisory and governance patterns</div>
-                <div class="cap-item" data-i18n="proj.skills.c3">&gt; Deterministic execution paths for autonomous coding</div>
+              <div class="proj-capabilities bevel-inset">
+                <div class="cap-item" data-i18n="proj.anvilai.c1">&gt; Sandbox isolation profiles for Docker / Podman / Bubblewrap</div>
+                <div class="cap-item" data-i18n="proj.anvilai.c2">&gt; Automated audits of filesystem ACLs, process isolation and egress</div>
+                <div class="cap-item" data-i18n="proj.anvilai.c3">&gt; Aligned with the OWASP Top 10 for LLM Applications</div>
               </div>
               <div class="proj-actions">
-                <button type="button" class="inspect-btn" data-project="skills" aria-haspopup="dialog">
+                <button type="button" class="inspect-btn bevel" data-project="anvilai" aria-haspopup="dialog">
                   <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
                 </button>
-                <a href="https://github.com/dandgabr/skills" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View skills on GitHub">
-                  REPO ↗
+                <a href="https://github.com/dandgabr/AnvilAI" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View AnvilAI on GitHub">
+                  REPO <span aria-hidden="true">&#8599;</span>
                 </a>
               </div>
             </article>
 
             <!-- Project 3: mcp-cheatengine -->
-            <article class="project-card" data-category="ai tools" data-project-id="mcp-cheatengine">
+            <article class="project-card bevel" data-category="tools" data-project-id="mcp-cheatengine">
               <div class="project-card-header">
                 <div class="proj-telemetry">
                   <span class="proj-id">PRJ-03</span>
-                  <span class="proj-status status-prototype" data-i18n="proj.status.integration">INTEGRATION</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.integration">INTEGRATION</span>
                 </div>
                 <div class="proj-category-tags">
-                  <span class="mini-tag">Model Context Protocol</span>
-                  <span class="mini-tag" data-i18n="proj.tag.automation">Process Automation</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.mcp">AI Tooling &amp; MCP</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.automation">Process Automation</span>
                 </div>
               </div>
               <h3 class="proj-title">
-                <span class="proj-icon">🧩</span> mcp-cheatengine
+                mcp-cheatengine
               </h3>
               <p class="proj-desc" data-i18n="proj.mcp_ce.desc">
                 Model Context Protocol (MCP) server interface for Cheat Engine, enabling programmatic inspection, process automation, and security telemetry for AI assistants.
               </p>
-              <div class="proj-capabilities">
+              <div class="proj-capabilities bevel-inset">
                 <div class="cap-item" data-i18n="proj.mcp_ce.c1">&gt; MCP server bridging LLMs to process inspection</div>
                 <div class="cap-item" data-i18n="proj.mcp_ce.c2">&gt; Real-time process address inspection and automation</div>
                 <div class="cap-item" data-i18n="proj.mcp_ce.c3">&gt; Autonomous agent inspection tooling for developer workflows</div>
               </div>
               <div class="proj-actions">
-                <button type="button" class="inspect-btn" data-project="mcp-cheatengine" aria-haspopup="dialog">
+                <button type="button" class="inspect-btn bevel" data-project="mcp-cheatengine" aria-haspopup="dialog">
                   <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
                 </button>
                 <a href="https://github.com/dandgabr/mcp-cheatengine" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View mcp-cheatengine on GitHub">
-                  REPO ↗
+                  REPO <span aria-hidden="true">&#8599;</span>
                 </a>
               </div>
             </article>
 
-            <!-- Project 4: Linux Security Validator -->
-            <article class="project-card" data-category="security" data-project-id="linux-security-validator">
+            <!-- Project 4: mcp-security-mitmproxy -->
+            <article class="project-card bevel" data-category="security tools" data-project-id="mcp-security-mitmproxy">
               <div class="project-card-header">
                 <div class="proj-telemetry">
                   <span class="proj-id">PRJ-04</span>
-                  <span class="proj-status status-audit" data-i18n="proj.status.compliance">COMPLIANCE</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.integration">INTEGRATION</span>
                 </div>
                 <div class="proj-category-tags">
-                  <span class="mini-tag">CIS Hardening</span>
-                  <span class="mini-tag">Linux / Python</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.mcpsecurity">MCP Security</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.security">Traffic Inspection</span>
                 </div>
               </div>
               <h3 class="proj-title">
-                <span class="proj-icon">🐧</span> Linux Security Validator
+                mcp-security-mitmproxy
               </h3>
-              <p class="proj-desc" data-i18n="proj.linux_sec.desc">
-                Automated scripts for security auditing, CIS baseline compliance validation, file permission anomaly detection, and kernel parameter enforcement across Linux servers and developer workstations.
+              <p class="proj-desc" data-i18n="proj.mitmproxy.desc">
+                An mitmproxy-based security layer for Model Context Protocol traffic, intercepting, decoding, and inspecting tool calls between agents and servers to surface prompt injection and tool misuse.
               </p>
-              <div class="proj-capabilities">
-                <div class="cap-item" data-i18n="proj.linux_sec.c1">&gt; System audit against CIS Linux benchmarks</div>
-                <div class="cap-item" data-i18n="proj.linux_sec.c2">&gt; SUID/SGID executable discovery & anomaly alerts</div>
-                <div class="cap-item" data-i18n="proj.linux_sec.c3">&gt; Automated remediation checklist generation</div>
+              <div class="proj-capabilities bevel-inset">
+                <div class="cap-item" data-i18n="proj.mitmproxy.c1">&gt; Transparent MCP traffic interception via the mitmproxy addon model</div>
+                <div class="cap-item" data-i18n="proj.mitmproxy.c2">&gt; Tool-call payloads decoded so requests and responses are legible in transit</div>
+                <div class="cap-item" data-i18n="proj.mitmproxy.c3">&gt; Rule hooks that flag injected instructions before they reach a tool</div>
               </div>
               <div class="proj-actions">
-                <button type="button" class="inspect-btn" data-project="linux-security-validator" aria-haspopup="dialog">
+                <button type="button" class="inspect-btn bevel" data-project="mcp-security-mitmproxy" aria-haspopup="dialog">
                   <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
                 </button>
-                <a href="https://github.com/dandgabr/Valida-o-de-seguran-a-em-sistemas-Linux" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View Linux Security Validator on GitHub">
-                  REPO ↗
-                </a>
-              </div>
-            </article>
-
-            <!-- Project 5: GDG Typst Presentation Theme -->
-            <article class="project-card" data-category="community" data-project-id="gdg-polylux-theme">
-              <div class="project-card-header">
-                <div class="proj-telemetry">
-                  <span class="proj-id">PRJ-05</span>
-                  <span class="proj-status status-community" data-i18n="proj.status.community">COMMUNITY</span>
-                </div>
-                <div class="proj-category-tags">
-                  <span class="mini-tag">Typst / Polylux</span>
-                  <span class="mini-tag" data-i18n="proj.tag.gdg">GDG Speaker</span>
-                </div>
-              </div>
-              <h3 class="proj-title">
-                <span class="proj-icon">🎨</span> GDG Typst Presentation Theme & Talks
-              </h3>
-              <p class="proj-desc" data-i18n="proj.gdg_theme.desc">
-                Modular presentation deck theme designed for Typst using Polylux, inspired by Google Developer Groups visual identity, accompanied by technical talk materials including Quantum Computing Fundamentals.
-              </p>
-              <div class="proj-capabilities">
-                <div class="cap-item" data-i18n="proj.gdg_theme.c1">&gt; Modern programmatic typesetting with Typst</div>
-                <div class="cap-item" data-i18n="proj.gdg_theme.c2">&gt; High-contrast slides for technical architecture talks</div>
-                <div class="cap-item" data-i18n="proj.gdg_theme.c3">&gt; Includes Quantum Computing fundamentals material</div>
-              </div>
-              <div class="proj-actions">
-                <button type="button" class="inspect-btn" data-project="gdg-polylux-theme" aria-haspopup="dialog">
-                  <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
-                </button>
-                <a href="https://github.com/dandgabr/gdg-polylux-theme" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View GDG Theme on GitHub">
-                  REPO ↗
+                <a href="https://github.com/dandgabr/mcp-security-mitmproxy" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View mcp-security-mitmproxy on GitHub">
+                  REPO <span aria-hidden="true">&#8599;</span>
                 </a>
               </div>
             </article>
@@ -882,43 +852,43 @@
 
   <!-- Project Inspection Modal (Dialog) -->
   <dialog id="project-modal" class="terminal-modal" aria-labelledby="modal-project-title">
-    <div class="modal-card">
-      <div class="terminal-card-header">
+    <div class="modal-card bevel">
+      <div class="terminal-card-header dither-title">
         <div class="terminal-dots" aria-hidden="true">
           <span class="dot dot-red"></span>
           <span class="dot dot-amber"></span>
           <span class="dot dot-green"></span>
         </div>
         <div class="terminal-title" id="modal-terminal-title">architecture_telemetry.log</div>
-        <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close modal dialog">[X]</button>
+        <button type="button" id="modal-close-btn" class="modal-close-btn bevel" aria-label="Close modal dialog">[X]</button>
       </div>
       <div class="modal-card-body">
         <div class="modal-meta-row">
-          <span id="modal-project-tag" class="tag-badge tag-security">DOMAIN</span>
-          <span id="modal-project-status" class="tag-badge tag-geo">STATUS</span>
+          <span id="modal-project-tag" class="tag-badge tag-security bevel-inset">DOMAIN</span>
+          <span id="modal-project-status" class="tag-badge tag-geo bevel-inset">STATUS</span>
         </div>
         <h3 id="modal-project-title" class="modal-title">PROJECT TITLE</h3>
         <p id="modal-project-desc" class="modal-desc">Project description loading...</p>
 
-        <div class="modal-tech-block">
+        <div class="modal-tech-block bevel-inset">
           <h4 class="modal-subheading" data-i18n="modal.summary_title">&gt; ARCHITECTURAL SUMMARY & KEY CHALLENGES</h4>
           <div id="modal-project-details" class="modal-details-content">
-            <!-- Dynamic architecture details populated by app.js -->
+            <!-- Dynamic architecture details populated by projects.js -->
           </div>
         </div>
 
-        <div class="modal-tech-block">
+        <div class="modal-tech-block bevel-inset">
           <h4 class="modal-subheading" data-i18n="modal.stack_title">&gt; STACK & SPECIFICATIONS</h4>
           <div id="modal-project-stack" class="modal-stack-tags">
-            <!-- Badges populated by app.js -->
+            <!-- Badges populated by projects.js -->
           </div>
         </div>
 
         <div class="modal-actions">
-          <a id="modal-repo-link" href="#" target="_blank" rel="noopener noreferrer" class="action-btn action-primary">
-            <span class="btn-prefix">↗</span> <span data-i18n="modal.action.github">VISIT REPOSITORY ON GITHUB</span>
+          <a id="modal-repo-link" href="#" target="_blank" rel="noopener noreferrer" class="action-btn action-primary bevel">
+            <span class="btn-prefix" aria-hidden="true">&#8599;</span> <span data-i18n="modal.action.github">VISIT REPOSITORY ON GITHUB</span>
           </a>
-          <button type="button" id="modal-dismiss-btn" class="action-btn action-ghost">
+          <button type="button" id="modal-dismiss-btn" class="action-btn action-ghost bevel">
             <span data-i18n="modal.action.close">[ESC] CLOSE TERMINAL</span>
           </button>
         </div>

@@ -511,10 +511,11 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 [data-app="connect"] .channel-card:hover {
   background: var(--win-body);
   color: var(--win-body-fg);
-  /* The card is an `<a>`, so the legacy `a:hover` (0,2,1) glow still lands on it
-     even though this block out-sets the card's own (0,2,0) rule. Cancel it here
-     and on the text/arrow nodes below, or the green text-shadow banned by §4.3
-     reappears on the exact element Task 10 rebuilt. */
+  /* The panel/card can be an `<a>`, so the legacy `a:hover` (0,1,1) glow is a
+     real candidate for the text nodes inside it. This block already out-sets it
+     at (0,2,0), but `text-shadow: none` is repeated on the text/arrow nodes
+     below as belt-and-braces, since a later selector could reintroduce the
+     green glow banned by §4.3. */
   text-shadow: none;
   border-radius: 0;
   box-shadow: none;
@@ -543,8 +544,9 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 /* Black text on white for every label, value and status line; the SVG glyphs use
    `fill="currentColor"`, so they turn black with `.channel-icon` (never a colour
    emoji). The arrow's legacy green slide is flattened too. `text-shadow` is
-   pinned to `none` here because `a:hover` out-sets this (0,2,0) group at (0,2,1)
-   and would otherwise re-apply the legacy green glow. */
+   pinned to `none` here because `a` / `a:hover` (0,1,1) can out-set this
+   (0,1,0) text group (this block's own selectors are (0,2,0), but the text
+   nodes are matched separately) and would otherwise re-apply the green glow. */
 [data-app="connect"] .card-hud-label,
 [data-app="connect"] .contact-headline,
 [data-app="connect"] .contact-sub,
@@ -582,6 +584,260 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 [data-app="connect"] .section-line {
   height: 2px;
   background: var(--amiga-orange);
+}
+
+/* ==========================================================================
+   PROJECTS application and inspection modal (Task 11) - Amiga flat surface
+
+   Two scopes, because the `<dialog>` is a sibling of the workbench window and
+   not a descendant of the PROJECTS section:
+     - `[data-app="projects"]` covers the grid, the filter tabs and the cards.
+     - `#project-modal` covers the dialog, which lives at body level.
+
+   Same job as the SKILLS/ACADEMIC/CONNECT blocks above: the `.project-card` /
+   `.modal-card` chrome still arrives from style.css, so these rules cancel the
+   glass (`border-radius`, `backdrop-filter` blur, glow box-shadows), the hover
+   `translateY` lift and the legacy text colours, then re-assert the two-tone
+   bevel at a specificity above the legacy hover rules so the gadget stays
+   raised while the pointer is on it.
+
+   A white card on the white `.window-body` has no top/left bevel contrast (both
+   lit edges are white), so the hard black outline mirrors `.window` and the
+   SKILLS `.skill-card` construction. Orange appears only as flat rules (a 2px
+   underline under the section header and the title bar dither inherited from
+   `.dither-title`), never as body text. Colours are `var()` tokens only, so no
+   new hex enters the stylesheet and the file stays RGB444-clean.
+   ========================================================================== */
+
+[data-app="projects"] .project-card,
+[data-app="projects"] .project-card:hover {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: none;
+}
+
+[data-app="projects"] .project-card {
+  outline: 1px solid var(--amiga-black);
+}
+
+[data-app="projects"] .project-card:hover {
+  border-top-color: var(--bevel-lit);
+  border-left-color: var(--bevel-lit);
+  border-bottom-color: var(--bevel-shadow);
+  border-right-color: var(--bevel-shadow);
+}
+
+/* Black text on white for every label, title, description and capability line.
+   `.proj-title` ships `--text-white` (1.03:1 on the white body, effectively
+   invisible) and `.proj-desc` / `.cap-item` ship the dark-theme muted greys. */
+[data-app="projects"] .proj-id,
+[data-app="projects"] .proj-title,
+[data-app="projects"] .proj-desc,
+[data-app="projects"] .cap-item,
+[data-app="projects"] .tag-index,
+[data-app="projects"] .section-title {
+  color: var(--win-body-fg);
+}
+
+/* Status and category badges are inset gadgets: white ground, black text. The
+   legacy `.proj-status` colours are traffic-light tints and `.mini-tag` is a
+   translucent grey; both carry a rounded corner this cancels. No `border` is
+   set, so the two-tone `bevel-inset` from the markup survives. */
+[data-app="projects"] .proj-status,
+[data-app="projects"] .mini-tag {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+}
+
+/* Capability list is a recessed panel; only the rounded corner and the legacy
+   translucent tint are cancelled, the `bevel-inset` edges stay. */
+[data-app="projects"] .proj-capabilities {
+  background: var(--win-body);
+  border-radius: 0;
+}
+
+/* Filter tabs and inspect buttons are raised grey controls, matching the dock
+   gadget. The legacy green text, green fill and glow are replaced; `.active`
+   reads as a pressed gadget exactly like `.dock-item[aria-current="page"]`. */
+[data-app="projects"] .filter-btn,
+[data-app="projects"] .inspect-btn,
+[data-app="projects"] .filter-btn:hover,
+[data-app="projects"] .inspect-btn:hover {
+  background: var(--control-face);
+  color: var(--text-on-face);
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+}
+
+[data-app="projects"] .filter-btn:hover,
+[data-app="projects"] .inspect-btn:hover {
+  background: var(--grey-dd);
+  border-top-color: var(--bevel-lit);
+  border-left-color: var(--bevel-lit);
+  border-bottom-color: var(--bevel-shadow);
+  border-right-color: var(--bevel-shadow);
+}
+
+[data-app="projects"] .filter-btn.active,
+[data-app="projects"] .filter-btn.active:hover {
+  background: var(--grey-dd);
+  color: var(--link);
+  border-top-color: var(--bevel-shadow);
+  border-left-color: var(--bevel-shadow);
+  border-bottom-color: var(--bevel-lit);
+  border-right-color: var(--bevel-lit);
+}
+
+/* The repo link is an `<a>`, so the legacy `a` green and the `a:hover` green
+   glow still land on it at (0,1,1); these (0,3,0) rules out-set both. */
+[data-app="projects"] .repo-link,
+[data-app="projects"] .repo-link:hover {
+  color: var(--win-body-fg);
+  text-shadow: none;
+}
+
+/* Orange as a flat 2px rule under the section header, never as text. */
+[data-app="projects"] .section-line {
+  height: 2px;
+  background: var(--amiga-orange);
+}
+
+/* --- Inspection modal (`<dialog>`) ---------------------------------------- */
+
+/* A flat black backdrop with no blur. `backdrop-filter` is what the legacy
+   `::backdrop` used for its frosted effect; a classic requester sits on an
+   opaque ground instead. */
+#project-modal::backdrop {
+  background: var(--amiga-black);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+#project-modal .modal-card {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  box-shadow: none;
+  outline: 1px solid var(--amiga-black);
+}
+
+/* Title bar: the orange dithered ground from the shared `.dither-title`, black
+   text, with the trailing window gadget square. */
+#project-modal .terminal-card-header {
+  background: var(--amiga-orange);
+  color: var(--win-title-fg);
+  border-bottom: 2px solid var(--amiga-black);
+}
+
+/* The legacy header carries three coloured traffic-light dots. The Amiga
+   convention is a square beveled gadget, so each becomes a small raised cell
+   with no colour of its own. */
+#project-modal .terminal-dots .dot {
+  width: calc(3 * var(--px));
+  height: calc(3 * var(--px));
+  border-radius: 0;
+  opacity: 1;
+  background: var(--control-face);
+  border-top: 2px solid var(--bevel-lit);
+  border-left: 2px solid var(--bevel-lit);
+  border-bottom: 2px solid var(--bevel-shadow);
+  border-right: 2px solid var(--bevel-shadow);
+}
+
+#project-modal .terminal-title,
+#project-modal .modal-title,
+#project-modal .modal-desc,
+#project-modal .modal-details-content {
+  color: var(--win-body-fg);
+}
+
+/* Close gadget: a raised grey cell, black text, no legacy red hover. */
+#project-modal .modal-close-btn,
+#project-modal .modal-close-btn:hover {
+  background: var(--control-face);
+  color: var(--text-on-face);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#project-modal .modal-close-btn:hover {
+  border-top-color: var(--bevel-lit);
+  border-left-color: var(--bevel-lit);
+  border-bottom-color: var(--bevel-shadow);
+  border-right-color: var(--bevel-shadow);
+}
+
+/* Metadata badges and the two tech blocks are inset panels: white ground, black
+   text, square corners. The four bevel colours are re-asserted rather than
+   cleared, because the legacy `.tag-security` / `.tag-geo` / `.modal-tech-block`
+   rules tint `border-color` at (0,1,0) and would otherwise paint over the
+   `bevel-inset` edges the markup draws. */
+#project-modal .tag-badge,
+#project-modal .modal-tech-block {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  border-top-color: var(--bevel-shadow);
+  border-left-color: var(--bevel-shadow);
+  border-bottom-color: var(--bevel-lit);
+  border-right-color: var(--bevel-lit);
+}
+
+/* Subheadings were the dark-theme green; orange is a rule here, not text, so
+   the label is black and the separating rule under it is orange. */
+#project-modal .modal-subheading {
+  color: var(--win-body-fg);
+  border-bottom: 2px solid var(--amiga-orange);
+  padding-bottom: calc(1 * var(--px));
+}
+
+/* Stack pills are inset gadgets. The legacy `.skill-pill` (and its light-theme
+   override at (0,2,0)) declares a 1px `border` shorthand that out-sets the
+   2px `.bevel-inset` (0,1,0) edges from the markup, so the four bevel colours
+   and the 2px width are re-asserted at (1,1,0) here. */
+#project-modal .skill-pill,
+#project-modal .skill-pill:hover {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  box-shadow: none;
+  border-top: 2px solid var(--bevel-shadow);
+  border-left: 2px solid var(--bevel-shadow);
+  border-bottom: 2px solid var(--bevel-lit);
+  border-right: 2px solid var(--bevel-lit);
+}
+
+/* Action buttons: the primary is a raised grey gadget rather than the legacy
+   green fill, and the ghost loses its border-only treatment. Both keep the
+   `.action-btn` metrics from style.css so the labels do not reflow. */
+#project-modal .action-btn {
+  border-radius: 0;
+}
+
+#project-modal .action-primary,
+#project-modal .action-primary:hover,
+#project-modal .action-ghost,
+#project-modal .action-ghost:hover {
+  background: var(--control-face);
+  color: var(--text-on-face);
+  box-shadow: none;
+  transform: none;
+  text-shadow: none;
+}
+
+#project-modal .action-primary:hover,
+#project-modal .action-ghost:hover {
+  background: var(--grey-dd);
+  border-top-color: var(--bevel-lit);
+  border-left-color: var(--bevel-lit);
+  border-bottom-color: var(--bevel-shadow);
+  border-right-color: var(--bevel-shadow);
 }
 
 /* ==========================================================================
