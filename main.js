@@ -58,8 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Projects filter & inspector (transitional; Phase 3 moves it to projects.js).
   new ProjectsEngine();
 
-  // 5. HUD controls (transitional; Phase 3 moves them to Prefs).
-  new HUDManager();
+  // 5. HUD controls (transitional; Phase 3 moves them to Prefs). The stream
+  //    writer is injected rather than re-imported inside app.js: effects.js
+  //    stays the single write path and app.js keeps no dependency on it.
+  new HUDManager(flipStreamPreference);
 
   // 6. Avatar image fallback, moved here from app.js.
   const avatarImg = document.getElementById('avatar-img');

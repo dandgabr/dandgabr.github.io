@@ -83,9 +83,15 @@ test('a legacy #contact link lands on connect', () => {
   assert.deepEqual(parseHash('#/contact'), { app: 'connect', project: null });
 });
 
+test('a legacy #terminal link lands on shell, not intel', () => {
+  assert.deepEqual(parseHash('#terminal'), { app: 'shell', project: null });
+  assert.deepEqual(parseHash('#/terminal'), { app: 'shell', project: null });
+});
+
 test('a legacy alias does not leak a project segment', () => {
   assert.deepEqual(parseHash('#/credentials/foo'), { app: 'academic', project: null });
   assert.deepEqual(parseHash('#/contact/foo'), { app: 'connect', project: null });
+  assert.deepEqual(parseHash('#/terminal/foo'), { app: 'shell', project: null });
 });
 
 test('the about rename lands on intel', () => {

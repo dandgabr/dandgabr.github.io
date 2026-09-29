@@ -132,8 +132,29 @@ export class ProjectsEngine {
 /* ==========================================================================
    MODULE 5: HUD System Controls & Navigation
    ========================================================================== */
+
+/**
+ * Default STREAM toggle for a no-argument construction: delegate to the
+ * bootstrap's published `window.__effects.flipStreamPreference` handle when it
+ * exists (so a caller that injects nothing still works), otherwise report the
+ * live state unchanged. A bare `new HUDManager()` must never throw.
+ * @param {Storage} store - injectable for tests; production passes localStorage.
+ * @returns {boolean} the EFFECTIVE stream state.
+ */
+function defaultFlipStream(store = localStorage) {
+  const flip = window.__effects && window.__effects.flipStreamPreference;
+  if (typeof flip === 'function') return flip(store);
+  return Boolean(window.__effects && window.__effects.stream && window.__effects.stream.isRunning);
+}
+
 export class HUDManager {
-  constructor() {
+  /**
+   * @param {(store?: Storage) => boolean} flipStream the ONE stream-toggle
+   *   writer, injected by the bootstrap so this transitional class never
+   *   re-imports `effects.js`. Defaults to the `window.__effects` handle.
+   */
+  constructor(flipStream = defaultFlipStream) {
+    this.flipStream = flipStream;
     this.langBtn = document.getElementById('toggle-lang');
     this.langVal = document.getElementById('lang-val');
     this.themeBtn = document.getElementById('toggle-theme');
@@ -250,7 +271,7 @@ export class HUDManager {
     applyState(Boolean(window.__effects && window.__effects.stream && window.__effects.stream.isRunning));
 
     this.rainBtn.addEventListener('click', () => {
-      const on = flipStreamPreference(localStorage);
+      const on = this.flipStream(localStorage);
       applyState(on);
     });
   }

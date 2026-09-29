@@ -22,6 +22,7 @@ const DEFAULT_APP = 'intel';
 const LEGACY_ALIASES = Object.freeze({
   credentials: 'academic',
   contact: 'connect',
+  terminal: 'shell',
 });
 
 /**
