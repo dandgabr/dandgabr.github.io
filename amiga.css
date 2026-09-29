@@ -373,7 +373,20 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
   color: var(--win-body-fg);
 }
 
-[data-app="skills"] .domain-icon { display: none; }
+/* Section header, flat: the legacy `.section-title` is the dark-theme
+   `--text-white` (1.03:1 on the white body, effectively invisible) and
+   `.tag-index` is `--green-core` (1.36:1 on white); `.section-line` is a
+   green/transparent gradient. Same treatment as the ACADEMIC and CONNECT
+   blocks: black text and a flat 2px orange rule, no gradient. */
+[data-app="skills"] .tag-index,
+[data-app="skills"] .section-title {
+  color: var(--win-body-fg);
+}
+
+[data-app="skills"] .section-line {
+  height: 2px;
+  background: var(--amiga-orange);
+}
 
 [data-app="skills"] .skill-pill,
 [data-app="skills"] .skill-pill:hover {
@@ -498,6 +511,11 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 [data-app="connect"] .channel-card:hover {
   background: var(--win-body);
   color: var(--win-body-fg);
+  /* The card is an `<a>`, so the legacy `a:hover` (0,2,1) glow still lands on it
+     even though this block out-sets the card's own (0,2,0) rule. Cancel it here
+     and on the text/arrow nodes below, or the green text-shadow banned by §4.3
+     reappears on the exact element Task 10 rebuilt. */
+  text-shadow: none;
   border-radius: 0;
   box-shadow: none;
   backdrop-filter: none;
@@ -524,7 +542,9 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 
 /* Black text on white for every label, value and status line; the SVG glyphs use
    `fill="currentColor"`, so they turn black with `.channel-icon` (never a colour
-   emoji). The arrow's legacy green slide is flattened too. */
+   emoji). The arrow's legacy green slide is flattened too. `text-shadow` is
+   pinned to `none` here because `a:hover` out-sets this (0,2,0) group at (0,2,1)
+   and would otherwise re-apply the legacy green glow. */
 [data-app="connect"] .card-hud-label,
 [data-app="connect"] .contact-headline,
 [data-app="connect"] .contact-sub,
@@ -536,11 +556,13 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 [data-app="connect"] .tag-index,
 [data-app="connect"] .section-title {
   color: var(--win-body-fg);
+  text-shadow: none;
 }
 
 [data-app="connect"] .channel-arrow,
 [data-app="connect"] .channel-card:hover .channel-arrow {
   color: var(--win-body-fg);
+  text-shadow: none;
   transform: none;
 }
 
