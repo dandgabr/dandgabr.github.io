@@ -12,6 +12,7 @@
 
 import { I18N } from './i18n.js';
 import { PROJECTS_DATA, getProjectData } from './projects-data.js';
+import { flipStreamPreference } from './effects.js';
 
 // Column width for the `help` command table.
 const HELP_COL = 24;
@@ -247,13 +248,15 @@ export class TerminalCLI {
   }
 
   toggleStream() {
-    if (window.streamInstance) {
-      const active = window.streamInstance.toggle();
-      this.appendLog(I18N.t(active ? 'cmd.stream.output_on' : 'cmd.stream.output_off'), 'text-accent');
-      const rainBtn = document.getElementById('toggle-rain');
-      if (rainBtn) {
-        rainBtn.querySelector('.btn-val').textContent = active ? 'RUN' : 'PAUSED';
-      }
+    // Delegates to effects.js, the single read/write path for the stream
+    // preference: this command must not touch window.__effects or localStorage
+    // itself, or it becomes a second writer.
+    const active = flipStreamPreference(localStorage);
+    this.appendLog(I18N.t(active ? 'cmd.stream.output_on' : 'cmd.stream.output_off'), 'text-accent');
+    const rainBtn = document.getElementById('toggle-rain');
+    if (rainBtn) {
+      rainBtn.querySelector('.btn-val').textContent = active ? 'RUN' : 'PAUSED';
+      rainBtn.setAttribute('aria-pressed', active.toString());
     }
   }
 }
