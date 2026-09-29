@@ -391,6 +391,92 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 }
 
 /* ==========================================================================
+   ACADEMIC application (Task 9) - Amiga flat surface
+
+   Scoped to `[data-app="academic"]`. Same job as the SKILLS block above: the
+   `.hud-card` / `.timeline-card` chrome still arrives from style.css, so these
+   rules cancel the glass (`border-radius`, `backdrop-filter` blur, glow
+   box-shadows), the hover `translateY` lift and the legacy text colours, and
+   re-assert the two-tone bevel at (0,2,0)/(0,3,0) so the legacy
+   `.hud-card:hover` (0,2,0) cannot flatten it.
+
+   The white card on the white `.window-body` has no top/left bevel contrast
+   (both lit edges are white), so the hard black outline mirrors `.window` and
+   the SKILLS `.skill-card` construction.
+
+   The timeline spine and both section-header rules are rebuilt flat: the
+   legacy versions are `linear-gradient()`s with a green/transparent fade, which
+   the brief excludes. Orange appears only as those rules and the marker dot,
+   never as body text. Colours are `var()` tokens only, so no new hex enters
+   the stylesheet and the file stays RGB444-clean.
+   ========================================================================== */
+
+[data-app="academic"] .timeline-card,
+[data-app="academic"] .timeline-card:hover {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: none;
+}
+
+[data-app="academic"] .timeline-card {
+  outline: 1px solid var(--amiga-black);
+}
+
+[data-app="academic"] .timeline-card:hover {
+  border-top-color: var(--bevel-lit);
+  border-left-color: var(--bevel-lit);
+  border-bottom-color: var(--bevel-shadow);
+  border-right-color: var(--bevel-shadow);
+}
+
+/* Spine: a flat 2px orange rule in place of the legacy green gradient. Geometry
+   (`top`/`bottom`/`left`) is inherited from style.css. */
+[data-app="academic"] .credentials-timeline::before {
+  background: var(--amiga-orange);
+}
+
+[data-app="academic"] .cred-badge,
+[data-app="academic"] .cred-title,
+[data-app="academic"] .cred-detail,
+[data-app="academic"] .cred-institution {
+  color: var(--win-body-fg);
+}
+
+/* Badges are inset gadgets: white ground, black text, and the `bevel-inset`
+   borders from the markup. Only the legacy rounded corner and translucent
+   tints are cancelled here -- the rule deliberately sets no `border`, which
+   would overwrite the two-tone bevel drawn by `.bevel-inset`. */
+[data-app="academic"] .cred-badge {
+  background: var(--win-body);
+  border-radius: 0;
+}
+
+/* Marker: a square orange dot, no glow. The legacy dot carried a green
+   box-shadow and a 50% radius. */
+[data-app="academic"] .marker-dot {
+  border-radius: 0;
+  background: var(--amiga-orange);
+  box-shadow: none;
+  border: 2px solid var(--amiga-black);
+}
+
+/* Section header, flat: the legacy title is the dark-theme `--text-white`
+   (invisible on the white body) and `.section-line` is a fading gradient. */
+[data-app="academic"] .tag-index,
+[data-app="academic"] .section-title {
+  color: var(--win-body-fg);
+}
+
+[data-app="academic"] .section-line {
+  height: 2px;
+  background: var(--amiga-orange);
+}
+
+/* ==========================================================================
    Preference fallbacks (last: they must out-order the flat chrome above)
    ========================================================================== */
 
