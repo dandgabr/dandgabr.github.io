@@ -40,8 +40,13 @@
 
   <!-- Stylesheet & Deferred Scripts -->
   <link rel="stylesheet" href="style.css">
+  <!-- Vendored Driver.js stylesheet (v1.8.0, MIT). A same-origin <link> keeps
+       `style-src 'self'` intact; nothing is fetched from a CDN. It loads before
+       amiga.css so the design-system overrides below can restyle the popover. -->
+  <link rel="stylesheet" href="vendor/driver/driver.css">
   <!-- Amiga design system. Loaded after style.css so it wins during the Phase 2
-       transition; style.css is removed once Phase 3 converts every section. -->
+       transition; style.css is removed once Phase 3 converts every section. It
+       also restyles the Driver.js popover onto the flat Workbench surface. -->
   <link rel="stylesheet" href="amiga.css">
   <script type="module" src="main.js"></script>
 </head>

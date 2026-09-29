@@ -1131,6 +1131,66 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 }
 
 /* ==========================================================================
+   Driver.js tour popover (vendored, load order: driver.css then this file)
+   The library ships a modern rounded card on Helvetica; this restyles it onto
+   the flat Workbench surface: square corners, 2px bevels, the system mono font
+   and palette tokens only. The overlay fill is set inline by the library's own
+   CSSOM code and is left as-is.
+   ========================================================================== */
+
+.driver-popover {
+  font-family: var(--font-mono);
+  color: var(--win-body-fg);
+  background-color: var(--win-body);
+  border-radius: 0;
+  box-shadow: none;
+  border-top: 2px solid var(--bevel-lit);
+  border-left: 2px solid var(--bevel-lit);
+  border-bottom: 2px solid var(--bevel-shadow);
+  border-right: 2px solid var(--bevel-shadow);
+}
+
+.driver-popover-title {
+  font-family: inherit;
+  color: var(--win-title-fg);
+  background: var(--win-title-bg);
+  padding: calc(1 * var(--px)) calc(2 * var(--px));
+}
+
+.driver-popover-description {
+  font-family: inherit;
+  color: var(--win-body-fg);
+}
+
+.driver-popover-progress-text {
+  font-family: inherit;
+  color: var(--win-body-fg);
+}
+
+/* Buttons are raised grey gadgets, like the dock and Prefs controls. */
+.driver-popover-footer-btn {
+  font-family: inherit;
+  color: var(--text-on-face);
+  background-color: var(--control-face);
+  border-radius: 0;
+  border-top: 2px solid var(--bevel-lit);
+  border-left: 2px solid var(--bevel-lit);
+  border-bottom: 2px solid var(--bevel-shadow);
+  border-right: 2px solid var(--bevel-shadow);
+}
+
+.driver-popover-footer-btn:hover,
+.driver-popover-footer-btn:focus {
+  background-color: var(--grey-dd);
+}
+
+/* The arrow is a 5px CSS triangle; it is hidden rather than restyled, because a
+   square-cornered gadget has no rounded notch to point from. */
+.driver-popover-arrow {
+  display: none;
+}
+
+/* ==========================================================================
    Preference fallbacks (last: they must out-order the flat chrome above)
    ========================================================================== */
 

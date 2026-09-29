@@ -15,6 +15,7 @@ import { TerminalCLI } from './terminal.js';
 import { TerminalStream, readStreamPreference, writeStreamPreference, flipStreamPreference } from './effects.js';
 import { initPrefs } from './prefs.js';
 import { initProjects, openProject, closeProject } from './projects.js';
+import { initTour } from './tour.js';
 
 /** The dock list is stable markup, so resolve it once, not per route. */
 const listEl = document.getElementById('dock-list');
@@ -70,7 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
   //    wiring the page needs for the whole preference surface.
   initPrefs();
 
-  // 6. Avatar image fallback, moved here from app.js.
+  // 6. First-visit guided tour. Runs once for a new visitor, after a short
+  //    delay so it does not fight the first paint; Prefs' "Replay tour" control
+  //    restarts it through the `window.__tour` handle the module sets.
+  initTour();
+
+  // 7. Avatar image fallback, moved here from app.js.
   const avatarImg = document.getElementById('avatar-img');
   if (avatarImg) {
     avatarImg.addEventListener('error', () => {
