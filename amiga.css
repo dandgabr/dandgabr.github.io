@@ -319,6 +319,78 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 }
 
 /* ==========================================================================
+   SKILLS application (Task 8) - Amiga flat surface
+
+   Scoped to `[data-app="skills"]` so the legacy `.hud-card` chrome is only
+   overridden where this task was asked to restyle. The four bevel borders and
+   the white ground come from the shared primitives and tokens; the rules below
+   only cancel the legacy glass: `border-radius`, `backdrop-filter` blur, the
+   glow box-shadows, the hover `translateY` lift and the legacy text colours.
+
+   The legacy `.hud-card:hover` and `.skill-pill:hover` flatten `border-color`
+   to a single value at (0,2,0), which would erase the two-tone bevel drawn by
+   `.bevel` / `.bevel-inset` on hover. The hover rules below re-assert the four
+   bevel colours at (0,3,0) so the gadget stays raised while the pointer is on
+   it. Colours are `var()` tokens only, so no new hex enters the stylesheet.
+   ========================================================================== */
+
+[data-app="skills"] .skill-card,
+[data-app="skills"] .skill-card:hover {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: none;
+}
+
+/* A white card on the white `.window-body` has no top/left bevel contrast (both
+   `.bevel` lit edges are white), so the hard black outer line mirrors the
+   `.window` construction and keeps the card readable as a gadget. */
+[data-app="skills"] .skill-card {
+  outline: 1px solid var(--amiga-black);
+}
+
+[data-app="skills"] .skill-card:hover {
+  border-top-color: var(--bevel-lit);
+  border-left-color: var(--bevel-lit);
+  border-bottom-color: var(--bevel-shadow);
+  border-right-color: var(--bevel-shadow);
+}
+
+/* Orange is a rule/accent here, never body text: a 2px underline separates the
+   domain title from its description. The label and both text nodes stay black. */
+[data-app="skills"] .skill-header {
+  border-bottom: 2px solid var(--amiga-orange);
+  padding-bottom: calc(2 * var(--px));
+}
+
+[data-app="skills"] .card-hud-label,
+[data-app="skills"] .skill-title,
+[data-app="skills"] .skill-desc,
+[data-app="skills"] .skill-pill {
+  color: var(--win-body-fg);
+}
+
+[data-app="skills"] .domain-icon { display: none; }
+
+[data-app="skills"] .skill-pill,
+[data-app="skills"] .skill-pill:hover {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+[data-app="skills"] .skill-pill:hover {
+  border-top-color: var(--bevel-shadow);
+  border-left-color: var(--bevel-shadow);
+  border-bottom-color: var(--bevel-lit);
+  border-right-color: var(--bevel-lit);
+}
+
+/* ==========================================================================
    Preference fallbacks (last: they must out-order the flat chrome above)
    ========================================================================== */
 
