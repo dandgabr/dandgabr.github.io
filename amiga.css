@@ -218,12 +218,14 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 
 /* Dock item: a real link (<a href="#/app">), not a button. Square gadget with
    the standard raised bevel; the focus ring comes from the shared
-   :focus-visible rule above. */
+   :focus-visible rule above. 12 cells (24px at the desktop 2px scale, 36px on
+   touch) is the accessibility floor: the WCAG 2.2 2.5.8 target minimum is
+   24x24 CSS px and an 8px control at 2x would be 16px, which fails. */
 .dock-item {
   display: flex;
   align-items: center;
   gap: calc(1 * var(--px));
-  min-height: calc(10 * var(--px));
+  min-height: calc(12 * var(--px));
   padding: calc(1 * var(--px)) calc(2 * var(--px));
   background: var(--control-face);
   color: var(--text-on-face);

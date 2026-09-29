@@ -59,3 +59,40 @@ test('parseHash is pure: same argument, same result, no DOM access', () => {
   assert.equal(typeof globalThis.document, 'undefined', 'no DOM should exist here');
   assert.deepEqual(parseHash('#/academic'), parseHash('#/academic'));
 });
+
+// The argument wins over any ambient `location`: a parser that reads the global
+// defensively would pass the suite above, so probe it directly.
+test('the argument wins even when a location global exists', () => {
+  globalThis.location = { hash: '#/projects' };
+  try {
+    assert.deepEqual(parseHash('#/skills'), { app: 'skills', project: null });
+  } finally {
+    delete globalThis.location;
+  }
+});
+
+// Legacy shared links (spec §5): the old section ids must land on the app that
+// absorbed the section, not fall through to the intel default.
+test('a legacy #credentials link lands on academic', () => {
+  assert.deepEqual(parseHash('#credentials'), { app: 'academic', project: null });
+  assert.deepEqual(parseHash('#/credentials'), { app: 'academic', project: null });
+});
+
+test('a legacy #contact link lands on connect', () => {
+  assert.deepEqual(parseHash('#contact'), { app: 'connect', project: null });
+  assert.deepEqual(parseHash('#/contact'), { app: 'connect', project: null });
+});
+
+test('a legacy alias does not leak a project segment', () => {
+  assert.deepEqual(parseHash('#/credentials/foo'), { app: 'academic', project: null });
+  assert.deepEqual(parseHash('#/contact/foo'), { app: 'connect', project: null });
+});
+
+test('the about rename lands on intel', () => {
+  assert.deepEqual(parseHash('#about'), { app: 'intel', project: null });
+});
+
+test('the alias lookup cannot reach Object.prototype', () => {
+  assert.deepEqual(parseHash('#/constructor'), { app: 'intel', project: null });
+  assert.deepEqual(parseHash('#/toString'), { app: 'intel', project: null });
+});
