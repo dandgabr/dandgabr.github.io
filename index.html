@@ -40,6 +40,9 @@
 
   <!-- Stylesheet & Deferred Scripts -->
   <link rel="stylesheet" href="style.css">
+  <!-- Amiga design system. Loaded after style.css so it wins during the Phase 2
+       transition; style.css is removed once Phase 3 converts every section. -->
+  <link rel="stylesheet" href="amiga.css">
   <script type="module" src="app.js"></script>
 </head>
 <body>
@@ -105,8 +108,28 @@
     </div>
   </header>
 
+  <!-- Workbench screen title bar: the top edge of the screen (Phase 2 shell).
+       The legacy HUD header still carries its own banner role and is removed
+       in a later phase; the duplicate landmark is transitional. -->
+  <div class="screen-bar bevel" role="banner">
+    <span class="screen-gadget bevel" aria-hidden="true"></span>
+    <span class="screen-title">Workbench — dan.seg.br</span>
+    <span class="screen-pad"></span>
+    <span class="screen-gadget bevel" aria-hidden="true"></span>
+  </div>
+
+  <!-- Menu bar: the active application's menus (wired in a later phase). -->
+  <nav class="menu-bar" aria-label="Application menu">
+    <button type="button" class="menu-item" aria-expanded="false">Workbench</button>
+  </nav>
+
   <!-- Main Content Landmark -->
   <main id="main-content" class="main-layout" role="main">
+    <!-- Workbench window frame. The existing sections live inside the body until
+         Phase 3 converts each one into its own `.app` window (Task 7). -->
+    <div class="window bevel" id="app-window">
+      <div class="window-title dither-title"><h2 tabindex="-1" id="window-heading">INTEL</h2></div>
+      <div class="window-body" id="window-body">
 
     <!-- HERO SECTION: Boot Telemetry & Identity -->
     <section id="hero" class="terminal-section hero-section" aria-labelledby="hero-heading">
@@ -781,7 +804,14 @@
       </div>
     </section>
 
+      </div>
+    </div>
   </main>
+
+  <!-- Workbench dock: application launchers (populated in Task 6). -->
+  <nav class="dock" aria-label="Applications">
+    <ul class="dock-list" id="dock-list"><!-- Task 6 --></ul>
+  </nav>
 
   <!-- Project Inspection Modal (Dialog) -->
   <dialog id="project-modal" class="terminal-modal" aria-labelledby="modal-project-title">

@@ -1,0 +1,208 @@
+/* ==========================================================================
+   AMIGA WORKBENCH DESIGN SYSTEM - dan.seg.br
+   Flat Classic surface: solid fills, 2px bevels, square gadgets.
+   Palette is Amiga 12-bit RGB444 only (every channel byte has equal nibbles).
+   No glow, no glass, no backdrop-filter, no rounded tiles, no colour emoji.
+
+   Loaded AFTER style.css during the Phase 2 transition so it wins; style.css
+   is removed once Phase 3 has converted every section to a window.
+   ========================================================================== */
+
+:root {
+  --amiga-black:#000000; --amiga-white:#FFFFFF;
+  --amiga-blue:#0055AA;  --amiga-blue-dp:#0000AA;
+  --amiga-orange:#FF8800; --amiga-orange-d:#CC6600;
+  --grey-55:#555555; --grey-88:#888888; --grey-aa:#AAAAAA; --grey-dd:#DDDDDD;
+
+  --screen-bg:var(--amiga-blue);
+  --menu-bg:var(--amiga-white);          --menu-fg:var(--amiga-black);
+  --menu-highlight-bg:var(--amiga-orange); --menu-highlight-fg:var(--amiga-black);
+  --win-frame:var(--grey-aa);            --win-frame-shadow:var(--grey-55);
+  --win-body:var(--amiga-white);         --win-body-fg:var(--amiga-black);
+  --win-title-bg:var(--amiga-orange);    --win-title-fg:var(--amiga-black);
+  --bevel-lit:var(--amiga-white);        --bevel-shadow:var(--grey-55);
+  --control-face:var(--grey-aa);         --text-on-face:var(--amiga-black);
+  --link:var(--amiga-blue);              --link-on-blue:var(--amiga-white);
+
+  --px:2px; --cell:calc(8 * var(--px));
+  --font-mono:'Unscii','Terminus',ui-monospace,monospace;
+
+  --focus-inner:2px solid var(--amiga-white);
+  --focus-outer:0 0 0 4px var(--amiga-black);
+}
+
+/* Touch layouts step the typographic grid up one integer multiple (never a
+   fractional scale). */
+@media (max-width:767px) { :root { --px:3px; } }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+
+/* The reduced-transparency fallback lives at the end of this file, after the
+   chrome rules: at equal specificity a later source order wins, so keeping it
+   here would let `.screen-bar`'s flat background override the fallback and the
+   media feature would never apply. */
+
+.bevel { border-top:2px solid var(--bevel-lit); border-left:2px solid var(--bevel-lit);
+         border-bottom:2px solid var(--bevel-shadow); border-right:2px solid var(--bevel-shadow); }
+.bevel-inset { border-top:2px solid var(--bevel-shadow); border-left:2px solid var(--bevel-shadow);
+               border-bottom:2px solid var(--bevel-lit); border-right:2px solid var(--bevel-lit); }
+.dither-title { background:repeating-linear-gradient(0deg,var(--amiga-orange) 0 2px,var(--amiga-orange-d) 2px 4px); }
+
+/* Dual-tone ring: 2px white inner + 2px black outer (spec §19 / plan global
+   constraint). Visible on all three grounds the system uses: Workbench blue,
+   control grey and the orange title bar, because the white band separates the
+   black band from every ground.
+   `outline-offset:0` is load-bearing. The brief wrote `outline-offset:2px`,
+   which pushes the white outline *outward* of a 2px transparent gap and paints
+   black inner / white outer — pixel-verified — the inverse of both the token
+   names (`--focus-inner` is white) and the locked decision. At offset 0 the
+   outline hugs the control and the 4px box-shadow begins exactly beneath it, so
+   the white band sits inside and the black band outside. */
+:focus-visible { outline:var(--focus-inner); outline-offset:0; box-shadow:var(--focus-outer); }
+
+body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--font-mono); margin:0; }
+
+/* ==========================================================================
+   Workbench chrome (transitional shell, Phase 2)
+   ========================================================================== */
+
+/* Screen title bar: the top edge of the Workbench screen. Left in normal flow
+   during Phase 2: the legacy `.hud-header` is also sticky at `top:0`, and two
+   stuck bars at the same offset would cover one another. It becomes fixed once
+   Phase 3 removes the legacy header. */
+.screen-bar {
+  display: flex;
+  align-items: center;
+  gap: calc(2 * var(--px));
+  min-height: calc(7 * var(--px));
+  padding: 0 calc(2 * var(--px));
+  background: var(--menu-bg);
+  color: var(--menu-fg);
+}
+
+/* Square depth gadget. Sized by the grid; the `.bevel` class draws the frame. */
+.screen-gadget {
+  display: inline-block;
+  flex: none;
+  width: calc(6 * var(--px));
+  height: calc(5 * var(--px));
+  background: var(--control-face);
+}
+
+.screen-title {
+  font-size: calc(6 * var(--px));
+  line-height: calc(8 * var(--px));
+  letter-spacing: calc(1 * var(--px));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.screen-pad { flex: 1; }
+
+/* Menu bar: white ground, black text, orange highlight block. */
+.menu-bar {
+  display: flex;
+  align-items: stretch;
+  background: var(--menu-bg);
+  color: var(--menu-fg);
+  border-bottom: 1px solid var(--amiga-black);
+}
+
+.menu-item {
+  font-family: inherit;
+  font-size: calc(6 * var(--px));
+  line-height: calc(8 * var(--px));
+  min-width: calc(12 * var(--px));
+  min-height: calc(12 * var(--px));
+  padding: calc(2 * var(--px)) calc(3 * var(--px));
+  background: transparent;
+  color: var(--menu-fg);
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.menu-item[aria-expanded="true"] {
+  background: var(--menu-highlight-bg);
+  color: var(--menu-highlight-fg);
+}
+
+/* Window: hard black outer line, raised grey frame with a two-tone bevel, an
+   orange dithered title bar and an inset white body. `outline` (not a shadow)
+   draws the outer line without affecting layout. */
+.window {
+  display: flex;
+  flex-direction: column;
+  background: var(--win-frame);
+  outline: 1px solid var(--amiga-black);
+  padding: calc(2 * var(--px));
+  min-height: calc(40 * var(--px));
+}
+
+.window-title {
+  display: flex;
+  align-items: center;
+  gap: calc(2 * var(--px));
+  min-height: calc(6 * var(--px));
+  padding: 0 calc(2 * var(--px));
+  color: var(--win-title-fg);
+}
+
+.window-title h2 {
+  margin: 0;
+  font-size: calc(7 * var(--px));
+  line-height: calc(8 * var(--px));
+  font-weight: 700;
+  letter-spacing: calc(1 * var(--px));
+  color: inherit;
+}
+
+/* Inset white content surface (same two-tone geometry as `.bevel-inset`).
+   The 60px gap mirrors the legacy `.main-layout` rhythm so the sections keep
+   their current spacing until Phase 3 converts them into separate windows. */
+.window-body {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  min-height: calc(24 * var(--px));
+  padding: calc(3 * var(--px));
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-top: 2px solid var(--win-frame-shadow);
+  border-left: 2px solid var(--win-frame-shadow);
+  border-bottom: 2px solid var(--bevel-lit);
+  border-right: 2px solid var(--bevel-lit);
+}
+
+/* Dock container: raised grey control strip along the bottom. Contents arrive
+   in Task 6; the empty list still reserves one control row. */
+.dock {
+  background: var(--control-face);
+  color: var(--text-on-face);
+  border-top: 2px solid var(--bevel-lit);
+  border-bottom: 2px solid var(--bevel-shadow);
+  padding: calc(2 * var(--px));
+}
+
+.dock-list {
+  display: flex;
+  align-items: center;
+  gap: calc(2 * var(--px));
+  min-height: calc(12 * var(--px));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ==========================================================================
+   Preference fallbacks (last: they must out-order the flat chrome above)
+   ========================================================================== */
+
+/* No blur in the design, so this is a belt-and-braces guard: if a later phase
+   reintroduces any translucency, a visitor who asked for less transparency gets
+   an opaque grey bar instead. */
+@media (prefers-reduced-transparency:reduce) {
+  .dock, .screen-bar { backdrop-filter:none; background:var(--grey-aa); }
+}
+
