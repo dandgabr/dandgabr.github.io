@@ -54,9 +54,6 @@
   <!-- Accessibility Skip Link -->
   <a href="#main-content" class="skip-link" data-i18n="a11y.skip">Skip to system interface [Enter]</a>
 
-  <!-- Background Terminal Stream Canvas -->
-  <canvas id="stream-canvas" aria-hidden="true"></canvas>
-
   <!-- CRT Screen Glare & Scanline Filter Overlay -->
   <div class="crt-overlay" aria-hidden="true"></div>
 
@@ -786,7 +783,6 @@
                 <button type="button" class="cmd-chip bevel" data-cmd="projects">projects</button>
                 <button type="button" class="cmd-chip bevel" data-cmd="credentials">credentials</button>
                 <button type="button" class="cmd-chip bevel" data-cmd="contact">contact</button>
-                <button type="button" class="cmd-chip bevel" data-cmd="stream">stream</button>
                 <button type="button" class="cmd-chip bevel" data-cmd="clear">clear</button>
               </div>
 
@@ -825,7 +821,7 @@
         </section>
 
         <!-- PREFS: the preferences application. Its controls (language, CRT
-             scanlines, background stream, replay tour) are wired by prefs.js,
+             scanlines, replay tour) are wired by prefs.js,
              which delegates from this section, not from `document`. -->
         <section class="app" data-app="prefs" aria-labelledby="win-prefs-heading" hidden>
           <h2 class="window-heading dither-title" id="win-prefs-heading" tabindex="-1" data-i18n="dock.prefs">Prefs</h2>
@@ -839,10 +835,6 @@
             <div class="prefs-row">
               <span id="prefs-crt-label" data-i18n="prefs.crt">CRT scanlines</span>
               <button type="button" class="bevel" data-toggle="crt" aria-pressed="false" aria-labelledby="prefs-crt-label"></button>
-            </div>
-            <div class="prefs-row">
-              <span id="prefs-stream-label" data-i18n="prefs.stream">Background stream</span>
-              <button type="button" class="bevel" data-toggle="stream" aria-pressed="false" aria-labelledby="prefs-stream-label"></button>
             </div>
             <div class="prefs-row">
               <button type="button" class="bevel" data-action="replay-tour" data-i18n="prefs.replay_tour">Replay tour</button>

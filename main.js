@@ -12,7 +12,6 @@ import { initRouter } from './router.js';
 import { renderDock, initDockNav } from './dock.js';
 import { showApp } from './windows.js';
 import { TerminalCLI } from './terminal.js';
-import { TerminalStream, readStreamPreference, writeStreamPreference, flipStreamPreference } from './effects.js';
 import { initPrefs } from './prefs.js';
 import { initProjects, openProject, closeProject } from './projects.js';
 import { initTour } from './tour.js';
@@ -49,34 +48,24 @@ document.addEventListener('DOMContentLoaded', () => {
   initDockNav();
   initRouter(activate);
 
-  // 2. Terminal background stream canvas - opt-in, persisted, desktop only.
-  //    This is the single reader of the preference; every toggle writes it
-  //    through effects.js. `window.__effects` is the cross-module handle and is
-  //    set here, before any toggle can read it.
-  const stream = new TerminalStream('stream-canvas');
-  window.__effects = { stream, readStreamPreference, writeStreamPreference, flipStreamPreference };
-  if (readStreamPreference() && !window.matchMedia('(max-width: 767px)').matches) {
-    stream.start();
-  }
-
-  // 3. Interactive CLI shell. Mounted even while its window is hidden: the
+  // 2. Interactive CLI shell. Mounted even while its window is hidden: the
   //    form, chips and output live in the DOM regardless of `hidden`.
   new TerminalCLI('terminal-form', 'cli-input', 'terminal-output');
 
-  // 4. Projects grid, filter tabs and inspection modal.
+  // 3. Projects grid, filter tabs and inspection modal.
   initProjects();
 
-  // 5. Prefs controls: language, CRT, background stream and replay tour. The
-  //    listener is delegated from the PREFS window itself, so this is the only
-  //    wiring the page needs for the whole preference surface.
+  // 4. Prefs controls: language, CRT scanlines and replay tour. The listener is
+  //    delegated from the PREFS window itself, so this is the only wiring the
+  //    page needs for the whole preference surface.
   initPrefs();
 
-  // 6. First-visit guided tour. Runs once for a new visitor, after a short
+  // 5. First-visit guided tour. Runs once for a new visitor, after a short
   //    delay so it does not fight the first paint; Prefs' "Replay tour" control
   //    restarts it through the `window.__tour` handle the module sets.
   initTour();
 
-  // 7. Avatar image fallback, moved here from app.js.
+  // 6. Avatar image fallback, moved here from app.js.
   const avatarImg = document.getElementById('avatar-img');
   if (avatarImg) {
     avatarImg.addEventListener('error', () => {

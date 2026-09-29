@@ -12,7 +12,6 @@
 
 import { I18N } from './i18n.js';
 import { PROJECTS_DATA, getProjectData } from './projects-data.js';
-import { flipStreamPreference, readStreamPreference } from './effects.js';
 
 // Column width for the `help` command table.
 const HELP_COL = 24;
@@ -96,14 +95,6 @@ function cmdContact(cli) {
   cli.appendLog(I18N.t('cmd.contact.output'), 'text-accent');
 }
 
-function cmdStream(cli, args) {
-  if (args[0] === 'toggle') {
-    cli.toggleStream();
-  } else {
-    cli.appendLog(I18N.t('cmd.stream.output'), 'text-main');
-  }
-}
-
 function cmdClear(cli) {
   cli.output.innerHTML = '';
   cli.appendLog(I18N.t('cmd.clear.output'), 'text-dim');
@@ -147,7 +138,6 @@ export const COMMANDS = {
   cat:         { aliases: ['project'],            handler: cmdCat,         description: 'cmd.cat.desc' },
   credentials: { aliases: ['education', 'certs'], handler: cmdCredentials, description: 'cmd.credentials.desc' },
   contact:     { aliases: [],                     handler: cmdContact,     description: 'cmd.contact.desc' },
-  stream:      { aliases: [],                     handler: cmdStream,      description: 'cmd.stream.desc' },
   clear:       { aliases: ['cls'],                handler: cmdClear,       description: 'cmd.clear.desc' },
   boot:        { aliases: [],                     handler: cmdBoot,        description: 'cmd.boot.desc' },
   date:        { aliases: [],                     handler: cmdDate,        description: 'cmd.date.desc' },
@@ -263,27 +253,5 @@ export class TerminalCLI {
     div.className = `term-response ${className}`;
     div.textContent = content;
     this.output.appendChild(div);
-  }
-
-  toggleStream() {
-    // Delegates to effects.js, the single read/write path for the stream
-    // preference: this command must not touch window.__effects or localStorage
-    // itself, or it becomes a second writer.
-    // `flipStreamPreference` returns the EFFECTIVE state (the narrow-viewport
-    // gate can keep the stream stopped even with the preference on), which is
-    // exactly what the log line should report: it must never claim a stopped
-    // stream is running.
-    const effective = flipStreamPreference(localStorage);
-    this.appendLog(I18N.t(effective ? 'cmd.stream.output_on' : 'cmd.stream.output_off'), 'text-accent');
-    // Keep the PREFS toggle truthful. R21: the button mirrors the STORED
-    // PREFERENCE - the same source `prefs.js` paints from - not the effective
-    // running state, so on a narrow viewport (where the gate keeps the stream
-    // stopped) the two modules still agree on the visitor's choice.
-    const streamOn = readStreamPreference(localStorage);
-    const streamBtn = document.querySelector('[data-toggle="stream"]');
-    if (streamBtn) {
-      streamBtn.setAttribute('aria-pressed', String(streamOn));
-      streamBtn.textContent = I18N.t(streamOn ? 'prefs.on' : 'prefs.off');
-    }
   }
 }

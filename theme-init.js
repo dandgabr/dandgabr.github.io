@@ -19,6 +19,10 @@
     var crtOff = crtPref === '1' || crtPref === 'true';
     root.setAttribute('data-crt', crtOff ? 'off' : 'on');
 
+    // The background stream was removed, so its preference is orphaned. Drop it
+    // once here rather than leaving dead state in returning visitors' storage.
+    try { localStorage.removeItem('stream_preference'); } catch (e) {}
+
     var saved = localStorage.getItem('lang_preference');
     var lang = 'en';
     if (saved === 'pt-br' || saved === 'es' || saved === 'en') {

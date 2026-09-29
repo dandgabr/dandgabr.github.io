@@ -168,14 +168,7 @@ a:hover { color:var(--amiga-blue-dp); }
 }
 .skip-link:focus { top:15px; outline:2px solid var(--amiga-white); }
 
-/* Background stream canvas and CRT scanline/vignette overlay. The CRT effect is
-   a flat repeating line rather than the legacy radial gradient. */
-#stream-canvas {
-  position:fixed; top:0; left:0;
-  width:100vw; height:100vh;
-  z-index:0; pointer-events:none; opacity:.38;
-}
-
+/* CRT scanline/vignette overlay: a flat repeating line, not a gradient. */
 .crt-overlay {
   position:fixed; top:0; left:0;
   width:100vw; height:100vh;

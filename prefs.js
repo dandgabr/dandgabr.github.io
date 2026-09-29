@@ -1,24 +1,21 @@
 /**
  * ============================================================================
  * PREFS - the preferences application
- * The single owner of the language, CRT scanline, background-stream and
- * replay-tour controls. It replaces the transitional HUD controls that used to
- * live in the deleted SYS-CTRL side panel and the class that drove them.
+ * The single owner of the language, CRT scanline and replay-tour controls. It
+ * replaces the transitional HUD controls that used to live in the deleted
+ * SYS-CTRL side panel and the class that drove them.
  *
  * The listener is delegated and rooted on the `[data-app="prefs"]` section, not
  * on `document`, so it cannot observe a click anywhere else on the page and
  * cannot collide with the terminal, the modal or the dock.
  *
- * Every read goes through the real state:
- *   - CRT lives on `document.documentElement[data-crt]`, set pre-paint by
- *     `theme-init.js` from the persisted preference.
- *   - stream lives in `effects.js` (`readStreamPreference`), the single read
- *     path, so what the button shows is what the page does.
+ * Every read goes through the real state: CRT lives on
+ * `document.documentElement[data-crt]`, set pre-paint by `theme-init.js` from
+ * the persisted preference.
  * ============================================================================
  */
 
 import { I18N } from './i18n.js';
-import { readStreamPreference, writeStreamPreference } from './effects.js';
 
 /** localStorage key for the CRT preference; `'1'` and legacy `'true'` mean OFF. */
 const CRT_KEY = 'crt_scanline_off';
@@ -35,7 +32,6 @@ export function initPrefs() {
   if (!root) return;
 
   const crtBtn = root.querySelector('[data-toggle="crt"]');
-  const streamBtn = root.querySelector('[data-toggle="stream"]');
 
   // The toggle buttons are state labels, so they carry no `data-i18n` (which
   // would pin them to a single key); they are re-labelled here whenever the
@@ -44,17 +40,12 @@ export function initPrefs() {
     const on = I18N.t('prefs.on');
     const off = I18N.t('prefs.off');
     if (crtBtn) crtBtn.textContent = crtBtn.getAttribute('aria-pressed') === 'true' ? on : off;
-    if (streamBtn) streamBtn.textContent = streamBtn.getAttribute('aria-pressed') === 'true' ? on : off;
   };
 
-  // Paint the REAL state, not a default: the attribute is the source of truth
-  // for CRT, `readStreamPreference` for the stream.
+  // Paint the REAL state, not a default: the attribute is the source of truth.
   const renderState = () => {
     const crtOn = document.documentElement.getAttribute('data-crt') !== 'off';
     if (crtBtn) crtBtn.setAttribute('aria-pressed', String(crtOn));
-
-    const streamOn = readStreamPreference(localStorage);
-    if (streamBtn) streamBtn.setAttribute('aria-pressed', String(streamOn));
 
     renderLabels();
   };
@@ -72,28 +63,19 @@ export function initPrefs() {
       return;
     }
 
-    const toggle = e.target.closest?.('[data-toggle]');
+    const toggle = e.target.closest?.('[data-toggle="crt"]');
     if (toggle) {
-      const isCrt = toggle.dataset.toggle === 'crt';
-
       // Flip the REAL state, read from its source of truth rather than trusting
-      // the button label: the DOM attribute for CRT, the persisted preference
-      // for the stream. A stray click can therefore never desync the two.
-      const current = isCrt
-        ? document.documentElement.getAttribute('data-crt') !== 'off'
-        : readStreamPreference(localStorage);
+      // the button label: the DOM attribute. A stray click can therefore never
+      // desync the two.
+      const current = document.documentElement.getAttribute('data-crt') !== 'off';
       const on = !current;
       toggle.setAttribute('aria-pressed', String(on));
 
-      if (isCrt) {
-        document.documentElement.setAttribute('data-crt', on ? 'on' : 'off');
-        // `crt_scanline_off` is the OFF flag: '1' means scanlines off. Writing
-        // the inverse here would silently reset a returning visitor on reload.
-        localStorage.setItem(CRT_KEY, on ? '0' : '1');
-      } else {
-        writeStreamPreference(localStorage, on);
-        window.__effects?.stream?.setEnabled(on);
-      }
+      document.documentElement.setAttribute('data-crt', on ? 'on' : 'off');
+      // `crt_scanline_off` is the OFF flag: '1' means scanlines off. Writing
+      // the inverse here would silently reset a returning visitor on reload.
+      localStorage.setItem(CRT_KEY, on ? '0' : '1');
 
       renderLabels();
       return;
