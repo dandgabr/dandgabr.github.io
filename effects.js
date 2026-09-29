@@ -185,6 +185,20 @@ export class TerminalStream {
 
     this.ctx.fillStyle = this.theme === 'light' ? '#f8faf9' : '#030a06';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // A viewport can narrow AFTER the stream is already running (rotate a
+    // tablet, drag a desktop window down). `start()` carries the hard gate, but
+    // `start()` is not re-entered on resize, so without this the stream would
+    // keep animating at 32 FPS on a narrow viewport until a reload. Stop it.
+    //
+    // This is deliberately stop-only: widening back does NOT auto-resume. The
+    // requirement forbids running on a narrow viewport and nothing more, and
+    // resuming would have to re-derive intent (it must never opt in a visitor
+    // who never chose the stream). The stored preference is not touched here,
+    // so the visitor's choice survives and a later `start()` or HUD toggle
+    // still works. `stop()` is idempotent, so calling it on an already-stopped
+    // stream (including the `init()` resize) is a safe no-op.
+    if (isNarrowViewport()) this.stop();
   }
 
   start() {
