@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://github.com data:; font-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' https://github.com data:; font-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none';">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <!-- Primary Meta Tags -->
@@ -13,8 +13,13 @@
   <meta name="description" content="Portfolio and Security Research of Daniel Gonçalves Araujo (@dandgabr). Information Security Architect @ Dasa. Specializing in Enterprise Security Architecture, AI Safety & Hardening, AppSec, and DevSecOps.">
   <meta name="keywords" content="Daniel Gonçalves Araujo, dandgabr, Security Architect, Dasa, AI Safety, AI Hardening, AppSec, DevSecOps, Threat Modeling, CIS Benchmarks, MCP, Model Context Protocol, Cloud Security, CompTIA Security+">
   <meta name="author" content="Daniel Gonçalves Araujo (@dandgabr)">
-  <meta name="theme-color" content="#061109">
-  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0055AA">
+  <meta name="color-scheme" content="dark">
+
+  <!-- Pre-paint CRT, language and theme-colour setup. Classic script, first in
+       <head>: it must run before the body paints so a visitor who disabled the
+       scanlines never sees them flash. No defer/async/module. -->
+  <script src="theme-init.js"></script>
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -33,125 +38,63 @@
   <!-- Favicon / SVG Icon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23061109' rx='6'/%3E%3Cpath d='M16 4 L28 9 V18 C28 24 16 28 16 28 C16 28 4 24 4 18 V9 Z' fill='none' stroke='%2300ff66' stroke-width='2'/%3E%3Cpath d='M11 16 L15 20 L21 12' fill='none' stroke='%2300ff66' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
-  <!-- Stylesheet & Deferred Scripts -->
-  <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
-
-  <!-- Early Theme and Language Detection (System Preference Default / Zero Flash) -->
-  <script>
-    (function() {
-      try {
-        // Theme Detection
-        var rawTheme = localStorage.getItem('theme_preference');
-        var savedTheme = (rawTheme === 'light' || rawTheme === 'dark') ? rawTheme : null;
-        var systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        var activeTheme = savedTheme || systemTheme;
-        document.documentElement.setAttribute('data-theme', activeTheme);
-        var metaTheme = document.querySelector('meta[name="theme-color"]');
-        if (metaTheme) {
-          metaTheme.setAttribute('content', activeTheme === 'light' ? '#ffffff' : '#061109');
-        }
-
-        // Language Detection
-        var savedLang = localStorage.getItem('lang_preference');
-        var activeLang = 'en';
-        if (savedLang && ['en', 'pt-br', 'es'].indexOf(savedLang) !== -1) {
-          activeLang = savedLang;
-        } else {
-          var navLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-          if (navLang.indexOf('pt') === 0) activeLang = 'pt-br';
-          else if (navLang.indexOf('es') === 0) activeLang = 'es';
-          else if (navLang.indexOf('en') === 0) activeLang = 'en';
-          else activeLang = 'en';
-        }
-        document.documentElement.setAttribute('lang', activeLang === 'pt-br' ? 'pt-BR' : activeLang);
-        document.documentElement.setAttribute('data-lang', activeLang);
-      } catch (e) {}
-    })();
-  </script>
+  <!-- Stylesheets. The Amiga design system is the only project stylesheet: the
+       legacy terminal-HUD style.css was retired once every section had moved
+       onto the Workbench surface. -->
+  <!-- Vendored Driver.js stylesheet (v1.8.0, MIT). A same-origin <link> keeps
+       `style-src 'self'` intact; nothing is fetched from a CDN. It loads before
+       amiga.css so the design-system overrides below can restyle the popover. -->
+  <link rel="stylesheet" href="vendor/driver/driver.css">
+  <!-- Amiga design system. It also restyles the Driver.js popover onto the flat
+       Workbench surface. -->
+  <link rel="stylesheet" href="amiga.css">
+  <script type="module" src="main.js"></script>
 </head>
-<body class="crt-scanlines">
+<body>
   <!-- Accessibility Skip Link -->
   <a href="#main-content" class="skip-link" data-i18n="a11y.skip">Skip to system interface [Enter]</a>
-
-  <!-- Background Terminal Stream Canvas -->
-  <canvas id="stream-canvas" aria-hidden="true"></canvas>
 
   <!-- CRT Screen Glare & Scanline Filter Overlay -->
   <div class="crt-overlay" aria-hidden="true"></div>
 
-  <!-- SYS-CTRL: Vertical Side Panel (controls moved from header) -->
-  <aside class="sys-ctrl-panel" aria-label="System Controls">
-    <div class="ctrl-header">
-      <span class="ctrl-title">SYS-CTRL</span>
-    </div>
-    <div class="ctrl-group">
-      <button id="toggle-lang" class="ctrl-item" type="button" aria-label="Switch language (EN, PT, ES)" title="Switch Language (EN / PT / ES)">
-        <span class="ctrl-item-label">&gt; LANG</span>
-        <span class="btn-val" id="lang-val">EN</span>
-      </button>
-      <button id="toggle-theme" class="ctrl-item" type="button" aria-label="Toggle Theme Mode" title="Toggle Light / Dark Mode">
-        <span class="ctrl-item-label">&gt; THEME</span>
-        <span class="btn-val" id="theme-val">DARK</span>
-      </button>
-      <button id="toggle-crt" class="ctrl-item" type="button" aria-pressed="true" title="Toggle CRT Scanline Effect">
-        <span class="ctrl-item-label">&gt; CRT</span>
-        <span class="btn-val">ON</span>
-      </button>
-      <button id="toggle-rain" class="ctrl-item" type="button" aria-pressed="true" title="Toggle Background Stream">
-        <span class="ctrl-item-label">&gt; STREAM</span>
-        <span class="btn-val">RUN</span>
-      </button>
-    </div>
-  </aside>
+  <!-- Workbench screen title bar: the top edge of the screen (Phase 2 shell).
+       The legacy HUD header is gone, so this is the page's only banner
+       landmark, and nothing collides with it at `top:0`. -->
+  <div class="screen-bar bevel" role="banner">
+    <span class="screen-gadget bevel" aria-hidden="true"></span>
+    <span class="screen-title">Workbench — dan.seg.br</span>
+    <span class="screen-pad"></span>
+    <span class="screen-gadget bevel" aria-hidden="true"></span>
+  </div>
 
-  <!-- HUD Top Bar / System Navigation -->
-  <header class="hud-header" role="banner">
-    <div class="hud-container">
-      <div class="sys-badge">
-        <span class="status-led" aria-hidden="true"></span>
-        <span class="sys-title">terminal</span>
-        <span class="sys-state" aria-label="System status operational" data-i18n="hud.active">[ACTIVE]</span>
-      </div>
-
-      <nav class="hud-nav" aria-label="Main system navigation">
-        <ul class="nav-links" id="nav-links">
-          <li><a href="#hero" class="nav-item active"><span class="nav-num">01.</span><span data-i18n="nav.root">//ROOT</span></a></li>
-          <li><a href="#terminal" class="nav-item"><span class="nav-num">02.</span><span data-i18n="nav.terminal">//TERMINAL</span></a></li>
-          <li><a href="#about" class="nav-item"><span class="nav-num">03.</span><span data-i18n="nav.intel">//INTEL</span></a></li>
-          <li><a href="#skills" class="nav-item"><span class="nav-num">04.</span><span data-i18n="nav.skills">//SKILLS</span></a></li>
-          <li><a href="#projects" class="nav-item"><span class="nav-num">05.</span><span data-i18n="nav.projects">//PROJECTS</span></a></li>
-          <li><a href="#credentials" class="nav-item"><span class="nav-num">06.</span><span data-i18n="nav.academic">//ACADEMIC</span></a></li>
-          <li><a href="#contact" class="nav-item"><span class="nav-num">07.</span><span data-i18n="nav.connect">//CONNECT</span></a></li>
-        </ul>
-      </nav>
-
-      <!-- Mobile: hamburger menu toggle only -->
-      <button id="mobile-menu-btn" class="hud-btn mobile-only" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle Navigation Menu">
-        <span class="btn-bracket">[</span>MENU<span class="btn-bracket">]</span>
-      </button>
-    </div>
-  </header>
+  <!-- Menu bar: the active application's menus. It has no menu yet, and a
+       half-implemented ARIA menu is worse than none (spec §12), so the bar is
+       an empty labelled landmark rather than a dead disclosure button that
+       never flips `aria-expanded`. The dock is the primary navigation. -->
+  <nav class="menu-bar" aria-label="Application menu"></nav>
 
   <!-- Main Content Landmark -->
   <main id="main-content" class="main-layout" role="main">
-
-    <!-- HERO SECTION: Boot Telemetry & Identity -->
+    <!-- Workbench desktop: the identity block sits on the screen itself,
+         outside every application window, and its <h1> is first in document
+         order (the transitional <h2 id="window-heading"> that used to precede
+         it is gone; each application now carries its own window heading). -->
     <section id="hero" class="terminal-section hero-section" aria-labelledby="hero-heading">
       <div class="terminal-card hero-card">
         <div class="terminal-card-header">
           <div class="terminal-dots" aria-hidden="true">
-            <span class="dot dot-red"></span>
-            <span class="dot dot-amber"></span>
-            <span class="dot dot-green"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
           </div>
           <div class="terminal-title">sec_core_v6.12_hardened.sys &mdash; 80x24 VT100</div>
           <div class="terminal-meta">CIPHER: CHACHA20-POLY1305</div>
         </div>
 
         <div class="terminal-card-body">
-          <div id="boot-log" class="boot-sequence" aria-live="polite">
-            <!-- Populated progressively by app.js; fallback content for non-JS -->
+          <div id="boot-log" class="boot-sequence">
+            <!-- Static identity block. Nothing appends to it: the Shell's `boot`
+                 command replays the sequence in the output log instead. -->
             <p class="log-line text-dim">&gt; BIOS_CHECKSUM: OK | KERNEL_LOAD: 0x00007FFD... ACCESS_GRANTED</p>
             <p class="log-line text-accent">&gt; IDENTITY: Daniel Gonçalves Araujo [@dandgabr]</p>
             <p class="log-line text-highlight">&gt; ROLE: Information Security Architect @ Dasa</p>
@@ -176,21 +119,21 @@
 
               <div class="hero-pillars">
                 <div class="pillar-chip">
-                  <span class="chip-icon" aria-hidden="true">🛡️</span>
+                  <span class="chip-icon" aria-hidden="true">&#9635;</span>
                   <div class="chip-body">
                     <strong data-i18n="hero.pillar1.title">Enterprise Security</strong>
                     <small data-i18n="hero.pillar1.sub">Threat Modeling & DevSecOps</small>
                   </div>
                 </div>
                 <div class="pillar-chip">
-                  <span class="chip-icon" aria-hidden="true">🤖</span>
+                  <span class="chip-icon" aria-hidden="true">&#9672;</span>
                   <div class="chip-body">
                     <strong data-i18n="hero.pillar2.title">AI Safety & Hardening</strong>
                     <small data-i18n="hero.pillar2.sub">MCP & Agent Containment</small>
                   </div>
                 </div>
                 <div class="pillar-chip">
-                  <span class="chip-icon" aria-hidden="true">☁️</span>
+                  <span class="chip-icon" aria-hidden="true">&#9636;</span>
                   <div class="chip-body">
                     <strong data-i18n="hero.pillar3.title">Cloud & Infrastructure</strong>
                     <small data-i18n="hero.pillar3.sub">AWS, Azure, CIS Hardening</small>
@@ -223,7 +166,7 @@
                     <source srcset="assets/avatar.webp" type="image/webp">
                     <img id="avatar-img" src="assets/avatar.png" alt="Daniel Gonçalves Araujo Avatar" class="avatar-img" width="208" height="208" decoding="async" fetchpriority="high">
                   </picture>
-                  <pre id="ascii-avatar" class="ascii-fallback" style="display:none;">
+                  <pre id="ascii-avatar" class="ascii-fallback" hidden>
     [ SEC_ARCH ]
       .---.
      /     \
@@ -246,610 +189,725 @@
       </div>
     </section>
 
-    <!-- SECTION 02: Interactive Terminal Console -->
-    <section id="terminal" class="terminal-section" aria-labelledby="terminal-heading">
-      <div class="section-tag-header">
-        <span class="tag-index">[SECTION 02]</span>
-        <h2 id="terminal-heading" class="section-title" data-i18n="sec.terminal.title">INTERACTIVE COMMAND SHELL</h2>
-        <span class="section-line"></span>
-      </div>
+    <!-- Workbench window frame. One `.app` section per application; only the
+         routed app is un-hidden (the `hidden` attribute is the whole
+         visibility model). INTEL opens by default for "" and unknown routes. -->
+    <div class="window bevel" id="app-window">
+      <div class="window-body" id="window-body">
 
-      <div class="terminal-card shell-card">
-        <div class="terminal-card-header">
-          <div class="terminal-dots" aria-hidden="true">
-            <span class="dot dot-red"></span>
-            <span class="dot dot-amber"></span>
-            <span class="dot dot-green"></span>
-          </div>
-          <div class="terminal-title">guest@dandga-kernel:/workspace (bash 5.2)</div>
-          <div class="terminal-meta">TTY: /dev/pts/0</div>
-        </div>
+        <section class="app" data-app="intel" id="about" aria-labelledby="win-intel-heading">
+          <h2 class="window-heading dither-title" id="win-intel-heading" tabindex="-1" data-i18n="dock.intel">INTEL</h2>
 
-        <div class="terminal-card-body terminal-interactive">
-          <div class="terminal-instructions text-dim" id="term-instructions">
-            <span data-i18n="terminal.instructions.prefix">Type</span> <span class="code-highlight">help</span> <span data-i18n="terminal.instructions.suffix">to list commands, or click any tactical command chip below:</span>
+          <div class="section-tag-header">
+            <span class="tag-index">[SECTION 03]</span>
+            <h2 id="about-heading" class="section-title" data-i18n="sec.about.title">DOSSIER // PROFESSIONAL INTEL</h2>
+            <span class="section-line"></span>
           </div>
 
-          <!-- Tactical Quick Command Buttons -->
-          <div class="quick-cmd-bar" role="toolbar" aria-label="Terminal command shortcuts">
-            <button type="button" class="cmd-chip" data-cmd="help">help</button>
-            <button type="button" class="cmd-chip" data-cmd="whoami">whoami</button>
-            <button type="button" class="cmd-chip" data-cmd="skills">skills</button>
-            <button type="button" class="cmd-chip" data-cmd="projects">projects</button>
-            <button type="button" class="cmd-chip" data-cmd="credentials">credentials</button>
-            <button type="button" class="cmd-chip" data-cmd="contact">contact</button>
-            <button type="button" class="cmd-chip" data-cmd="stream">stream</button>
-            <button type="button" class="cmd-chip" data-cmd="clear">clear</button>
-          </div>
+          <div class="about-grid">
+            <div class="hud-card about-dossier">
+              <div class="card-hud-label" data-i18n="dossier.profile_label">[OPERATIONAL PROFILE]</div>
+              <h3 class="card-title" data-i18n="dossier.role_title">Information Security Architect</h3>
+              <div class="dossier-org">
+                <span class="org-label" data-i18n="dossier.org_label">ORGANIZATION:</span>
+                <span class="org-name" data-i18n="dossier.org_name">Dasa (Largest integrated healthcare network in Latin America)</span>
+              </div>
 
-          <!-- Terminal Output Log -->
-          <div id="terminal-output" class="terminal-output" role="log" aria-live="polite" aria-atomic="false">
-            <div class="term-response">
-              <span class="text-dim">Security Shell v2.4.0 (x86_64-hardened-linux)</span><br>
-              <span class="text-dim" data-i18n="terminal.welcome">Session initialized for peer review. Type 'help' for guidance.</span>
+              <div class="dossier-body">
+                <p data-i18n="dossier.p1">
+                  Operating at the intersection of <strong>Enterprise Defense Architecture</strong> and <strong>Emerging Autonomous Tech</strong>, I engineer security frameworks that prevent exploitation before code reaches production and isolate autonomous agents operating in developer workspaces.
+                </p>
+                <p data-i18n="dossier.p2">
+                  My engineering approach is rooted in systems programming, microcontroller diagnostics, and threat containment. With 7+ years of academic background lecturing algorithms, computer security, and electronics, I combine pedagogical clarity with technical rigor in application security, threat modeling, and secure software development lifecycles.
+                </p>
+              </div>
+
+              <div class="dossier-specs">
+                <div class="spec-row">
+                  <span class="spec-key" data-i18n="dossier.spec.discipline_label">DISCIPLINE:</span>
+                  <span class="spec-val" data-i18n="dossier.spec.discipline_val">Security Architecture & DevSecOps</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key" data-i18n="dossier.spec.focus_label">RESEARCH_FOCUS:</span>
+                  <span class="spec-val" data-i18n="dossier.spec.focus_val">AI Safety, MCP Sandboxing, Memory Forensics</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key" data-i18n="dossier.spec.accred_label">ACCREDITATION:</span>
+                  <span class="spec-val text-accent">CompTIA Security+ ce</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-key" data-i18n="dossier.spec.community_label">COMMUNITY:</span>
+                  <span class="spec-val" data-i18n="dossier.spec.community_val">Google Developer Groups (GDG) Speaker</span>
+                </div>
+              </div>
+
+              <!-- Prior security roles (spec §2 decision 15 / §14 item 3): the
+                   current Dasa role above plus these three. Teaching and
+                   freelance work are deliberately excluded from INTEL. -->
+              <div class="prior-roles">
+                <div class="card-hud-label" data-i18n="dossier.prior_label">[PRIOR SECURITY ROLES]</div>
+                <ul class="prior-list">
+                  <li class="prior-row">
+                    <span class="prior-role" data-i18n="dossier.prior.bv_role">Information Security Architect</span>
+                    <span class="prior-meta"><span data-i18n="dossier.prior.bv_org">Boa Vista</span> &middot; <span data-i18n="dossier.prior.bv_dates">Jun 2022 – May 2024</span></span>
+                  </li>
+                  <li class="prior-row">
+                    <span class="prior-role" data-i18n="dossier.prior.dock_role">Application Security Engineer</span>
+                    <span class="prior-meta"><span data-i18n="dossier.prior.dock_org">Dock</span> &middot; <span data-i18n="dossier.prior.dock_dates">Jan 2022 – Jun 2022</span></span>
+                  </li>
+                  <li class="prior-row">
+                    <span class="prior-role" data-i18n="dossier.prior.cv_role">Information Security Analyst (AppSec)</span>
+                    <span class="prior-meta"><span data-i18n="dossier.prior.cv_org">Conviso Application Security</span> &middot; <span data-i18n="dossier.prior.cv_dates">Jun 2021 – Dec 2021</span></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Architecture Triad HUD -->
+            <div class="hud-card triad-dossier">
+              <div class="card-hud-label" data-i18n="triad.label">[DEFENSE METHODOLOGY]</div>
+              <h3 class="card-title" data-i18n="triad.title">The Three Pillars of Defense</h3>
+
+              <div class="triad-list">
+                <article class="triad-item">
+                  <div class="triad-num">01</div>
+                  <div class="triad-content">
+                    <h4 data-i18n="triad.p1.title">Enterprise Security Architecture & AppSec</h4>
+                    <p data-i18n="triad.p1.desc">Establishing defense-in-depth through systematic threat modeling (STRIDE, PASTA), OWASP ASVS/SAMM frameworks, and automated DevSecOps pipelines integrated into CI/CD environments.</p>
+                  </div>
+                </article>
+
+                <article class="triad-item">
+                  <div class="triad-num">02</div>
+                  <div class="triad-content">
+                    <h4 data-i18n="triad.p2.title">AI Safety & Agent Containment</h4>
+                    <p data-i18n="triad.p2.desc">Pioneering practical sandboxing for developer AI tooling. Designing MCP (Model Context Protocol) validation layers and agent skill frameworks to prevent prompt injection and tool misuse.</p>
+                  </div>
+                </article>
+
+                <article class="triad-item">
+                  <div class="triad-num">03</div>
+                  <div class="triad-content">
+                    <h4 data-i18n="triad.p3.title">Cloud Security & DevSecOps</h4>
+                    <p data-i18n="triad.p3.desc">Automating security policy enforcement, infrastructure hardening (CIS Benchmarks), container integrity, and compliance controls across multi-cloud environments (AWS & Azure).</p>
+                  </div>
+                </article>
+              </div>
             </div>
           </div>
+    
+        </section>
 
-          <!-- Command Input Line -->
-          <form id="terminal-form" class="terminal-input-row" autocomplete="off">
-            <label for="cli-input" class="term-prompt">
-              <span class="term-user">terminal</span>&gt;&nbsp;
-            </label>
-            <input type="text" id="cli-input" class="term-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Terminal command line input" data-i18n-attr="placeholder:terminal.placeholder,aria-label:terminal.input_aria" placeholder="type a command...">
-            <button type="submit" class="term-submit-btn" aria-label="Execute command">&gt;</button>
-          </form>
-        </div>
-      </div>
-    </section>
+        <section class="app" data-app="skills" id="skills" aria-labelledby="win-skills-heading" hidden>
+          <h2 class="window-heading dither-title" id="win-skills-heading" tabindex="-1" data-i18n="dock.skills">SKILLS</h2>
 
-    <!-- SECTION 03: Profile Intel & Philosophy -->
-    <section id="about" class="terminal-section" aria-labelledby="about-heading">
-      <div class="section-tag-header">
-        <span class="tag-index">[SECTION 03]</span>
-        <h2 id="about-heading" class="section-title" data-i18n="sec.about.title">DOSSIER // PROFESSIONAL INTEL</h2>
-        <span class="section-line"></span>
-      </div>
-
-      <div class="about-grid">
-        <div class="hud-card about-dossier">
-          <div class="card-hud-label" data-i18n="dossier.profile_label">[OPERATIONAL PROFILE]</div>
-          <h3 class="card-title" data-i18n="dossier.role_title">Information Security Architect</h3>
-          <div class="dossier-org">
-            <span class="org-label" data-i18n="dossier.org_label">ORGANIZATION:</span>
-            <span class="org-name" data-i18n="dossier.org_name">Dasa (Largest integrated healthcare network in Latin America)</span>
+          <div class="section-tag-header">
+            <span class="tag-index">[SECTION 04]</span>
+            <h2 id="skills-heading" class="section-title" data-i18n="sec.skills.title">CORE EXPERTISE & TECHNICAL DOMAINS</h2>
+            <span class="section-line"></span>
           </div>
 
-          <div class="dossier-body">
-            <p data-i18n="dossier.p1">
-              Operating at the intersection of <strong>Enterprise Defense Architecture</strong> and <strong>Emerging Autonomous Tech</strong>, I engineer security frameworks that prevent exploitation before code reaches production and isolate autonomous agents operating in developer workspaces.
-            </p>
-            <p data-i18n="dossier.p2">
-              My engineering approach is rooted in systems programming, microcontroller diagnostics, and threat containment. With 4+ years of academic background lecturing algorithms, computer security, and electronics, I combine pedagogical clarity with technical rigor in application security, threat modeling, and secure software development lifecycles.
-            </p>
+          <div class="skills-grid">
+            <!-- Quadrant 1: Security Architecture -->
+            <div class="hud-card skill-card bevel">
+              <div class="card-hud-label">[DOMAIN: 0x01]</div>
+              <div class="skill-header">
+                <h3 class="skill-title" data-i18n="skills.q1.title">Security Architecture & Governance</h3>
+              </div>
+              <p class="skill-desc" data-i18n="skills.q1.desc">Enterprise defense design, policy enforcement, and resilient DevSecOps integration.</p>
+              <ul class="skill-pill-list" aria-label="Security skills list">
+                <li class="skill-pill bevel-inset">Threat Modeling (STRIDE)</li>
+                <li class="skill-pill bevel-inset">OWASP SAMM & ASVS</li>
+                <li class="skill-pill bevel-inset">Cloud Security (AWS / Azure)</li>
+                <li class="skill-pill bevel-inset">DevSecOps CI/CD Pipelines</li>
+                <li class="skill-pill bevel-inset">PCI DSS Compliance</li>
+                <li class="skill-pill bevel-inset">Linux & OS Hardening</li>
+                <li class="skill-pill bevel-inset">Security Champions Leadership</li>
+              </ul>
+            </div>
+
+            <!-- Quadrant 2: AI & Agentic Systems -->
+            <div class="hud-card skill-card bevel">
+              <div class="card-hud-label">[DOMAIN: 0x02]</div>
+              <div class="skill-header">
+                <h3 class="skill-title" data-i18n="skills.q2.title">AI Safety & Agentic Systems</h3>
+              </div>
+              <p class="skill-desc" data-i18n="skills.q2.desc">Hardening autonomous agents, sandbox containment, and protocol-level integration.</p>
+              <ul class="skill-pill-list" aria-label="AI and Agentic skills list">
+                <li class="skill-pill bevel-inset">Model Context Protocol (MCP)</li>
+                <li class="skill-pill bevel-inset">Agent Safety & Containment</li>
+                <li class="skill-pill bevel-inset">AI Workspace Hardening</li>
+                <li class="skill-pill bevel-inset">Agentic Skill Architectures</li>
+                <li class="skill-pill bevel-inset">Academic AI (UTFPR Research)</li>
+                <li class="skill-pill bevel-inset">Prompt Injection Mitigation</li>
+              </ul>
+            </div>
+
+            <!-- Quadrant 3: Cloud Security & Infrastructure -->
+            <div class="hud-card skill-card bevel">
+              <div class="card-hud-label">[DOMAIN: 0x03]</div>
+              <div class="skill-header">
+                <h3 class="skill-title" data-i18n="skills.q3.title">Cloud Security & Infrastructure</h3>
+              </div>
+              <p class="skill-desc" data-i18n="skills.q3.desc">Enterprise cloud defense, operating system hardening, compliance baselines, and infrastructure security.</p>
+              <ul class="skill-pill-list" aria-label="Cloud Security skills list">
+                <li class="skill-pill bevel-inset">AWS Security Architecture</li>
+                <li class="skill-pill bevel-inset">Microsoft Azure Security</li>
+                <li class="skill-pill bevel-inset">Linux OS Baseline Hardening</li>
+                <li class="skill-pill bevel-inset">CIS Benchmarks & Controls</li>
+                <li class="skill-pill bevel-inset">Container & K8s Security</li>
+                <li class="skill-pill bevel-inset">IAM & Identity Governance</li>
+              </ul>
+            </div>
+
+            <!-- Quadrant 4: Tooling & Documentation -->
+            <div class="hud-card skill-card bevel">
+              <div class="card-hud-label">[DOMAIN: 0x04]</div>
+              <div class="skill-header">
+                <h3 class="skill-title" data-i18n="skills.q4.title">Languages, Scripting & Tooling</h3>
+              </div>
+              <p class="skill-desc" data-i18n="skills.q4.desc">Languages and automation pipelines for rapid validation and reproducible reporting.</p>
+              <ul class="skill-pill-list" aria-label="Languages and tooling list">
+                <li class="skill-pill bevel-inset">Python (Automation & Analysis)</li>
+                <li class="skill-pill bevel-inset">Bash & Linux Shell Scripting</li>
+                <li class="skill-pill bevel-inset">C# (.NET Integrations)</li>
+                <li class="skill-pill bevel-inset">Typst & Technical Presentations</li>
+                <li class="skill-pill bevel-inset">Git / GitHub Workflows</li>
+                <li class="skill-pill bevel-inset">CIS Benchmark Auditing</li>
+              </ul>
+            </div>
+
+            <!-- Quadrant 5: Cryptography & Blockchain -->
+            <div class="hud-card skill-card bevel">
+              <div class="card-hud-label">[DOMAIN: 0x05]</div>
+              <div class="skill-header">
+                <h3 class="skill-title" data-i18n="skills.q5.title">Cryptography & Blockchain</h3>
+              </div>
+              <p class="skill-desc" data-i18n="skills.q5.desc">Applied cryptography, distributed-ledger fundamentals and smart-contract engineering.</p>
+              <ul class="skill-pill-list" aria-label="Cryptography and blockchain skills list">
+                <li class="skill-pill bevel-inset">Solidity Smart Contracts</li>
+                <li class="skill-pill bevel-inset">Blockchain Fundamentals</li>
+                <li class="skill-pill bevel-inset">C# (.NET Integrations)</li>
+              </ul>
+            </div>
+          </div>
+    
+        </section>
+
+        <section class="app" data-app="projects" id="projects" aria-labelledby="win-projects-heading" hidden>
+          <h2 class="window-heading dither-title" id="win-projects-heading" tabindex="-1" data-i18n="dock.projects">PROJECTS</h2>
+
+          <div class="section-tag-header">
+            <span class="tag-index">[SECTION 05]</span>
+            <h2 id="projects-heading" class="section-title" data-i18n="sec.projects.title">FEATURED RESEARCH & OPEN REPOSITORIES</h2>
+            <span class="section-line"></span>
           </div>
 
-          <div class="dossier-specs">
-            <div class="spec-row">
-              <span class="spec-key" data-i18n="dossier.spec.discipline_label">DISCIPLINE:</span>
-              <span class="spec-val" data-i18n="dossier.spec.discipline_val">Security Architecture & DevSecOps</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-key" data-i18n="dossier.spec.focus_label">RESEARCH_FOCUS:</span>
-              <span class="spec-val" data-i18n="dossier.spec.focus_val">AI Safety, MCP Sandboxing, Memory Forensics</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-key" data-i18n="dossier.spec.accred_label">ACCREDITATION:</span>
-              <span class="spec-val text-accent">CompTIA Security+ ce</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-key" data-i18n="dossier.spec.community_label">COMMUNITY:</span>
-              <span class="spec-val" data-i18n="dossier.spec.community_val">Google Developer Groups (GDG) Speaker</span>
-            </div>
+          <!-- Category Filter Tabs. Four featured repos: ALL (4), the two MCP
+               repos under TOOLING, AnvilAI + the mitmproxy proxy under SECURITY,
+               Coacus + AnvilAI under AI. The COMMUNITY tab is gone with the GDG
+               theme it filtered. -->
+          <div class="filter-bar" role="tablist" aria-label="Filter projects by discipline">
+            <button type="button" class="filter-btn bevel active" role="tab" aria-selected="true" data-filter="all">
+              <span data-i18n="projects.tab.all">[ ALL (4) ]</span>
+            </button>
+            <button type="button" class="filter-btn bevel" role="tab" aria-selected="false" data-filter="security">
+              <span data-i18n="projects.tab.security">[ SECURITY (2) ]</span>
+            </button>
+            <button type="button" class="filter-btn bevel" role="tab" aria-selected="false" data-filter="ai">
+              <span data-i18n="projects.tab.ai">[ AI & AGENTS (2) ]</span>
+            </button>
+            <button type="button" class="filter-btn bevel" role="tab" aria-selected="false" data-filter="tools">
+              <span data-i18n="projects.tab.tools">[ TOOLING (2) ]</span>
+            </button>
           </div>
-        </div>
 
-        <!-- Architecture Triad HUD -->
-        <div class="hud-card triad-dossier">
-          <div class="card-hud-label" data-i18n="triad.label">[DEFENSE METHODOLOGY]</div>
-          <h3 class="card-title" data-i18n="triad.title">The Three Pillars of Defense</h3>
+          <!-- Projects Grid: the four featured repositories, in the order the
+               GitHub profile features them. Each card's `data-project-id` is a
+               `PROJECTS_DATA` key and its inspect button deep-links the modal. -->
+          <div class="projects-grid" id="projects-grid">
 
-          <div class="triad-list">
-            <article class="triad-item">
-              <div class="triad-num">01</div>
-              <div class="triad-content">
-                <h4 data-i18n="triad.p1.title">Enterprise Security Architecture & AppSec</h4>
-                <p data-i18n="triad.p1.desc">Establishing defense-in-depth through systematic threat modeling (STRIDE, PASTA), OWASP ASVS/SAMM frameworks, and automated DevSecOps pipelines integrated into CI/CD environments.</p>
+            <!-- Project 1: Coacus -->
+            <article class="project-card bevel" data-category="ai" data-project-id="coacus">
+              <div class="project-card-header">
+                <div class="proj-telemetry">
+                  <span class="proj-id">PRJ-01</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span>
+                </div>
+                <div class="proj-category-tags">
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.framework">Skill &amp; Agent Framework</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.agentic">Agentic AI</span>
+                </div>
+              </div>
+              <h3 class="proj-title">
+                Coacus
+              </h3>
+              <p class="proj-desc" data-i18n="proj.coacus.desc">
+                A dependency-free skill and agent framework that packages engineering judgment as reusable, versioned artifacts, with a concurrency governor that caps and accounts for every agent a workflow spawns.
+              </p>
+              <div class="proj-capabilities bevel-inset">
+                <div class="cap-item" data-i18n="proj.coacus.c1">&gt; Skill catalog as the single source of truth for agent definitions</div>
+                <div class="cap-item" data-i18n="proj.coacus.c2">&gt; A governor that enforces a hard concurrency cap instead of documenting one</div>
+                <div class="cap-item" data-i18n="proj.coacus.c3">&gt; Handoffs between agents use compact TOON payloads</div>
+              </div>
+              <div class="proj-actions">
+                <button type="button" class="inspect-btn bevel" data-project="coacus" aria-haspopup="dialog">
+                  <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
+                </button>
+                <a href="https://github.com/dandgabr/Coacus" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View Coacus on GitHub">
+                  REPO <span aria-hidden="true">&#8599;</span>
+                </a>
               </div>
             </article>
 
-            <article class="triad-item">
-              <div class="triad-num">02</div>
-              <div class="triad-content">
-                <h4 data-i18n="triad.p2.title">AI Safety & Agent Containment</h4>
-                <p data-i18n="triad.p2.desc">Pioneering practical sandboxing for developer AI tooling. Designing MCP (Model Context Protocol) validation layers and agent skill frameworks to prevent prompt injection and tool misuse.</p>
+            <!-- Project 2: AnvilAI (the harness-hardening tool, formerly named
+                 differently; this is the only live repository link). -->
+            <article class="project-card bevel" data-category="security ai" data-project-id="anvilai">
+              <div class="project-card-header">
+                <div class="proj-telemetry">
+                  <span class="proj-id">PRJ-02</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.research">ACTIVE RESEARCH</span>
+                </div>
+                <div class="proj-category-tags">
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.aisafety">AI Safety</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.hardening">Hardening</span>
+                </div>
+              </div>
+              <h3 class="proj-title">
+                AnvilAI
+              </h3>
+              <p class="proj-desc" data-i18n="proj.anvilai.desc">
+                An automated hardening and governance layer for third-party AI harnesses, validating sandbox isolation, enforcing API token boundaries, and auditing permissions on tooling you do not control.
+              </p>
+              <div class="proj-capabilities bevel-inset">
+                <div class="cap-item" data-i18n="proj.anvilai.c1">&gt; Sandbox isolation profiles for Docker / Podman / Bubblewrap</div>
+                <div class="cap-item" data-i18n="proj.anvilai.c2">&gt; Automated audits of filesystem ACLs, process isolation and egress</div>
+                <div class="cap-item" data-i18n="proj.anvilai.c3">&gt; Aligned with the OWASP Top 10 for LLM Applications</div>
+              </div>
+              <div class="proj-actions">
+                <button type="button" class="inspect-btn bevel" data-project="anvilai" aria-haspopup="dialog">
+                  <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
+                </button>
+                <a href="https://github.com/dandgabr/AnvilAI" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View AnvilAI on GitHub">
+                  REPO <span aria-hidden="true">&#8599;</span>
+                </a>
               </div>
             </article>
 
-            <article class="triad-item">
-              <div class="triad-num">03</div>
-              <div class="triad-content">
-                <h4 data-i18n="triad.p3.title">Cloud Security & DevSecOps</h4>
-                <p data-i18n="triad.p3.desc">Automating security policy enforcement, infrastructure hardening (CIS Benchmarks), container integrity, and compliance controls across multi-cloud environments (AWS & Azure).</p>
+            <!-- Project 3: mcp-cheatengine -->
+            <article class="project-card bevel" data-category="tools" data-project-id="mcp-cheatengine">
+              <div class="project-card-header">
+                <div class="proj-telemetry">
+                  <span class="proj-id">PRJ-03</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.integration">INTEGRATION</span>
+                </div>
+                <div class="proj-category-tags">
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.mcp">AI Tooling &amp; MCP</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.automation">Process Automation</span>
+                </div>
+              </div>
+              <h3 class="proj-title">
+                mcp-cheatengine
+              </h3>
+              <p class="proj-desc" data-i18n="proj.mcp_ce.desc">
+                Model Context Protocol (MCP) server interface for Cheat Engine, enabling programmatic inspection, process automation, and security telemetry for AI assistants.
+              </p>
+              <div class="proj-capabilities bevel-inset">
+                <div class="cap-item" data-i18n="proj.mcp_ce.c1">&gt; MCP server bridging LLMs to process inspection</div>
+                <div class="cap-item" data-i18n="proj.mcp_ce.c2">&gt; Real-time process address inspection and automation</div>
+                <div class="cap-item" data-i18n="proj.mcp_ce.c3">&gt; Autonomous agent inspection tooling for developer workflows</div>
+              </div>
+              <div class="proj-actions">
+                <button type="button" class="inspect-btn bevel" data-project="mcp-cheatengine" aria-haspopup="dialog">
+                  <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
+                </button>
+                <a href="https://github.com/dandgabr/mcp-cheatengine" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View mcp-cheatengine on GitHub">
+                  REPO <span aria-hidden="true">&#8599;</span>
+                </a>
               </div>
             </article>
+
+            <!-- Project 4: mcp-security-mitmproxy -->
+            <article class="project-card bevel" data-category="security tools" data-project-id="mcp-security-mitmproxy">
+              <div class="project-card-header">
+                <div class="proj-telemetry">
+                  <span class="proj-id">PRJ-04</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.integration">INTEGRATION</span>
+                </div>
+                <div class="proj-category-tags">
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.mcpsecurity">MCP Security</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.security">Traffic Inspection</span>
+                </div>
+              </div>
+              <h3 class="proj-title">
+                mcp-security-mitmproxy
+              </h3>
+              <p class="proj-desc" data-i18n="proj.mitmproxy.desc">
+                An mitmproxy-based security layer for Model Context Protocol traffic, intercepting, decoding, and inspecting tool calls between agents and servers to surface prompt injection and tool misuse.
+              </p>
+              <div class="proj-capabilities bevel-inset">
+                <div class="cap-item" data-i18n="proj.mitmproxy.c1">&gt; Transparent MCP traffic interception via the mitmproxy addon model</div>
+                <div class="cap-item" data-i18n="proj.mitmproxy.c2">&gt; Tool-call payloads decoded so requests and responses are legible in transit</div>
+                <div class="cap-item" data-i18n="proj.mitmproxy.c3">&gt; Rule hooks that flag injected instructions before they reach a tool</div>
+              </div>
+              <div class="proj-actions">
+                <button type="button" class="inspect-btn bevel" data-project="mcp-security-mitmproxy" aria-haspopup="dialog">
+                  <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
+                </button>
+                <a href="https://github.com/dandgabr/mcp-security-mitmproxy" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View mcp-security-mitmproxy on GitHub">
+                  REPO <span aria-hidden="true">&#8599;</span>
+                </a>
+              </div>
+            </article>
+
           </div>
-        </div>
+    
+        </section>
+
+        <section class="app" data-app="academic" id="credentials" aria-labelledby="win-academic-heading" hidden>
+          <h2 class="window-heading dither-title" id="win-academic-heading" tabindex="-1" data-i18n="dock.academic">ACADEMIC</h2>
+
+          <div class="section-tag-header">
+            <span class="tag-index">[SECTION 06]</span>
+            <h2 id="credentials-heading" class="section-title" data-i18n="sec.credentials.title">ACADEMIC TRAJECTORY & CERTIFICATIONS</h2>
+            <span class="section-line"></span>
+          </div>
+
+          <div class="credentials-timeline">
+
+            <!-- Certification -->
+            <div class="timeline-entry">
+              <div class="timeline-marker">
+                <span class="marker-dot"></span>
+                <span class="marker-code">CERT</span>
+              </div>
+              <div class="hud-card timeline-card bevel">
+                <div class="timeline-head">
+                  <span class="cred-badge bevel-inset" data-i18n="cred.badge.cert">CERTIFICATION</span>
+                  <span class="cred-institution">CompTIA</span>
+                </div>
+                <h3 class="cred-title" data-i18n="cred.c1.title">CompTIA Security+ ce Certification</h3>
+                <p class="cred-detail" data-i18n="cred.c1.detail">
+                  Globally recognized credential validating foundational and operational cybersecurity proficiency: network architecture security, threat analysis, incident response, cryptographic controls, and risk governance.
+                </p>
+              </div>
+            </div>
+
+            <!-- Postgraduate: Artificial Intelligence -->
+            <div class="timeline-entry">
+              <div class="timeline-marker">
+                <span class="marker-dot"></span>
+                <span class="marker-code">PÓS</span>
+              </div>
+              <div class="hud-card timeline-card bevel">
+                <div class="timeline-head">
+                  <span class="cred-badge bevel-inset" data-i18n="cred.badge.postgrad">POSTGRADUATE</span>
+                  <span class="cred-institution">Universidade Tecnológica Federal do Paraná (UTFPR)</span>
+                </div>
+                <h3 class="cred-title" data-i18n="cred.c2.title">Postgraduate Specialization in Artificial Intelligence</h3>
+                <p class="cred-detail" data-i18n="cred.c2.detail">
+                  August 2024 – March 2026. Specialized research in machine learning paradigms, deep neural architectures, heuristic optimization and automated decision-making models.
+                </p>
+              </div>
+            </div>
+
+            <!-- Postgraduate: Blockchain -->
+            <div class="timeline-entry">
+              <div class="timeline-marker">
+                <span class="marker-dot"></span>
+                <span class="marker-code">PÓS</span>
+              </div>
+              <div class="hud-card timeline-card bevel">
+                <div class="timeline-head">
+                  <span class="cred-badge bevel-inset" data-i18n="cred.badge.postgrad">POSTGRADUATE</span>
+                  <span class="cred-institution">UniFECAF</span>
+                </div>
+                <h3 class="cred-title" data-i18n="cred.c3.title">Postgraduate Specialization in Blockchain Development</h3>
+                <p class="cred-detail" data-i18n="cred.c3.detail">
+                  Completed January 2026. Distributed-ledger fundamentals, smart-contract engineering, applied cryptography and decentralized application architecture.
+                </p>
+              </div>
+            </div>
+
+            <!-- Postgraduate: Electric Power Systems -->
+            <div class="timeline-entry">
+              <div class="timeline-marker">
+                <span class="marker-dot"></span>
+                <span class="marker-code">PÓS</span>
+              </div>
+              <div class="hud-card timeline-card bevel">
+                <div class="timeline-head">
+                  <span class="cred-badge bevel-inset" data-i18n="cred.badge.postgrad">POSTGRADUATE</span>
+                  <span class="cred-institution" data-i18n="cred.c4.institution">Faculdade Pitágoras</span>
+                </div>
+                <h3 class="cred-title" data-i18n="cred.c4.title">Postgraduate Specialization in Electric Power Systems</h3>
+                <p class="cred-detail" data-i18n="cred.c4.detail">
+                  2015. Power-system analysis: generation, transmission and distribution, protection schemes, power-flow studies and electrical machines.
+                </p>
+              </div>
+            </div>
+
+            <!-- Bachelor's Degree -->
+            <div class="timeline-entry">
+              <div class="timeline-marker">
+                <span class="marker-dot"></span>
+                <span class="marker-code">ENG</span>
+              </div>
+              <div class="hud-card timeline-card bevel">
+                <div class="timeline-head">
+                  <span class="cred-badge bevel-inset" data-i18n="cred.badge.bs">BACHELOR DEGREE</span>
+                  <span class="cred-institution">Faculdade Pitágoras</span>
+                </div>
+                <h3 class="cred-title" data-i18n="cred.c5.title">Bachelor's Degree in Electrical and Electronic Engineering</h3>
+                <p class="cred-detail" data-i18n="cred.c5.detail">
+                  January 2008 – December 2012. Circuit analysis, analog and digital signal processing, embedded systems, microcontrollers, control theory and hardware-level computer architecture.
+                </p>
+              </div>
+            </div>
+
+            <!-- Teaching -->
+            <div class="timeline-entry">
+              <div class="timeline-marker">
+                <span class="marker-dot"></span>
+                <span class="marker-code">DOC</span>
+              </div>
+              <div class="hud-card timeline-card bevel">
+                <div class="timeline-head">
+                  <span class="cred-badge bevel-inset" data-i18n="cred.badge.teaching">TEACHING</span>
+                  <span class="cred-institution">Faculdade Pitágoras · Funtel · CIV</span>
+                </div>
+                <h3 class="cred-title" data-i18n="cred.c6.title">University Teaching</h3>
+                <p class="cred-detail" data-i18n="cred.c6.detail">
+                  Approximately 7 years. Taught Information Security, Algorithms, Analog and Digital Electronics, Microcontrollers, Electrotechnics and Industrial Automation.
+                </p>
+              </div>
+            </div>
+
+          </div>
+    
+        </section>
+
+        <section class="app" data-app="connect" id="contact" aria-labelledby="win-connect-heading" hidden>
+          <h2 class="window-heading dither-title" id="win-connect-heading" tabindex="-1" data-i18n="dock.connect">CONNECT</h2>
+
+          <div class="section-tag-header">
+            <span class="tag-index">[SECTION 07]</span>
+            <h2 id="contact-heading" class="section-title" data-i18n="sec.contact.title">TRANSMISSION CHANNELS // CONNECT</h2>
+            <span class="section-line"></span>
+          </div>
+
+          <!-- No email published by design: LinkedIn and GitHub are the only channels. -->
+          <div class="contact-panel hud-card bevel">
+            <div class="contact-header">
+              <div class="card-hud-label" data-i18n="contact.channels_label">[SECURE COMMUNICATION CHANNELS]</div>
+              <h3 class="contact-headline" data-i18n="contact.headline">Establish Connection with Security Architect</h3>
+              <p class="contact-sub" data-i18n="contact.sub">
+                Available for technical dialogues on enterprise defense architecture, AI agent safety research, threat modeling workshops, and community speaking engagements.
+              </p>
+            </div>
+
+            <div class="channels-grid">
+              <!-- Channel 1: LinkedIn -->
+              <a href="https://www.linkedin.com/in/dandga" target="_blank" rel="noopener noreferrer" class="channel-card bevel">
+                <div class="channel-icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.25c-.9 0-1.63.73-1.63 1.63s.73 1.63 1.63 1.63c.9 0 1.63-.73 1.63-1.63s-.73-1.63-1.63-1.63Z"/>
+                  </svg>
+                </div>
+                <div class="channel-info">
+                  <span class="channel-label" data-i18n="contact.linkedin_label">PROFESSIONAL NETWORK</span>
+                  <span class="channel-value">linkedin.com/in/dandga</span>
+                </div>
+                <span class="channel-arrow" aria-hidden="true">&gt;&gt;</span>
+              </a>
+
+              <!-- Channel 2: GitHub -->
+              <a href="https://github.com/dandgabr" target="_blank" rel="noopener noreferrer" class="channel-card bevel">
+                <div class="channel-icon" aria-hidden="true">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
+                  </svg>
+                </div>
+                <div class="channel-info">
+                  <span class="channel-label" data-i18n="contact.github_label">SOURCE REPOSITORIES</span>
+                  <span class="channel-value">github.com/dandgabr</span>
+                </div>
+                <span class="channel-arrow" aria-hidden="true">&gt;&gt;</span>
+              </a>
+            </div>
+
+            <div class="transmission-status bevel-inset">
+              <div class="status-line">
+                <span class="status-key" data-i18n="contact.geo_key">GEOLOCATION:</span>
+                <span class="status-val" data-i18n="contact.geo_val">Londrina, Paraná &mdash; Brazil (UTC-3)</span>
+              </div>
+              <div class="status-line">
+                <span class="status-key" data-i18n="contact.policy_key">POLICY:</span>
+                <span class="status-val text-dim" data-i18n="contact.policy_val">Zero spam, direct professional communication via LinkedIn/GitHub only.</span>
+              </div>
+            </div>
+          </div>
+    
+        </section>
+
+        <section class="app" data-app="shell" id="terminal" aria-labelledby="win-shell-heading" hidden>
+          <h2 class="window-heading dither-title" id="win-shell-heading" tabindex="-1" data-i18n="dock.shell">SHELL</h2>
+
+          <div class="section-tag-header">
+            <span class="tag-index">[SECTION 02]</span>
+            <h2 id="terminal-heading" class="section-title" data-i18n="sec.terminal.title">INTERACTIVE COMMAND SHELL</h2>
+            <span class="section-line"></span>
+          </div>
+
+          <div class="terminal-card shell-card bevel">
+            <div class="terminal-card-header">
+              <div class="terminal-dots" aria-hidden="true">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+              <div class="terminal-title">guest@dandga-kernel:/workspace (bash 5.2)</div>
+              <div class="terminal-meta">TTY: /dev/pts/0</div>
+            </div>
+
+            <div class="terminal-card-body terminal-interactive">
+              <div class="terminal-instructions text-dim" id="term-instructions">
+                <span data-i18n="terminal.instructions.prefix">Type</span> <span class="code-highlight">help</span> <span data-i18n="terminal.instructions.suffix">to list commands, or click any tactical command chip below:</span>
+              </div>
+
+              <!-- Tactical Quick Command Buttons -->
+              <div class="quick-cmd-bar" role="toolbar" aria-label="Terminal command shortcuts">
+                <button type="button" class="cmd-chip bevel" data-cmd="help">help</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="whoami">whoami</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="skills">skills</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="projects">projects</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="credentials">credentials</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="contact">contact</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="clear">clear</button>
+              </div>
+
+              <!-- Terminal Output Log. `role="log"` stays (it is a navigable
+                   log of the session), but `aria-live="off"` overrides the
+                   role's implicit polite value, so the log itself is silent.
+                   The single-line status element below carries the
+                   announcement, so a large `help --all` block is never
+                   force-announced in full. -->
+              <div id="terminal-output" class="terminal-output bevel-inset" role="log" aria-live="off">
+                <div class="term-response">
+                  <span class="text-dim">Security Shell v2.4.0 (x86_64-hardened-linux)</span><br>
+                  <span class="text-dim" data-i18n="terminal.welcome">Session initialized for peer review. Type 'help' for guidance.</span>
+                </div>
+              </div>
+
+              <!-- Command Input Line -->
+              <form id="terminal-form" class="terminal-input-row bevel" autocomplete="off">
+                <label for="cli-input" class="term-prompt">
+                  <span class="term-user">terminal</span>&gt;&nbsp;
+                </label>
+                <input type="text" id="cli-input" class="term-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Terminal command line input" data-i18n-attr="placeholder:terminal.placeholder,aria-label:terminal.input_aria" placeholder="type a command...">
+                <button type="submit" class="term-submit-btn bevel" aria-label="Execute command">&gt;</button>
+              </form>
+
+              <!-- Shell live region: one single-line, visually-hidden status.
+                   `role="status"` carries an implicit `aria-live="polite"` (and
+                   `aria-atomic="true"`), so no explicit `aria-live` is needed —
+                   and none is set, so the attribute cannot drift from the role.
+                   The output log above is deliberately silent
+                   (`aria-live="off"`), and this is the only shell announcement. -->
+              <p id="terminal-status" class="visually-hidden" role="status"></p>
+            </div>
+          </div>
+    
+        </section>
+
+        <!-- PREFS: the preferences application. Its controls (language, CRT
+             scanlines, replay tour) are wired by prefs.js,
+             which delegates from this section, not from `document`. -->
+        <section class="app" data-app="prefs" aria-labelledby="win-prefs-heading" hidden>
+          <h2 class="window-heading dither-title" id="win-prefs-heading" tabindex="-1" data-i18n="dock.prefs">Prefs</h2>
+          <div class="prefs-panel bevel" role="toolbar" aria-label="Preferences">
+            <div class="prefs-row">
+              <span data-i18n="prefs.lang">Language</span>
+              <button type="button" class="bevel" data-lang="pt-br">PT-BR</button>
+              <button type="button" class="bevel" data-lang="en">EN</button>
+              <button type="button" class="bevel" data-lang="es">ES</button>
+            </div>
+            <div class="prefs-row">
+              <span id="prefs-crt-label" data-i18n="prefs.crt">CRT scanlines</span>
+              <button type="button" class="bevel" data-toggle="crt" aria-pressed="false" aria-labelledby="prefs-crt-label"></button>
+            </div>
+            <div class="prefs-row">
+              <button type="button" class="bevel" data-action="replay-tour" data-i18n="prefs.replay_tour">Replay tour</button>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
 
-    <!-- SECTION 04: Technical Capabilities & Domains (Skills) -->
-    <section id="skills" class="terminal-section" aria-labelledby="skills-heading">
-      <div class="section-tag-header">
-        <span class="tag-index">[SECTION 04]</span>
-        <h2 id="skills-heading" class="section-title" data-i18n="sec.skills.title">CORE EXPERTISE & TECHNICAL DOMAINS</h2>
-        <span class="section-line"></span>
-      </div>
-
-      <div class="skills-grid">
-        <!-- Quadrant 1: Security Architecture -->
-        <div class="hud-card skill-card">
-          <div class="card-hud-label">[DOMAIN: 0x01]</div>
-          <div class="skill-header">
-            <span class="domain-icon" aria-hidden="true">🛡️</span>
-            <h3 class="skill-title" data-i18n="skills.q1.title">Security Architecture & Governance</h3>
-          </div>
-          <p class="skill-desc" data-i18n="skills.q1.desc">Enterprise defense design, policy enforcement, and resilient DevSecOps integration.</p>
-          <ul class="skill-pill-list" aria-label="Security skills list">
-            <li class="skill-pill">Threat Modeling (STRIDE)</li>
-            <li class="skill-pill">OWASP SAMM & ASVS</li>
-            <li class="skill-pill">Cloud Security (AWS / Azure)</li>
-            <li class="skill-pill">DevSecOps CI/CD Pipelines</li>
-            <li class="skill-pill">PCI DSS Compliance</li>
-            <li class="skill-pill">Linux & OS Hardening</li>
-            <li class="skill-pill">Security Champions Leadership</li>
-          </ul>
-        </div>
-
-        <!-- Quadrant 2: AI & Agentic Systems -->
-        <div class="hud-card skill-card">
-          <div class="card-hud-label">[DOMAIN: 0x02]</div>
-          <div class="skill-header">
-            <span class="domain-icon" aria-hidden="true">🧠</span>
-            <h3 class="skill-title" data-i18n="skills.q2.title">AI Safety & Agentic Systems</h3>
-          </div>
-          <p class="skill-desc" data-i18n="skills.q2.desc">Hardening autonomous agents, sandbox containment, and protocol-level integration.</p>
-          <ul class="skill-pill-list" aria-label="AI and Agentic skills list">
-            <li class="skill-pill">Model Context Protocol (MCP)</li>
-            <li class="skill-pill">Agent Safety & Containment</li>
-            <li class="skill-pill">AI Workspace Hardening</li>
-            <li class="skill-pill">Agentic Skill Architectures</li>
-            <li class="skill-pill">Academic AI (UTFPR Research)</li>
-            <li class="skill-pill">Prompt Injection Mitigation</li>
-          </ul>
-        </div>
-
-        <!-- Quadrant 3: Cloud Security & Infrastructure -->
-        <div class="hud-card skill-card">
-          <div class="card-hud-label">[DOMAIN: 0x03]</div>
-          <div class="skill-header">
-            <span class="domain-icon" aria-hidden="true">☁️</span>
-            <h3 class="skill-title" data-i18n="skills.q3.title">Cloud Security & Infrastructure</h3>
-          </div>
-          <p class="skill-desc" data-i18n="skills.q3.desc">Enterprise cloud defense, operating system hardening, compliance baselines, and infrastructure security.</p>
-          <ul class="skill-pill-list" aria-label="Cloud Security skills list">
-            <li class="skill-pill">AWS Security Architecture</li>
-            <li class="skill-pill">Microsoft Azure Security</li>
-            <li class="skill-pill">Linux OS Baseline Hardening</li>
-            <li class="skill-pill">CIS Benchmarks & Controls</li>
-            <li class="skill-pill">Container & K8s Security</li>
-            <li class="skill-pill">IAM & Identity Governance</li>
-          </ul>
-        </div>
-
-        <!-- Quadrant 4: Tooling & Documentation -->
-        <div class="hud-card skill-card">
-          <div class="card-hud-label">[DOMAIN: 0x04]</div>
-          <div class="skill-header">
-            <span class="domain-icon" aria-hidden="true">⚙️</span>
-            <h3 class="skill-title" data-i18n="skills.q4.title">Languages, Scripting & Tooling</h3>
-          </div>
-          <p class="skill-desc" data-i18n="skills.q4.desc">Languages and automation pipelines for rapid validation and reproducible reporting.</p>
-          <ul class="skill-pill-list" aria-label="Languages and tooling list">
-            <li class="skill-pill">Python (Automation & Analysis)</li>
-            <li class="skill-pill">Bash & Linux Shell Scripting</li>
-            <li class="skill-pill">C# (.NET Integrations)</li>
-            <li class="skill-pill">Typst & Technical Presentations</li>
-            <li class="skill-pill">Git / GitHub Workflows</li>
-            <li class="skill-pill">CIS Benchmark Auditing</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 05: Featured Projects & Research -->
-    <section id="projects" class="terminal-section" aria-labelledby="projects-heading">
-      <div class="section-tag-header">
-        <span class="tag-index">[SECTION 05]</span>
-        <h2 id="projects-heading" class="section-title" data-i18n="sec.projects.title">FEATURED RESEARCH & OPEN REPOSITORIES</h2>
-        <span class="section-line"></span>
-      </div>
-
-      <!-- Category Filter Tabs -->
-      <div class="filter-bar" role="tablist" aria-label="Filter projects by discipline">
-        <button type="button" class="filter-btn active" role="tab" aria-selected="true" data-filter="all">
-          <span data-i18n="projects.tab.all">[ ALL (5) ]</span>
-        </button>
-        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="security">
-          <span data-i18n="projects.tab.security">[ SECURITY (2) ]</span>
-        </button>
-        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="ai">
-          <span data-i18n="projects.tab.ai">[ AI & AGENTS (2) ]</span>
-        </button>
-        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="tools">
-          <span data-i18n="projects.tab.tools">[ TOOLING (1) ]</span>
-        </button>
-        <button type="button" class="filter-btn" role="tab" aria-selected="false" data-filter="community">
-          <span data-i18n="projects.tab.community">[ COMMUNITY (1) ]</span>
-        </button>
-      </div>
-
-      <!-- Projects Grid -->
-      <div class="projects-grid" id="projects-grid">
-
-        <!-- Project 1: hardening-ia -->
-        <article class="project-card" data-category="security ai" data-project-id="hardening-ia">
-          <div class="project-card-header">
-            <div class="proj-telemetry">
-              <span class="proj-id">PRJ-01</span>
-              <span class="proj-status status-active" data-i18n="proj.status.prod">PRODUCTION</span>
-            </div>
-            <div class="proj-category-tags">
-              <span class="mini-tag" data-i18n="proj.tag.aisafety">AI Safety</span>
-              <span class="mini-tag" data-i18n="proj.tag.hardening">Hardening</span>
-            </div>
-          </div>
-          <h3 class="proj-title">
-            <span class="proj-icon">🛡️</span> hardening-ia
-          </h3>
-          <p class="proj-desc" data-i18n="proj.hardening_ia.desc">
-            Automated security hardening framework designed for AI-assisted development environments. Implements sandbox verification, API token boundary enforcement, and permission audits.
-          </p>
-          <div class="proj-capabilities">
-            <div class="cap-item" data-i18n="proj.hardening_ia.c1">&gt; Zero-trust isolation for local AI coding CLI tools</div>
-            <div class="cap-item" data-i18n="proj.hardening_ia.c2">&gt; Workspace token and credential leakage prevention</div>
-            <div class="cap-item" data-i18n="proj.hardening_ia.c3">&gt; Automated compliance and baseline validation audits</div>
-          </div>
-          <div class="proj-actions">
-            <button type="button" class="inspect-btn" data-project="hardening-ia" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
-            </button>
-            <a href="https://github.com/dandgabr/hardening-ia" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View hardening-ia on GitHub">
-              REPO ↗
-            </a>
-          </div>
-        </article>
-
-        <!-- Project 2: skills -->
-        <article class="project-card" data-category="ai" data-project-id="skills">
-          <div class="project-card-header">
-            <div class="proj-telemetry">
-              <span class="proj-id">PRJ-02</span>
-              <span class="proj-status status-active" data-i18n="proj.status.prod">PRODUCTION</span>
-            </div>
-            <div class="proj-category-tags">
-              <span class="mini-tag" data-i18n="proj.tag.agentic">Agentic AI</span>
-              <span class="mini-tag" data-i18n="proj.tag.modular">Modular Skills</span>
-            </div>
-          </div>
-          <h3 class="proj-title">
-            <span class="proj-icon">🧠</span> skills
-          </h3>
-          <p class="proj-desc" data-i18n="proj.skills.desc">
-            A battle-tested ecosystem of standardized, modular skills engineered for AI coding agents, multi-agent orchestration, and developer assistants.
-          </p>
-          <div class="proj-capabilities">
-            <div class="cap-item" data-i18n="proj.skills.c1">&gt; Standardized capability contracts across 50+ domains</div>
-            <div class="cap-item" data-i18n="proj.skills.c2">&gt; Multi-agent supervisory and governance patterns</div>
-            <div class="cap-item" data-i18n="proj.skills.c3">&gt; Deterministic execution paths for autonomous coding</div>
-          </div>
-          <div class="proj-actions">
-            <button type="button" class="inspect-btn" data-project="skills" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
-            </button>
-            <a href="https://github.com/dandgabr/skills" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View skills on GitHub">
-              REPO ↗
-            </a>
-          </div>
-        </article>
-
-        <!-- Project 3: mcp-cheatengine -->
-        <article class="project-card" data-category="ai tools" data-project-id="mcp-cheatengine">
-          <div class="project-card-header">
-            <div class="proj-telemetry">
-              <span class="proj-id">PRJ-03</span>
-              <span class="proj-status status-prototype" data-i18n="proj.status.integration">INTEGRATION</span>
-            </div>
-            <div class="proj-category-tags">
-              <span class="mini-tag">Model Context Protocol</span>
-              <span class="mini-tag" data-i18n="proj.tag.automation">Process Automation</span>
-            </div>
-          </div>
-          <h3 class="proj-title">
-            <span class="proj-icon">🧩</span> mcp-cheatengine
-          </h3>
-          <p class="proj-desc" data-i18n="proj.mcp_ce.desc">
-            Model Context Protocol (MCP) server interface for Cheat Engine, enabling programmatic inspection, process automation, and security telemetry for AI assistants.
-          </p>
-          <div class="proj-capabilities">
-            <div class="cap-item" data-i18n="proj.mcp_ce.c1">&gt; MCP server bridging LLMs to process inspection</div>
-            <div class="cap-item" data-i18n="proj.mcp_ce.c2">&gt; Real-time process address inspection and automation</div>
-            <div class="cap-item" data-i18n="proj.mcp_ce.c3">&gt; Autonomous agent inspection tooling for developer workflows</div>
-          </div>
-          <div class="proj-actions">
-            <button type="button" class="inspect-btn" data-project="mcp-cheatengine" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
-            </button>
-            <a href="https://github.com/dandgabr/mcp-cheatengine" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View mcp-cheatengine on GitHub">
-              REPO ↗
-            </a>
-          </div>
-        </article>
-
-        <!-- Project 4: Linux Security Validator -->
-        <article class="project-card" data-category="security" data-project-id="linux-security-validator">
-          <div class="project-card-header">
-            <div class="proj-telemetry">
-              <span class="proj-id">PRJ-04</span>
-              <span class="proj-status status-audit" data-i18n="proj.status.compliance">COMPLIANCE</span>
-            </div>
-            <div class="proj-category-tags">
-              <span class="mini-tag">CIS Hardening</span>
-              <span class="mini-tag">Linux / Python</span>
-            </div>
-          </div>
-          <h3 class="proj-title">
-            <span class="proj-icon">🐧</span> Linux Security Validator
-          </h3>
-          <p class="proj-desc" data-i18n="proj.linux_sec.desc">
-            Automated scripts for security auditing, CIS baseline compliance validation, file permission anomaly detection, and kernel parameter enforcement across Linux servers and developer workstations.
-          </p>
-          <div class="proj-capabilities">
-            <div class="cap-item" data-i18n="proj.linux_sec.c1">&gt; System audit against CIS Linux benchmarks</div>
-            <div class="cap-item" data-i18n="proj.linux_sec.c2">&gt; SUID/SGID executable discovery & anomaly alerts</div>
-            <div class="cap-item" data-i18n="proj.linux_sec.c3">&gt; Automated remediation checklist generation</div>
-          </div>
-          <div class="proj-actions">
-            <button type="button" class="inspect-btn" data-project="linux-security-validator" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
-            </button>
-            <a href="https://github.com/dandgabr/Valida-o-de-seguran-a-em-sistemas-Linux" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View Linux Security Validator on GitHub">
-              REPO ↗
-            </a>
-          </div>
-        </article>
-
-        <!-- Project 5: GDG Typst Presentation Theme -->
-        <article class="project-card" data-category="community" data-project-id="gdg-polylux-theme">
-          <div class="project-card-header">
-            <div class="proj-telemetry">
-              <span class="proj-id">PRJ-05</span>
-              <span class="proj-status status-community" data-i18n="proj.status.community">COMMUNITY</span>
-            </div>
-            <div class="proj-category-tags">
-              <span class="mini-tag">Typst / Polylux</span>
-              <span class="mini-tag" data-i18n="proj.tag.gdg">GDG Speaker</span>
-            </div>
-          </div>
-          <h3 class="proj-title">
-            <span class="proj-icon">🎨</span> GDG Typst Presentation Theme & Talks
-          </h3>
-          <p class="proj-desc" data-i18n="proj.gdg_theme.desc">
-            Modular presentation deck theme designed for Typst using Polylux, inspired by Google Developer Groups visual identity, accompanied by technical talk materials including Quantum Computing Fundamentals.
-          </p>
-          <div class="proj-capabilities">
-            <div class="cap-item" data-i18n="proj.gdg_theme.c1">&gt; Modern programmatic typesetting with Typst</div>
-            <div class="cap-item" data-i18n="proj.gdg_theme.c2">&gt; High-contrast slides for technical architecture talks</div>
-            <div class="cap-item" data-i18n="proj.gdg_theme.c3">&gt; Includes Quantum Computing fundamentals material</div>
-          </div>
-          <div class="proj-actions">
-            <button type="button" class="inspect-btn" data-project="gdg-polylux-theme" aria-haspopup="dialog">
-              <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
-            </button>
-            <a href="https://github.com/dandgabr/gdg-polylux-theme" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View GDG Theme on GitHub">
-              REPO ↗
-            </a>
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- SECTION 06: Academic Trajectory & Credentials -->
-    <section id="credentials" class="terminal-section" aria-labelledby="credentials-heading">
-      <div class="section-tag-header">
-        <span class="tag-index">[SECTION 06]</span>
-        <h2 id="credentials-heading" class="section-title" data-i18n="sec.credentials.title">ACADEMIC TRAJECTORY & CERTIFICATIONS</h2>
-        <span class="section-line"></span>
-      </div>
-
-      <div class="credentials-timeline">
-
-        <!-- Certification -->
-        <div class="timeline-entry">
-          <div class="timeline-marker">
-            <span class="marker-dot"></span>
-            <span class="marker-code">CERT</span>
-          </div>
-          <div class="hud-card timeline-card">
-            <div class="timeline-head">
-              <span class="cred-badge badge-cert" data-i18n="cred.badge.cert">CERTIFICATION</span>
-              <span class="cred-institution">CompTIA</span>
-            </div>
-            <h3 class="cred-title" data-i18n="cred.c1.title">CompTIA Security+ ce Certification</h3>
-            <p class="cred-detail" data-i18n="cred.c1.detail">
-              Globally recognized credential validating foundational and operational cybersecurity proficiency: network architecture security, threat analysis, incident response, cryptographic controls, and risk governance.
-            </p>
-          </div>
-        </div>
-
-        <!-- Postgrad -->
-        <div class="timeline-entry">
-          <div class="timeline-marker">
-            <span class="marker-dot"></span>
-            <span class="marker-code">PÓS</span>
-          </div>
-          <div class="hud-card timeline-card">
-            <div class="timeline-head">
-              <span class="cred-badge badge-academic" data-i18n="cred.badge.postgrad">POSTGRADUATE</span>
-              <span class="cred-institution">Universidade Tecnológica Federal do Paraná (UTFPR)</span>
-            </div>
-            <h3 class="cred-title" data-i18n="cred.c2.title">Postgraduate Specialization in Artificial Intelligence</h3>
-            <p class="cred-detail" data-i18n="cred.c2.detail">
-              Specialized research and development in machine learning paradigms, deep neural architectures, heuristic optimization, and automated decision-making models.
-            </p>
-          </div>
-        </div>
-
-        <!-- B.S. Degree -->
-        <div class="timeline-entry">
-          <div class="timeline-marker">
-            <span class="marker-dot"></span>
-            <span class="marker-code">ENG</span>
-          </div>
-          <div class="hud-card timeline-card">
-            <div class="timeline-head">
-              <span class="cred-badge badge-academic" data-i18n="cred.badge.bs">BACHELOR OF SCIENCE</span>
-              <span class="cred-institution">Faculdade Pitágoras</span>
-            </div>
-            <h3 class="cred-title" data-i18n="cred.c3.title">B.S. in Electrical and Electronic Engineering</h3>
-            <p class="cred-detail" data-i18n="cred.c3.detail">
-              Comprehensive engineering foundation: circuit analysis, analog/digital signal processing, embedded systems, microcontrollers, control theory, and hardware-level computer architecture.
-            </p>
-          </div>
-        </div>
-
-        <!-- Professor Career -->
-        <div class="timeline-entry">
-          <div class="timeline-marker">
-            <span class="marker-dot"></span>
-            <span class="marker-code">DOC</span>
-          </div>
-          <div class="hud-card timeline-card">
-            <div class="timeline-head">
-              <span class="cred-badge badge-teaching" data-i18n="cred.badge.teaching">ACADEMIA & TEACHING</span>
-              <span class="cred-institution" data-i18n="cred.c4.institution">Higher Education Institution</span>
-            </div>
-            <h3 class="cred-title" data-i18n="cred.c4.title">Former University Professor (4+ Years)</h3>
-            <p class="cred-detail" data-i18n="cred.c4.detail">
-              Taught undergraduate courses in Information Security, Algorithms and Data Structures, Analog and Digital Electronics, and Embedded Microcontrollers. Mentored future engineers in algorithmic thinking and secure systems design.
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- SECTION 07: Coordinates & Telemetry (Contact) -->
-    <section id="contact" class="terminal-section" aria-labelledby="contact-heading">
-      <div class="section-tag-header">
-        <span class="tag-index">[SECTION 07]</span>
-        <h2 id="contact-heading" class="section-title" data-i18n="sec.contact.title">TRANSMISSION CHANNELS // CONNECT</h2>
-        <span class="section-line"></span>
-      </div>
-
-      <div class="contact-panel hud-card">
-        <div class="contact-header">
-          <div class="card-hud-label" data-i18n="contact.channels_label">[SECURE COMMUNICATION CHANNELS]</div>
-          <h3 class="contact-headline" data-i18n="contact.headline">Establish Connection with Security Architect</h3>
-          <p class="contact-sub" data-i18n="contact.sub">
-            Available for technical dialogues on enterprise defense architecture, AI agent safety research, threat modeling workshops, and community speaking engagements.
-          </p>
-        </div>
-
-        <div class="channels-grid">
-          <!-- Channel 1: LinkedIn -->
-          <a href="https://www.linkedin.com/in/dandga/" target="_blank" rel="noopener noreferrer" class="channel-card">
-            <div class="channel-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.25c-.9 0-1.63.73-1.63 1.63s.73 1.63 1.63 1.63c.9 0 1.63-.73 1.63-1.63s-.73-1.63-1.63-1.63Z"/>
-              </svg>
-            </div>
-            <div class="channel-info">
-              <span class="channel-label" data-i18n="contact.linkedin_label">PROFESSIONAL NETWORK</span>
-              <span class="channel-value">linkedin.com/in/dandga</span>
-            </div>
-            <span class="channel-arrow" aria-hidden="true">&gt;&gt;</span>
-          </a>
-
-          <!-- Channel 2: GitHub -->
-          <a href="https://github.com/dandgabr" target="_blank" rel="noopener noreferrer" class="channel-card">
-            <div class="channel-icon" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/>
-              </svg>
-            </div>
-            <div class="channel-info">
-              <span class="channel-label" data-i18n="contact.github_label">SOURCE REPOSITORIES</span>
-              <span class="channel-value">github.com/dandgabr</span>
-            </div>
-            <span class="channel-arrow" aria-hidden="true">&gt;&gt;</span>
-          </a>
-        </div>
-
-        <div class="transmission-status">
-          <div class="status-line">
-            <span class="status-key" data-i18n="contact.geo_key">GEOLOCATION:</span>
-            <span class="status-val" data-i18n="contact.geo_val">Londrina, Paraná &mdash; Brazil (UTC-3)</span>
-          </div>
-          <div class="status-line">
-            <span class="status-key" data-i18n="contact.policy_key">POLICY:</span>
-            <span class="status-val text-dim" data-i18n="contact.policy_val">Zero spam, direct professional communication via LinkedIn/GitHub only.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    <!-- Window switch announcer: one visually-hidden polite live region. -->
+    <p id="app-status" class="visually-hidden" aria-live="polite"></p>
   </main>
+
+  <!-- Workbench dock: application launchers. The seven anchors are STATIC
+       markup, not browser-built, so a visitor without JS still gets real
+       `#/app` links (spec §7.1 keeps content in `index.html` and preserves the
+       no-JS degradation). `renderDock` then only manages `aria-current` and the
+       roving tabindex over these existing nodes; `buildDock` remains as the
+       fallback for a list that arrives empty. The non-INTEL `<section hidden>`
+       stays hidden without JS, so a JS-less click on `#/skills` changes the hash
+       while the section remains hidden — a documented limitation of the
+       JS-owned visibility model, not a broken link. -->
+  <nav class="dock" aria-label="Applications">
+    <ul class="dock-list" id="dock-list">
+      <li><a href="#/intel" class="dock-item" data-app="intel"><span class="dock-icon" data-icon="intel"></span><span class="dock-label" data-i18n="dock.intel">INTEL</span></a></li>
+      <li><a href="#/skills" class="dock-item" data-app="skills"><span class="dock-icon" data-icon="skills"></span><span class="dock-label" data-i18n="dock.skills">SKILLS</span></a></li>
+      <li><a href="#/projects" class="dock-item" data-app="projects"><span class="dock-icon" data-icon="projects"></span><span class="dock-label" data-i18n="dock.projects">PROJECTS</span></a></li>
+      <li><a href="#/academic" class="dock-item" data-app="academic"><span class="dock-icon" data-icon="academic"></span><span class="dock-label" data-i18n="dock.academic">ACADEMIC</span></a></li>
+      <li><a href="#/connect" class="dock-item" data-app="connect"><span class="dock-icon" data-icon="connect"></span><span class="dock-label" data-i18n="dock.connect">CONNECT</span></a></li>
+      <li><a href="#/shell" class="dock-item" data-app="shell"><span class="dock-icon" data-icon="shell"></span><span class="dock-label" data-i18n="dock.shell">SHELL</span></a></li>
+      <li><a href="#/prefs" class="dock-item" data-app="prefs"><span class="dock-icon" data-icon="prefs"></span><span class="dock-label" data-i18n="dock.prefs">PREFS</span></a></li>
+    </ul>
+  </nav>
 
   <!-- Project Inspection Modal (Dialog) -->
   <dialog id="project-modal" class="terminal-modal" aria-labelledby="modal-project-title">
-    <div class="modal-card">
-      <div class="terminal-card-header">
+    <div class="modal-card bevel">
+      <div class="terminal-card-header dither-title">
         <div class="terminal-dots" aria-hidden="true">
-          <span class="dot dot-red"></span>
-          <span class="dot dot-amber"></span>
-          <span class="dot dot-green"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
         </div>
         <div class="terminal-title" id="modal-terminal-title">architecture_telemetry.log</div>
-        <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close modal dialog">[X]</button>
+        <button type="button" id="modal-close-btn" class="modal-close-btn bevel" aria-label="Close modal dialog">[X]</button>
       </div>
       <div class="modal-card-body">
         <div class="modal-meta-row">
-          <span id="modal-project-tag" class="tag-badge tag-security">DOMAIN</span>
-          <span id="modal-project-status" class="tag-badge tag-geo">STATUS</span>
+          <span id="modal-project-tag" class="tag-badge tag-security bevel-inset">DOMAIN</span>
+          <span id="modal-project-status" class="tag-badge tag-geo bevel-inset">STATUS</span>
         </div>
         <h3 id="modal-project-title" class="modal-title">PROJECT TITLE</h3>
         <p id="modal-project-desc" class="modal-desc">Project description loading...</p>
 
-        <div class="modal-tech-block">
+        <div class="modal-tech-block bevel-inset">
           <h4 class="modal-subheading" data-i18n="modal.summary_title">&gt; ARCHITECTURAL SUMMARY & KEY CHALLENGES</h4>
           <div id="modal-project-details" class="modal-details-content">
-            <!-- Dynamic architecture details populated by app.js -->
+            <!-- Dynamic architecture details populated by projects.js -->
           </div>
         </div>
 
-        <div class="modal-tech-block">
+        <div class="modal-tech-block bevel-inset">
           <h4 class="modal-subheading" data-i18n="modal.stack_title">&gt; STACK & SPECIFICATIONS</h4>
           <div id="modal-project-stack" class="modal-stack-tags">
-            <!-- Badges populated by app.js -->
+            <!-- Badges populated by projects.js -->
           </div>
         </div>
 
         <div class="modal-actions">
-          <a id="modal-repo-link" href="#" target="_blank" rel="noopener noreferrer" class="action-btn action-primary">
-            <span class="btn-prefix">↗</span> <span data-i18n="modal.action.github">VISIT REPOSITORY ON GITHUB</span>
+          <a id="modal-repo-link" href="#" target="_blank" rel="noopener noreferrer" class="action-btn action-primary bevel">
+            <span class="btn-prefix" aria-hidden="true">&#8599;</span> <span data-i18n="modal.action.github">VISIT REPOSITORY ON GITHUB</span>
           </a>
-          <button type="button" id="modal-dismiss-btn" class="action-btn action-ghost">
+          <button type="button" id="modal-dismiss-btn" class="action-btn action-ghost bevel">
             <span data-i18n="modal.action.close">[ESC] CLOSE TERMINAL</span>
           </button>
         </div>

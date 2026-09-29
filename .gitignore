@@ -11,3 +11,13 @@ Thumbs.db
 *.swo
 .idea/
 .vscode/
+
+# Superpowers brainstorm mockups
+.superpowers/
+
+# Playwright MCP probe artifacts
+.playwright-mcp/
+
+# Planning/design docs and SDD scratch: kept out of the repo that publishes
+# the site, so internal notes and editorial rationale stay offline.
+docs/
