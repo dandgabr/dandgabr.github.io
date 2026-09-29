@@ -477,6 +477,92 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 }
 
 /* ==========================================================================
+   CONNECT application (Task 10) - Amiga flat surface
+
+   Scoped to `[data-app="connect"]`. Same job as the SKILLS/ACADEMIC blocks
+   above: the `.hud-card` / `.channel-card` chrome still arrives from style.css,
+   so these rules cancel the glass (`border-radius`, `backdrop-filter` blur, glow
+   box-shadows), the hover `translateY` lift and the legacy text colours, and
+   re-assert the two-tone bevel at (0,3,0) so `.hud-card:hover` (0,2,0) cannot
+   flatten it.
+
+   CONNECT publishes no email by design: LinkedIn and GitHub are the only
+   channels. Orange appears only as flat rules (the header rule and the section
+   line), never as body text. Colours are `var()` tokens only, so no new hex
+   enters the stylesheet and the file stays RGB444-clean.
+   ========================================================================== */
+
+[data-app="connect"] .contact-panel,
+[data-app="connect"] .contact-panel:hover,
+[data-app="connect"] .channel-card,
+[data-app="connect"] .channel-card:hover {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: none;
+}
+
+/* A white card on the white `.window-body` has no top/left bevel contrast (both
+   lit edges are white), so a hard black outline mirrors `.window` and the SKILLS
+   `.skill-card` construction. The transmission strip is an inset gadget instead
+   (`bevel-inset`), so it needs no outline. */
+[data-app="connect"] .contact-panel,
+[data-app="connect"] .channel-card {
+  outline: 1px solid var(--amiga-black);
+}
+
+[data-app="connect"] .contact-panel:hover,
+[data-app="connect"] .channel-card:hover {
+  border-top-color: var(--bevel-lit);
+  border-left-color: var(--bevel-lit);
+  border-bottom-color: var(--bevel-shadow);
+  border-right-color: var(--bevel-shadow);
+}
+
+/* Black text on white for every label, value and status line; the SVG glyphs use
+   `fill="currentColor"`, so they turn black with `.channel-icon` (never a colour
+   emoji). The arrow's legacy green slide is flattened too. */
+[data-app="connect"] .card-hud-label,
+[data-app="connect"] .contact-headline,
+[data-app="connect"] .contact-sub,
+[data-app="connect"] .channel-label,
+[data-app="connect"] .channel-value,
+[data-app="connect"] .channel-icon,
+[data-app="connect"] .status-key,
+[data-app="connect"] .status-val,
+[data-app="connect"] .tag-index,
+[data-app="connect"] .section-title {
+  color: var(--win-body-fg);
+}
+
+[data-app="connect"] .channel-arrow,
+[data-app="connect"] .channel-card:hover .channel-arrow {
+  color: var(--win-body-fg);
+  transform: none;
+}
+
+/* `.text-dim` carries `!important` in style.css, so the policy value needs the
+   flag too to leave the legacy muted grey for black. */
+[data-app="connect"] .transmission-status .text-dim {
+  color: var(--win-body-fg) !important;
+}
+
+/* Orange as a rule, never text: a flat 2px rule under the header and a flat
+   `.section-line`, replacing the legacy translucent/gradient rules. */
+[data-app="connect"] .contact-header {
+  border-bottom: 2px solid var(--amiga-orange);
+  padding-bottom: calc(2 * var(--px));
+}
+
+[data-app="connect"] .section-line {
+  height: 2px;
+  background: var(--amiga-orange);
+}
+
+/* ==========================================================================
    Preference fallbacks (last: they must out-order the flat chrome above)
    ========================================================================== */
 
