@@ -197,6 +197,7 @@ export const I18N = {
         "cmd.sudo.desc": "Attempt privileged escalation",
         "cmd.sudo.output": "dandga is not in the sudoers file. This incident will be reported to security.",
         "cmd.error.notfound": "bash: command not found: {cmd}. Type 'help' to inspect available instructions.",
+        "cmd.status.done": "Command executed: {cmd}",
         "footer.spec": "ZERO-FRAMEWORKS • PURE HTML5/CSS3/ES6+",
         "footer.copy": "© 2026 Daniel Gonçalves Araujo. High-assurance security architecture."
       },
@@ -372,6 +373,7 @@ export const I18N = {
         "cmd.sudo.desc": "Tentar escalação de privilégio",
         "cmd.sudo.output": "dandga não está no arquivo sudoers. Este incidente será reportado à segurança.",
         "cmd.error.notfound": "bash: comando não encontrado: {cmd}. Digite 'help' para inspecionar as instruções disponíveis.",
+        "cmd.status.done": "Comando executado: {cmd}",
       },
       "es": {
         "a11y.skip": "Ir a la interfaz del sistema [Enter]",
@@ -545,6 +547,7 @@ export const I18N = {
         "cmd.sudo.desc": "Intentar escalada de privilegios",
         "cmd.sudo.output": "dandga no está en el archivo sudoers. Este incidente se reportará a seguridad.",
         "cmd.error.notfound": "bash: comando no encontrado: {cmd}. Escribe 'help' para inspeccionar las instrucciones disponibles.",
+        "cmd.status.done": "Comando ejecutado: {cmd}",
       }
     },
 

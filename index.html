@@ -816,10 +816,12 @@
               </div>
 
               <!-- Terminal Output Log. `role="log"` stays (it is a navigable
-                   log of the session); the live region is the single-line
-                   status element below, so a large `help --all` block is not
+                   log of the session), but `aria-live="off"` overrides the
+                   role's implicit polite value, so the log itself is silent.
+                   The single-line status element below carries the
+                   announcement, so a large `help --all` block is never
                    force-announced in full. -->
-              <div id="terminal-output" class="terminal-output bevel-inset" role="log">
+              <div id="terminal-output" class="terminal-output bevel-inset" role="log" aria-live="off">
                 <div class="term-response">
                   <span class="text-dim">Security Shell v2.4.0 (x86_64-hardened-linux)</span><br>
                   <span class="text-dim" data-i18n="terminal.welcome">Session initialized for peer review. Type 'help' for guidance.</span>
@@ -836,8 +838,12 @@
               </form>
 
               <!-- Shell live region: one single-line, visually-hidden status.
-                   The output log above is deliberately not a live region. -->
-              <p id="terminal-status" class="visually-hidden" role="status" aria-live="polite"></p>
+                   `role="status"` carries an implicit `aria-live="polite"` (and
+                   `aria-atomic="true"`), so no explicit `aria-live` is needed —
+                   and none is set, so the attribute cannot drift from the role.
+                   The output log above is deliberately silent
+                   (`aria-live="off"`), and this is the only shell announcement. -->
+              <p id="terminal-status" class="visually-hidden" role="status"></p>
             </div>
           </div>
     

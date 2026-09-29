@@ -1004,6 +1004,21 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
   min-height: calc(12 * var(--px));
 }
 
+/* The `box-shadow:none` above is in the base state, so at equal (0,2,0)
+   specificity it also cancels the design-system ring that the global
+   `:focus-visible` rule (line 76) sets: the attribute selector out-ranks the
+   bare `:focus-visible` and wins on source order. Re-assert the ring here for
+   the two focusable controls only. This rule is (0,3,0), so it out-ranks the
+   base block outright, and it restores exactly `--focus-outer` (the 4px black
+   band) on top of the white `--focus-inner` outline. Every other scoped
+   `[data-app=...]` block confines `box-shadow:none` to `:hover`; the input
+   row's own `box-shadow:none` is on the form, not on `#cli-input`, so the
+   text field already keeps the ring. */
+[data-app="shell"] .cmd-chip:focus-visible,
+[data-app="shell"] .term-submit-btn:focus-visible {
+  box-shadow: var(--focus-outer);
+}
+
 [data-app="shell"] .cmd-chip:hover,
 [data-app="shell"] .term-submit-btn:hover {
   background: var(--grey-dd);

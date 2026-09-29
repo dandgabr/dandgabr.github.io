@@ -168,6 +168,10 @@ export class TerminalCLI {
     this.form = document.getElementById(formId);
     this.input = document.getElementById(inputId);
     this.output = document.getElementById(outputId);
+    // The single-line live region. Optional: the CLI still runs when the status
+    // element is absent (e.g. a bare harness that mounts only the form), so the
+    // writer below is guarded rather than assumed.
+    this.status = document.getElementById('terminal-status');
     this.history = [];
     this.historyIndex = -1;
 
@@ -233,11 +237,25 @@ export class TerminalCLI {
     const name = COMMANDS[mainCmd] ? mainCmd : ALIASES[mainCmd];
     if (name) {
       COMMANDS[name].handler(this, args);
+      this.setStatus(renderTemplate(I18N.t('cmd.status.done'), { cmd: name }));
     } else {
-      this.appendLog(renderTemplate(I18N.t('cmd.error.notfound'), { cmd: mainCmd }), 'text-dim');
+      const notFound = renderTemplate(I18N.t('cmd.error.notfound'), { cmd: mainCmd });
+      this.appendLog(notFound, 'text-dim');
+      this.setStatus(notFound);
     }
 
     this.output.scrollTop = this.output.scrollHeight;
+  }
+
+  /**
+   * Write the one-line summary into the shell's live region. The output log
+   * itself is `aria-live="off"` (it overrides `role="log"`'s implicit polite
+   * value), so this is the only announcement a screen reader gets for a
+   * command — deliberately short, never a copy of the command's output.
+   * @param {string} text single-line summary
+   */
+  setStatus(text) {
+    if (this.status) this.status.textContent = text;
   }
 
   appendLog(content, className = '') {
