@@ -29,8 +29,6 @@ export const I18N = {
     translations: {
       "en": {
         "a11y.skip": "Skip to system interface [Enter]",
-        "hud.active": "[ACTIVE]",
-        "nav.root": "//ROOT",
         "dock.intel": "INTEL",
         "dock.skills": "SKILLS",
         "dock.projects": "PROJECTS",
@@ -44,12 +42,8 @@ export const I18N = {
         "prefs.replay_tour": "Replay tour",
         "prefs.on": "ON",
         "prefs.off": "OFF",
-        "nav.terminal": "//TERMINAL",
-        "nav.intel": "//INTEL",
-        "nav.skills": "//SKILLS",
+        "app.status.opened": "{app} window opened",
         "nav.projects": "//PROJECTS",
-        "nav.academic": "//ACADEMIC",
-        "nav.connect": "//CONNECT",
         "hero.badge.role": "SECURITY ARCHITECT @ DASA",
         "hero.badge.geo": "LONDRINA, PR — BRAZIL",
         "hero.subline": "Architecting resilient enterprise defenses, developing containment frameworks for autonomous AI agents, and establishing continuous DevSecOps governance.",
@@ -209,8 +203,6 @@ export const I18N = {
       },
       "pt-br": {
         "a11y.skip": "Ir para a interface do sistema [Enter]",
-        "hud.active": "[ATIVO]",
-        "nav.root": "//RAIZ",
         "dock.intel": "DOSSIÊ",
         "dock.skills": "DOMÍNIOS",
         "dock.projects": "PROJETOS",
@@ -224,12 +216,8 @@ export const I18N = {
         "prefs.replay_tour": "Repetir tour",
         "prefs.on": "ON",
         "prefs.off": "OFF",
-        "nav.terminal": "//TERMINAL",
-        "nav.intel": "//DOSSIÊ",
-        "nav.skills": "//DOMÍNIOS",
+        "app.status.opened": "Janela {app} aberta",
         "nav.projects": "//PROJETOS",
-        "nav.academic": "//FORMAÇÃO",
-        "nav.connect": "//CONTATO",
         "hero.badge.role": "ARQUITETO DE SEGURANÇA @ DASA",
         "hero.badge.geo": "LONDRINA, PR — BRASIL",
         "hero.subline": "Projetando defesas corporativas resilientes, estabelecendo modelos de contenção para agentes autônomos de IA e governança contínua de DevSecOps.",
@@ -389,8 +377,6 @@ export const I18N = {
       },
       "es": {
         "a11y.skip": "Ir a la interfaz del sistema [Enter]",
-        "hud.active": "[ACTIVO]",
-        "nav.root": "//RAÍZ",
         "dock.intel": "DOSIER",
         "dock.skills": "DOMINIOS",
         "dock.projects": "PROYECTOS",
@@ -404,12 +390,8 @@ export const I18N = {
         "prefs.replay_tour": "Repetir recorrido",
         "prefs.on": "ON",
         "prefs.off": "OFF",
-        "nav.terminal": "//TERMINAL",
-        "nav.intel": "//DOSIER",
-        "nav.skills": "//DOMINIOS",
+        "app.status.opened": "Ventana {app} abierta",
         "nav.projects": "//PROYECTOS",
-        "nav.academic": "//FORMACIÓN",
-        "nav.connect": "//CONTACTO",
         "hero.badge.role": "ARQUITECTO DE SEGURIDAD @ DASA",
         "hero.badge.geo": "LONDRINA, PR — BRASIL",
         "hero.subline": "Diseñando defensas corporativas resilientes, forjando marcos de contención para agentes autónomos de IA y gobernanza continua de DevSecOps.",
@@ -622,8 +604,16 @@ export const I18N = {
       });
     },
 
-    t(key) {
+    t(key, vars) {
       const dict = this.translations[this.currentLang] || this.translations.en;
-      return dict[key] ?? this.translations.en[key] ?? key;
+      const value = dict[key] ?? this.translations.en[key] ?? key;
+      // Optional `{name}` interpolation for the few strings that mix prose with
+      // a non-translatable value (an app id, a project id, a timestamp). A
+      // placeholder with no matching var is left intact, so a missing var
+      // degrades to the literal `{name}` rather than to `undefined`.
+      if (!vars) return value;
+      return value.replace(/\{(\w+)\}/g, (match, name) =>
+        Object.prototype.hasOwnProperty.call(vars, name) ? String(vars[name]) : match
+      );
     }
 };

@@ -12,7 +12,7 @@
 
 import { I18N } from './i18n.js';
 import { PROJECTS_DATA, getProjectData } from './projects-data.js';
-import { flipStreamPreference } from './effects.js';
+import { flipStreamPreference, readStreamPreference } from './effects.js';
 
 // Column width for the `help` command table.
 const HELP_COL = 24;
@@ -269,15 +269,21 @@ export class TerminalCLI {
     // Delegates to effects.js, the single read/write path for the stream
     // preference: this command must not touch window.__effects or localStorage
     // itself, or it becomes a second writer.
-    const active = flipStreamPreference(localStorage);
-    this.appendLog(I18N.t(active ? 'cmd.stream.output_on' : 'cmd.stream.output_off'), 'text-accent');
-    // Keep the PREFS toggle truthful: the command is a second route into the
-    // same preference, so the button must reflect the new state rather than
-    // wait for a reload. `aria-pressed` and the label are re-derived together.
+    // `flipStreamPreference` returns the EFFECTIVE state (the narrow-viewport
+    // gate can keep the stream stopped even with the preference on), which is
+    // exactly what the log line should report: it must never claim a stopped
+    // stream is running.
+    const effective = flipStreamPreference(localStorage);
+    this.appendLog(I18N.t(effective ? 'cmd.stream.output_on' : 'cmd.stream.output_off'), 'text-accent');
+    // Keep the PREFS toggle truthful. R21: the button mirrors the STORED
+    // PREFERENCE - the same source `prefs.js` paints from - not the effective
+    // running state, so on a narrow viewport (where the gate keeps the stream
+    // stopped) the two modules still agree on the visitor's choice.
+    const streamOn = readStreamPreference(localStorage);
     const streamBtn = document.querySelector('[data-toggle="stream"]');
     if (streamBtn) {
-      streamBtn.setAttribute('aria-pressed', active.toString());
-      streamBtn.textContent = I18N.t(active ? 'prefs.on' : 'prefs.off');
+      streamBtn.setAttribute('aria-pressed', String(streamOn));
+      streamBtn.textContent = I18N.t(streamOn ? 'prefs.on' : 'prefs.off');
     }
   }
 }

@@ -55,7 +55,15 @@
 
   /* Dimensions & Spacing */
   --header-height: 56px;
-  --sidebar-width: 110px;
+  /* Zeroed in Task 13: the SYS-CTRL side panel that justified the reservation
+     was deleted, so the main layout's left padding is now an even 20px. The
+     token stays (rather than being removed) so the `.main-layout` rule and any
+     future side reservation keep one source for the value. `0px`, not `0`: the
+     token is consumed by `calc(var(--sidebar-width) + 20px)`, and a unitless
+     `0` would make that calc a number+length type error, invalidating the whole
+     `padding` declaration at computed-value time and collapsing all four sides
+     to 0. */
+  --sidebar-width: 0px;
   --max-width: 1180px;
   --radius-xs: 2px;
   --radius-sm: 3px;
@@ -1610,12 +1618,9 @@ a:hover {
    Responsive Breakpoints
    ========================================================================== */
 
-/* --- 1. Tablet compacto (768–1023px): sidebar estreita, só o valor ------ */
-@media (max-width: 1023px) {
-  :root {
-    --sidebar-width: 48px;
-  }
-}
+/* --- 1. Tablet (768–1023px): the SYS-CTRL panel that used to sit here was
+   removed in Task 13, so no breakpoint reserves horizontal space any more; the
+   `--sidebar-width` token is `0` at every width (see `:root`). ------------- */
 
 /* --- 2. Grid/hero adjustments 900px --------------------------------------- */
 @media (max-width: 900px) {
@@ -1642,13 +1647,8 @@ a:hover {
 
 /* --- 3. Mobile portrait (≤767px) ---------------------------------------- */
 @media (max-width: 767px) {
-  :root {
-    --sidebar-width: 0px;
-  }
-
   /* Main layout: padding bottom para não ficar atrás da barra */
   .main-layout {
-    padding-left: 20px;
     padding-bottom: 68px;
   }
 
@@ -1669,11 +1669,10 @@ a:hover {
   }
 }
 
-/* --- 4. Landscape mobile (altura curta): sidebar ultra-compacta ---------- */
+/* --- 4. Landscape mobile (altura curta): header ultra-compacto ----------- */
 @media (max-height: 500px) and (orientation: landscape) {
   :root {
     --header-height: 44px;
-    --sidebar-width: 40px;
   }
 }
 

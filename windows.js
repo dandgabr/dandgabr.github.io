@@ -12,6 +12,8 @@
  * ============================================================================
  */
 
+import { I18N } from './i18n.js';
+
 /** The id of the currently open application, or null before the first paint. */
 let active = null;
 
@@ -35,8 +37,11 @@ export function showApp(app) {
   const heading = document.querySelector(`.app[data-app="${app}"] .window-heading`);
   if (heading) heading.focus({ preventScroll: true });
 
+  // The announcement is localised through the shared dictionary. The app id
+  // itself is deliberately not translated (the ids are route keys), so it is
+  // interpolated into the localised sentence as `{app}`.
   const status = document.getElementById('app-status');
-  if (status) status.textContent = `${app} window opened`;
+  if (status) status.textContent = I18N.t('app.status.opened', { app });
 
   active = app;
 }

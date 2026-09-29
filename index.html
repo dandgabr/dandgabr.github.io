@@ -800,7 +800,7 @@
              scanlines, background stream, replay tour) are wired by prefs.js,
              which delegates from this section, not from `document`. -->
         <section class="app" data-app="prefs" aria-labelledby="win-prefs-heading" hidden>
-          <h2 class="window-heading" id="win-prefs-heading" tabindex="-1" data-i18n="dock.prefs">Prefs</h2>
+          <h2 class="window-heading dither-title" id="win-prefs-heading" tabindex="-1" data-i18n="dock.prefs">Prefs</h2>
           <div class="prefs-panel bevel" role="toolbar" aria-label="Preferences">
             <div class="prefs-row">
               <span data-i18n="prefs.lang">Language</span>
@@ -809,12 +809,12 @@
               <button type="button" class="bevel" data-lang="es">ES</button>
             </div>
             <div class="prefs-row">
-              <span data-i18n="prefs.crt">CRT scanlines</span>
-              <button type="button" class="bevel" data-toggle="crt" aria-pressed="false"></button>
+              <span id="prefs-crt-label" data-i18n="prefs.crt">CRT scanlines</span>
+              <button type="button" class="bevel" data-toggle="crt" aria-pressed="false" aria-labelledby="prefs-crt-label"></button>
             </div>
             <div class="prefs-row">
-              <span data-i18n="prefs.stream">Background stream</span>
-              <button type="button" class="bevel" data-toggle="stream" aria-pressed="false"></button>
+              <span id="prefs-stream-label" data-i18n="prefs.stream">Background stream</span>
+              <button type="button" class="bevel" data-toggle="stream" aria-pressed="false" aria-labelledby="prefs-stream-label"></button>
             </div>
             <div class="prefs-row">
               <button type="button" class="bevel" data-action="replay-tour" data-i18n="prefs.replay_tour">Replay tour</button>
