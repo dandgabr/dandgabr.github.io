@@ -238,7 +238,7 @@ html[data-crt="off"] .crt-overlay {
   display: none;
 }
 
-html[data-crt="off"] body {
+html[data-crt="off"]:not([data-theme="light"]) body {
   --text-main: #dcf5e3;
 }
 
