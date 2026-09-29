@@ -101,8 +101,8 @@ export function initPrefs() {
 
     if (e.target.closest?.('[data-action="replay-tour"]')) {
       localStorage.removeItem('tour_done');
-      // The tour lands in Task 14; until then the handle is absent and the
-      // optional call must simply do nothing.
+      // `window.__tour` is set by `tour.js` on load. The optional call keeps a
+      // Prefs click a no-op if that module failed, rather than throwing.
       window.__tour?.start();
     }
   });

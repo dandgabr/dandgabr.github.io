@@ -437,6 +437,20 @@ html[data-crt="off"] .crt-overlay { display:none; }
 .spec-key { color:var(--bevel-shadow); font-weight:600; }
 .spec-val { color:var(--win-body-fg); text-align:right; font-weight:500; }
 
+/* Prior security roles (spec §2 decision 15 / §14 item 3). A compact list under
+   the spec rows: the role in black on the white body, the organisation and dates
+   in the same grey the spec keys use, and orange only as the 2px rule that
+   separates the block. No orange text (§12). */
+.prior-roles {
+  display:flex; flex-direction:column; gap:10px;
+  margin-top:16px; padding-top:14px;
+  border-top:2px solid var(--amiga-orange);
+}
+.prior-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.prior-row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px; font-size:12px; }
+.prior-role { color:var(--win-body-fg); font-weight:600; }
+.prior-meta { color:var(--bevel-shadow); text-align:right; }
+
 .triad-list { display:flex; flex-direction:column; gap:16px; }
 .triad-item {
   display:flex; gap:16px; padding:14px;
@@ -444,7 +458,15 @@ html[data-crt="off"] .crt-overlay { display:none; }
   border:1px solid var(--bevel-shadow);
 }
 .triad-item:hover { border-color:var(--amiga-orange); transform:none; }
-.triad-num { font-size:18px; font-weight:800; color:var(--amiga-orange); opacity:1; line-height:1.2; }
+/* The numeral is text, so it is black: orange on white is 2.39:1 and orange is
+   a rule/frame colour only (spec §12). The accent survives as a short orange
+   rule under the glyph, which keeps "01/02/03" visually distinct without
+   putting orange in a text role. */
+.triad-num {
+  font-size:18px; font-weight:800; color:var(--win-body-fg); opacity:1; line-height:1.2;
+  padding-bottom:calc(1 * var(--px)); border-bottom:2px solid var(--amiga-orange);
+  align-self:flex-start;
+}
 .triad-content h4 { font-size:13.5px; color:var(--win-body-fg); margin-bottom:6px; }
 .triad-content p { font-size:12.5px; color:var(--win-body-fg); line-height:1.55; }
 
@@ -653,7 +675,10 @@ html[data-crt="off"] .crt-overlay { display:none; }
 
 .screen-pad { flex: 1; }
 
-/* Menu bar: white ground, black text, orange highlight block. */
+/* Menu bar: white ground, black text, orange highlight block. The bar currently
+   carries no menu items (the dead Workbench disclosure button was removed per
+   spec §12); the `.menu-item` rules below are kept so the real menu, when it
+   lands, inherits the intended treatment. */
 .menu-bar {
   display: flex;
   align-items: stretch;
@@ -760,8 +785,8 @@ html[data-crt="off"] .crt-overlay { display:none; }
    a display on an element it then reveals another way. */
 [hidden] { display: none !important; }
 
-/* Dock container: raised grey control strip along the bottom. Contents arrive
-   in Task 6; the empty list still reserves one control row. */
+/* Dock container: raised grey control strip along the bottom. Its seven
+   launcher anchors are static markup; the list is never empty in the page. */
 .dock {
   background: var(--control-face);
   color: var(--text-on-face);
@@ -822,9 +847,9 @@ html[data-crt="off"] .crt-overlay { display:none; }
   border-right-color: var(--bevel-lit);
 }
 
-/* Icon slot. Task 15 / Phase 3 paints the per-app SVG into
-   `.dock-icon[data-icon="<app>"]`; this task only reserves the space so the
-   rows do not reflow when the art lands. */
+/* Icon slot. The per-app SVG icon set is not painted yet (recorded as a
+   follow-up): this reserves the space so a later art drop does not reflow the
+   dock rows. */
 .dock-icon {
   display: inline-block;
   flex: none;
@@ -1580,6 +1605,40 @@ html[data-crt="off"] .crt-overlay { display:none; }
   border-left-color: var(--bevel-lit);
   border-bottom-color: var(--bevel-shadow);
   border-right-color: var(--bevel-shadow);
+}
+
+/* ==========================================================================
+   Dual-tone focus ring re-assertion for the five scopes that clobbered it
+
+   `box-shadow: none` in a base state at (0,1,0)+ out-ranks the global
+   `:focus-visible` rule (0,1,0, declared at line 104) on source order, so those
+   controls were byte-identical focused and unfocused. Same defect the SHELL
+   block above fixes for `.cmd-chip` / `.term-submit-btn`. Each selector here is
+   one class (or one id) above its offending rule, so the ring wins outright, and
+   it restores exactly `--focus-outer` (the 4px black band) on top of the white
+   `--focus-inner` outline. The scopes:
+
+     .action-primary                      (0,1,0, base)  -> hero primary CTA
+     .filter-btn.active                   (0,2,0)         -> pressed filter tab
+     [data-app="projects"] .filter-btn     (0,2,0)         -> four filter tabs
+     [data-app="projects"] .inspect-btn    (0,2,0)         -> four inspect buttons
+     [data-app="connect"] .channel-card    (0,2,0)         -> two channel cards
+     #project-modal .action-primary/-ghost (1,1,0)         -> modal repo link/dismiss
+
+   The hero `.action-secondary` / `.action-ghost` carry no `box-shadow` in the
+   base state, so they already keep the ring; they are re-asserted anyway to pin
+   the pair against any later base-state change.
+   ========================================================================== */
+.action-primary:focus-visible,
+.action-secondary:focus-visible,
+.action-ghost:focus-visible,
+.filter-btn.active:focus-visible,
+[data-app="projects"] .filter-btn:focus-visible,
+[data-app="projects"] .inspect-btn:focus-visible,
+[data-app="connect"] .channel-card:focus-visible,
+#project-modal .action-primary:focus-visible,
+#project-modal .action-ghost:focus-visible {
+  box-shadow: var(--focus-outer);
 }
 
 /* Section header, flat: the legacy `.section-title` is the dark-theme

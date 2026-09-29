@@ -1,11 +1,17 @@
 /**
  * ============================================================================
  * APPLICATION DOCK
- * Renders the Workbench launcher list and owns its keyboard model. The items
- * are real `<a href="#/app">` links, not buttons: that yields middle-click,
- * copy-link, open-in-new-tab and the screen-reader links list for free.
- * Navigation happens by the browser changing `location.hash`; `router.js`
- * observes it. There is deliberately no activation callback.
+ * Owns the Workbench launcher list's keyboard model. The items are real
+ * `<a href="#/app">` links, not buttons: that yields middle-click, copy-link,
+ * open-in-new-tab and the screen-reader links list for free. Navigation happens
+ * by the browser changing `location.hash`; `router.js` observes it. There is
+ * deliberately no activation callback.
+ *
+ * The seven anchors are STATIC markup in `index.html` (spec §7.1 keeps content
+ * in the page and preserves the no-JS degradation), so with JS disabled a
+ * visitor still sees seven real links. `renderDock` only updates
+ * `aria-current`/`tabindex` in place; `buildDock` survives as the fallback for
+ * a list that arrives empty, and is a no-op against the shipped markup.
  * ============================================================================
  */
 
@@ -22,7 +28,11 @@ function dockItems(listEl) {
   return [...listEl.querySelectorAll('a[data-app]')];
 }
 
-/** Build the list once. */
+/**
+ * Build the list, one anchor per app. Only reached when `#dock-list` is empty
+ * (the shipped markup already carries the seven anchors), so it stays as the
+ * fallback path and a safety net for a page that ships without them.
+ */
 function buildDock(listEl) {
   APP_IDS.forEach((app) => {
     const li = document.createElement('li');
@@ -31,8 +41,9 @@ function buildDock(listEl) {
     a.className = 'dock-item';
     a.dataset.app = app;
 
-    // The icon is a placeholder span Task 15 fills with per-app SVG; the label
-    // is built as a node (not an HTML string) so there is no markup assembly.
+    // The icon is a placeholder span the icon set later fills with per-app SVG;
+    // the label is built as a node (not an HTML string) so there is no markup
+    // assembly.
     const icon = document.createElement('span');
     icon.className = 'dock-icon';
     icon.dataset.icon = app;
@@ -56,7 +67,7 @@ function buildDock(listEl) {
  * Render the dock list. Exactly one item is tabbable: the active app, or the
  * first item if the route names an app the dock does not carry.
  *
- * Idempotent and non-destructive. The anchors are built only once; a later
+ * Idempotent and non-destructive. The anchors are built only if absent; a later
  * call updates `aria-current` and the roving `tabindex` in place. Rebuilding
  * would detach the focused node on every `hashchange` and drop focus back to
  * `BODY`, so the anchors must survive a re-render.

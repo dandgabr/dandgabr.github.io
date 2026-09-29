@@ -36,6 +36,19 @@ const REDUCED_MOTION = '(prefers-reduced-motion: reduce)';
 /** localStorage key written once the tour has been completed or dismissed. */
 const TOUR_DONE_KEY = 'tour_done';
 
+/** Milliseconds between the page being clear and an automatic first run. */
+const TOUR_DELAY_MS = 600;
+
+/**
+ * The page's own landmarks. Driver.js mounts a `<header>` and a `<footer>` on
+ * `<body>`, so while the tour runs the document has two banners and two
+ * contentinfo landmarks and axe reports `landmark-no-duplicate-banner` /
+ * `landmark-no-duplicate-contentinfo`. The vendored bundle cannot be edited, so
+ * the page's pair is hidden from the accessibility tree for the duration and
+ * restored on destroy.
+ */
+const SHADOWED_LANDMARKS = ['.screen-bar', '.hud-footer'];
+
 /** True when the visitor asked the system for reduced motion. */
 function prefersReducedMotion() {
   return typeof matchMedia === 'function' && matchMedia(REDUCED_MOTION).matches;
@@ -106,6 +119,32 @@ export function buildSteps(t) {
 /** The live Driver.js instance, or null. Kept so a replay can replace it. */
 let instance = null;
 
+/** True while the page landmarks are hidden from the accessibility tree. */
+let landmarksShadowed = false;
+
+/**
+ * Hide the page's `banner` / `contentinfo` landmarks from assistive tech while
+ * the tour's own header/footer are mounted, so the document never exposes a
+ * duplicate of either. Paired with `restoreLandmarks`; idempotent.
+ */
+function shadowLandmarks() {
+  if (landmarksShadowed) return;
+  landmarksShadowed = true;
+  SHADOWED_LANDMARKS.forEach((sel) => {
+    const el = document.querySelector(sel);
+    if (el) el.setAttribute('aria-hidden', 'true');
+  });
+}
+
+/** Undo `shadowLandmarks`. Safe to call when nothing was hidden. */
+function restoreLandmarks() {
+  landmarksShadowed = false;
+  SHADOWED_LANDMARKS.forEach((sel) => {
+    const el = document.querySelector(sel);
+    if (el) el.removeAttribute('aria-hidden');
+  });
+}
+
 /**
  * Start the tour. Safe to call repeatedly: the Prefs "Replay tour" control
  * clears the completed flag and calls this, and it must replace, not stack,
@@ -124,6 +163,7 @@ export function start() {
     prevBtnText: I18N.t('tour.prev'),
     doneBtnText: I18N.t('tour.done'),
     onDestroyed: () => {
+      restoreLandmarks();
       try {
         localStorage.setItem(TOUR_DONE_KEY, '1');
       } catch (e) {}
@@ -131,18 +171,56 @@ export function start() {
     steps: buildSteps((key) => I18N.t(key)),
   });
 
+  // Landmarks are hidden before the first popover mounts and restored by
+  // `onDestroyed`, so the shadow lasts exactly as long as `driver-active`.
+  shadowLandmarks();
   instance.drive();
+}
+
+/**
+ * The project modal `<dialog>` when it is currently open, else null. The tour
+ * cannot run underneath it: Driver.js adds `.driver-active` to `<body>`, and
+ * the vendored stylesheet sets `.driver-active * { pointer-events:none }`,
+ * while the popover paints outside the dialog's top layer and is therefore
+ * invisible behind it. A visitor who deep-links to `#/projects/<id>` on a first
+ * visit would see an invisible tour swallow every click on the dialog and then
+ * write `tour_done`.
+ *
+ * @returns {HTMLDialogElement|null}
+ */
+function openModal() {
+  if (typeof document === 'undefined') return null;
+  const modal = document.getElementById('project-modal');
+  return modal && modal.open ? modal : null;
 }
 
 /**
  * Run the tour automatically on a first visit only, after the first paint has
  * settled. A returning visitor, or one who asked for reduced motion, is left
  * alone.
+ *
+ * On a deep link (`#/projects/coacus`) `projects.js` has already called
+ * `showModal()` by the time this runs, so the automatic run is deferred until
+ * the dialog fires `close` — a one-shot listener that then applies the same
+ * delay and reduced-motion rules. The completed flag is never written while the
+ * dialog is open, because the tour never starts.
  */
 export function initTour() {
   if (isTourDone()) return;
   if (prefersReducedMotion()) return;
-  setTimeout(start, 600);
+
+  const modal = openModal();
+  if (!modal) {
+    setTimeout(start, TOUR_DELAY_MS);
+    return;
+  }
+
+  // One-shot: a second open/close pair must not queue a second tour.
+  modal.addEventListener(
+    'close',
+    () => setTimeout(start, TOUR_DELAY_MS),
+    { once: true },
+  );
 }
 
 // Prefs' "Replay tour" control calls this handle. Set here rather than in

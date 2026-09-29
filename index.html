@@ -14,7 +14,7 @@
   <meta name="keywords" content="Daniel Gonçalves Araujo, dandgabr, Security Architect, Dasa, AI Safety, AI Hardening, AppSec, DevSecOps, Threat Modeling, CIS Benchmarks, MCP, Model Context Protocol, Cloud Security, CompTIA Security+">
   <meta name="author" content="Daniel Gonçalves Araujo (@dandgabr)">
   <meta name="theme-color" content="#0055AA">
-  <meta name="color-scheme" content="dark light">
+  <meta name="color-scheme" content="dark">
 
   <!-- Pre-paint CRT, language and theme-colour setup. Classic script, first in
        <head>: it must run before the body paints so a visitor who disabled the
@@ -70,10 +70,11 @@
     <span class="screen-gadget bevel" aria-hidden="true"></span>
   </div>
 
-  <!-- Menu bar: the active application's menus (wired in a later phase). -->
-  <nav class="menu-bar" aria-label="Application menu">
-    <button type="button" class="menu-item" aria-expanded="false">Workbench</button>
-  </nav>
+  <!-- Menu bar: the active application's menus. It has no menu yet, and a
+       half-implemented ARIA menu is worse than none (spec §12), so the bar is
+       an empty labelled landmark rather than a dead disclosure button that
+       never flips `aria-expanded`. The dock is the primary navigation. -->
+  <nav class="menu-bar" aria-label="Application menu"></nav>
 
   <!-- Main Content Landmark -->
   <main id="main-content" class="main-layout" role="main">
@@ -94,8 +95,9 @@
         </div>
 
         <div class="terminal-card-body">
-          <div id="boot-log" class="boot-sequence" aria-live="polite">
-            <!-- Populated progressively by app.js; fallback content for non-JS -->
+          <div id="boot-log" class="boot-sequence">
+            <!-- Static identity block. Nothing appends to it: the Shell's `boot`
+                 command replays the sequence in the output log instead. -->
             <p class="log-line text-dim">&gt; BIOS_CHECKSUM: OK | KERNEL_LOAD: 0x00007FFD... ACCESS_GRANTED</p>
             <p class="log-line text-accent">&gt; IDENTITY: Daniel Gonçalves Araujo [@dandgabr]</p>
             <p class="log-line text-highlight">&gt; ROLE: Information Security Architect @ Dasa</p>
@@ -219,7 +221,7 @@
                   Operating at the intersection of <strong>Enterprise Defense Architecture</strong> and <strong>Emerging Autonomous Tech</strong>, I engineer security frameworks that prevent exploitation before code reaches production and isolate autonomous agents operating in developer workspaces.
                 </p>
                 <p data-i18n="dossier.p2">
-                  My engineering approach is rooted in systems programming, microcontroller diagnostics, and threat containment. With 4+ years of academic background lecturing algorithms, computer security, and electronics, I combine pedagogical clarity with technical rigor in application security, threat modeling, and secure software development lifecycles.
+                  My engineering approach is rooted in systems programming, microcontroller diagnostics, and threat containment. With 7+ years of academic background lecturing algorithms, computer security, and electronics, I combine pedagogical clarity with technical rigor in application security, threat modeling, and secure software development lifecycles.
                 </p>
               </div>
 
@@ -240,6 +242,27 @@
                   <span class="spec-key" data-i18n="dossier.spec.community_label">COMMUNITY:</span>
                   <span class="spec-val" data-i18n="dossier.spec.community_val">Google Developer Groups (GDG) Speaker</span>
                 </div>
+              </div>
+
+              <!-- Prior security roles (spec §2 decision 15 / §14 item 3): the
+                   current Dasa role above plus these three. Teaching and
+                   freelance work are deliberately excluded from INTEL. -->
+              <div class="prior-roles">
+                <div class="card-hud-label" data-i18n="dossier.prior_label">[PRIOR SECURITY ROLES]</div>
+                <ul class="prior-list">
+                  <li class="prior-row">
+                    <span class="prior-role" data-i18n="dossier.prior.bv_role">Information Security Architect</span>
+                    <span class="prior-meta"><span data-i18n="dossier.prior.bv_org">Boa Vista</span> &middot; <span data-i18n="dossier.prior.bv_dates">Jun 2022 – May 2024</span></span>
+                  </li>
+                  <li class="prior-row">
+                    <span class="prior-role" data-i18n="dossier.prior.dock_role">Application Security Engineer</span>
+                    <span class="prior-meta"><span data-i18n="dossier.prior.dock_org">Dock</span> &middot; <span data-i18n="dossier.prior.dock_dates">Jan 2022 – Jun 2022</span></span>
+                  </li>
+                  <li class="prior-row">
+                    <span class="prior-role" data-i18n="dossier.prior.cv_role">Information Security Analyst (AppSec)</span>
+                    <span class="prior-meta"><span data-i18n="dossier.prior.cv_org">Conviso Application Security</span> &middot; <span data-i18n="dossier.prior.cv_dates">Jun 2021 – Dec 2021</span></span>
+                  </li>
+                </ul>
               </div>
             </div>
 
@@ -833,9 +856,25 @@
     <p id="app-status" class="visually-hidden" aria-live="polite"></p>
   </main>
 
-  <!-- Workbench dock: application launchers (populated in Task 6). -->
+  <!-- Workbench dock: application launchers. The seven anchors are STATIC
+       markup, not browser-built, so a visitor without JS still gets real
+       `#/app` links (spec §7.1 keeps content in `index.html` and preserves the
+       no-JS degradation). `renderDock` then only manages `aria-current` and the
+       roving tabindex over these existing nodes; `buildDock` remains as the
+       fallback for a list that arrives empty. The non-INTEL `<section hidden>`
+       stays hidden without JS, so a JS-less click on `#/skills` changes the hash
+       while the section remains hidden — a documented limitation of the
+       JS-owned visibility model, not a broken link. -->
   <nav class="dock" aria-label="Applications">
-    <ul class="dock-list" id="dock-list"><!-- Task 6 --></ul>
+    <ul class="dock-list" id="dock-list">
+      <li><a href="#/intel" class="dock-item" data-app="intel"><span class="dock-icon" data-icon="intel"></span><span class="dock-label" data-i18n="dock.intel">INTEL</span></a></li>
+      <li><a href="#/skills" class="dock-item" data-app="skills"><span class="dock-icon" data-icon="skills"></span><span class="dock-label" data-i18n="dock.skills">SKILLS</span></a></li>
+      <li><a href="#/projects" class="dock-item" data-app="projects"><span class="dock-icon" data-icon="projects"></span><span class="dock-label" data-i18n="dock.projects">PROJECTS</span></a></li>
+      <li><a href="#/academic" class="dock-item" data-app="academic"><span class="dock-icon" data-icon="academic"></span><span class="dock-label" data-i18n="dock.academic">ACADEMIC</span></a></li>
+      <li><a href="#/connect" class="dock-item" data-app="connect"><span class="dock-icon" data-icon="connect"></span><span class="dock-label" data-i18n="dock.connect">CONNECT</span></a></li>
+      <li><a href="#/shell" class="dock-item" data-app="shell"><span class="dock-icon" data-icon="shell"></span><span class="dock-label" data-i18n="dock.shell">SHELL</span></a></li>
+      <li><a href="#/prefs" class="dock-item" data-app="prefs"><span class="dock-icon" data-icon="prefs"></span><span class="dock-label" data-i18n="dock.prefs">PREFS</span></a></li>
+    </ul>
   </nav>
 
   <!-- Project Inspection Modal (Dialog) -->
