@@ -787,7 +787,7 @@
             <span class="section-line"></span>
           </div>
 
-          <div class="terminal-card shell-card">
+          <div class="terminal-card shell-card bevel">
             <div class="terminal-card-header">
               <div class="terminal-dots" aria-hidden="true">
                 <span class="dot dot-red"></span>
@@ -805,18 +805,21 @@
 
               <!-- Tactical Quick Command Buttons -->
               <div class="quick-cmd-bar" role="toolbar" aria-label="Terminal command shortcuts">
-                <button type="button" class="cmd-chip" data-cmd="help">help</button>
-                <button type="button" class="cmd-chip" data-cmd="whoami">whoami</button>
-                <button type="button" class="cmd-chip" data-cmd="skills">skills</button>
-                <button type="button" class="cmd-chip" data-cmd="projects">projects</button>
-                <button type="button" class="cmd-chip" data-cmd="credentials">credentials</button>
-                <button type="button" class="cmd-chip" data-cmd="contact">contact</button>
-                <button type="button" class="cmd-chip" data-cmd="stream">stream</button>
-                <button type="button" class="cmd-chip" data-cmd="clear">clear</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="help">help</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="whoami">whoami</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="skills">skills</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="projects">projects</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="credentials">credentials</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="contact">contact</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="stream">stream</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="clear">clear</button>
               </div>
 
-              <!-- Terminal Output Log -->
-              <div id="terminal-output" class="terminal-output" role="log" aria-live="polite" aria-atomic="false">
+              <!-- Terminal Output Log. `role="log"` stays (it is a navigable
+                   log of the session); the live region is the single-line
+                   status element below, so a large `help --all` block is not
+                   force-announced in full. -->
+              <div id="terminal-output" class="terminal-output bevel-inset" role="log">
                 <div class="term-response">
                   <span class="text-dim">Security Shell v2.4.0 (x86_64-hardened-linux)</span><br>
                   <span class="text-dim" data-i18n="terminal.welcome">Session initialized for peer review. Type 'help' for guidance.</span>
@@ -824,13 +827,17 @@
               </div>
 
               <!-- Command Input Line -->
-              <form id="terminal-form" class="terminal-input-row" autocomplete="off">
+              <form id="terminal-form" class="terminal-input-row bevel" autocomplete="off">
                 <label for="cli-input" class="term-prompt">
                   <span class="term-user">terminal</span>&gt;&nbsp;
                 </label>
                 <input type="text" id="cli-input" class="term-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Terminal command line input" data-i18n-attr="placeholder:terminal.placeholder,aria-label:terminal.input_aria" placeholder="type a command...">
-                <button type="submit" class="term-submit-btn" aria-label="Execute command">&gt;</button>
+                <button type="submit" class="term-submit-btn bevel" aria-label="Execute command">&gt;</button>
               </form>
+
+              <!-- Shell live region: one single-line, visually-hidden status.
+                   The output log above is deliberately not a live region. -->
+              <p id="terminal-status" class="visually-hidden" role="status" aria-live="polite"></p>
             </div>
           </div>
     

@@ -862,6 +862,173 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 }
 
 /* ==========================================================================
+   SHELL application (Task 12) - Amiga flat surface
+
+   Scoped to `[data-app="shell"]`. Same job as the SKILLS/ACADEMIC/CONNECT/
+   PROJECTS blocks above: the `.terminal-card` / `.term-*` chrome still arrives
+   from style.css, so these rules cancel the glass (`border-radius`,
+   `backdrop-filter` blur, glow box-shadows, hover transforms and the legacy
+   `text-shadow` glow) and repaint every text node black on the white window
+   body. The output log (`.terminal-output`) is a recessed `bevel-inset` panel;
+   the input row, the quick-command chips and the submit gadget are raised
+   `.bevel` controls.
+
+   Orange is a rule/accent only (the flat `.section-line`), never body text.
+   Colours are `var()` tokens only, so no new hex enters the stylesheet and the
+   file stays RGB444-clean.
+   ========================================================================== */
+
+/* The card is a raised white gadget. On the white `.window-body` both lit bevel
+   edges are white, so a hard black outline mirrors `.window` and the SKILLS
+   `.skill-card` construction. The legacy `::before` is a translucent gradient
+   hairline; it is removed rather than recoloured. */
+[data-app="shell"] .terminal-card,
+[data-app="shell"] .terminal-card:hover {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: none;
+}
+
+[data-app="shell"] .terminal-card {
+  outline: 1px solid var(--amiga-black);
+}
+
+[data-app="shell"] .terminal-card::before { display: none; }
+
+/* Header: a flat grey control strip with black text, reading as a toolbar inside
+   the white window. The legacy bar is the translucent `--bg-card` on a 1px
+   tinted border. (The orange dithered title bar belongs to the window heading,
+   so a second one is not duplicated here.) */
+[data-app="shell"] .terminal-card-header {
+  background: var(--control-face);
+  color: var(--text-on-face);
+  border-bottom: 2px solid var(--amiga-black);
+}
+
+[data-app="shell"] .terminal-title,
+[data-app="shell"] .terminal-meta {
+  color: var(--text-on-face);
+}
+
+/* The three legacy traffic-light dots are coloured circles; the Amiga
+   convention (identical to `#project-modal`) is a square raised cell. */
+[data-app="shell"] .terminal-dots .dot {
+  width: calc(3 * var(--px));
+  height: calc(3 * var(--px));
+  border-radius: 0;
+  opacity: 1;
+  background: var(--control-face);
+  border-top: 2px solid var(--bevel-lit);
+  border-left: 2px solid var(--bevel-lit);
+  border-bottom: 2px solid var(--bevel-shadow);
+  border-right: 2px solid var(--bevel-shadow);
+}
+
+/* Every text node in the shell surface: black on white, no legacy glow.
+   `.text-dim` / `.text-accent` / `.text-highlight` carry `!important` in
+   style.css, so the override needs the flag too; `text-shadow` clears
+   `.text-accent`'s green glow and the `.term-submit-btn:hover` glow. */
+[data-app="shell"] .text-dim,
+[data-app="shell"] .text-accent,
+[data-app="shell"] .text-highlight,
+[data-app="shell"] .term-response,
+[data-app="shell"] .term-cmd-echo,
+[data-app="shell"] .term-prompt,
+[data-app="shell"] .term-user,
+[data-app="shell"] .term-input {
+  color: var(--win-body-fg);
+  text-shadow: none;
+}
+
+[data-app="shell"] .text-dim,
+[data-app="shell"] .text-accent,
+[data-app="shell"] .text-highlight {
+  color: var(--win-body-fg) !important;
+}
+
+/* The `help` key hint is a flat black-on-white token bounded by a grey rule; the
+   legacy chip is green on dark green with a rounded corner. */
+[data-app="shell"] .code-highlight {
+  color: var(--win-body-fg);
+  background: var(--win-body);
+  border-color: var(--bevel-shadow);
+  border-radius: 0;
+}
+
+/* Output log: a recessed white panel. Only the legacy dark ground, the rounded
+   corner and the green scrollbar are cancelled; the `bevel-inset` edges plus the
+   `display` / `gap` / `max-height` metrics from style.css survive. */
+[data-app="shell"] .terminal-output {
+  background: var(--win-body);
+  color: var(--win-body-fg);
+  border-radius: 0;
+  scrollbar-color: var(--grey-55) var(--win-body);
+}
+
+/* Input row: a raised white gadget. `:focus-within` re-asserts the four bevel
+   colours, because the legacy rule sets a green `border-color` shorthand at
+   (0,2,0) that would otherwise flatten the `bevel` edges while typing. */
+[data-app="shell"] .terminal-input-row,
+[data-app="shell"] .terminal-input-row:focus-within {
+  background: var(--win-body);
+  border-top-color: var(--bevel-lit);
+  border-left-color: var(--bevel-lit);
+  border-bottom-color: var(--bevel-shadow);
+  border-right-color: var(--bevel-shadow);
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+[data-app="shell"] .term-input::placeholder {
+  color: var(--grey-55);
+}
+
+/* Quick-command chips and the submit gadget are raised grey controls, matching
+   the dock. Both meet the 24x24 CSS px target (12 cells) named in the spec's
+   accessibility section; the legacy glow, rounded corner and active shrink are
+   cleared. */
+[data-app="shell"] .cmd-chip,
+[data-app="shell"] .cmd-chip:active,
+[data-app="shell"] .term-submit-btn {
+  background: var(--control-face);
+  color: var(--text-on-face);
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+  min-width: calc(12 * var(--px));
+  min-height: calc(12 * var(--px));
+}
+
+[data-app="shell"] .cmd-chip:hover,
+[data-app="shell"] .term-submit-btn:hover {
+  background: var(--grey-dd);
+  color: var(--text-on-face);
+  text-shadow: none;
+  border-top-color: var(--bevel-lit);
+  border-left-color: var(--bevel-lit);
+  border-bottom-color: var(--bevel-shadow);
+  border-right-color: var(--bevel-shadow);
+}
+
+/* Section header, flat: the legacy `.section-title` is the dark-theme
+   `--text-white` (invisible on the white body) and `.tag-index` is the green
+   accent. Orange is the flat 2px rule only. */
+[data-app="shell"] .tag-index,
+[data-app="shell"] .section-title {
+  color: var(--win-body-fg);
+}
+
+[data-app="shell"] .section-line {
+  height: 2px;
+  background: var(--amiga-orange);
+}
+
+/* ==========================================================================
    Preference fallbacks (last: they must out-order the flat chrome above)
    ========================================================================== */
 
