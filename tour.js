@@ -194,33 +194,51 @@ function openModal() {
   return modal && modal.open ? modal : null;
 }
 
+/** True while an automatic first run is deferred, so it is queued at most once. */
+let pending = false;
+
+/**
+ * One deferral window. When the delay elapses the modal is re-checked: if one
+ * is open the run stays pending and is re-armed on that dialog's `close`
+ * instead of starting underneath it. A modal reopened inside the window (the
+ * deep-link race) therefore cannot be trapped by `.driver-active`.
+ */
+function deferStart() {
+  setTimeout(() => {
+    const modal = openModal();
+    if (modal) {
+      // One-shot: the dialog owns the retry, so at most one listener is
+      // attached for this pending run and a repeated close cannot stack one.
+      modal.addEventListener('close', deferStart, { once: true });
+      return;
+    }
+    pending = false;
+    start();
+  }, TOUR_DELAY_MS);
+}
+
+/** Arm the automatic first run. A call while one is already pending is a no-op. */
+function scheduleStart() {
+  if (pending) return;
+  pending = true;
+  deferStart();
+}
+
 /**
  * Run the tour automatically on a first visit only, after the first paint has
  * settled. A returning visitor, or one who asked for reduced motion, is left
- * alone.
+ * alone; the completed flag is written by `start` on destroy, so it is never
+ * written by a run that never began.
  *
  * On a deep link (`#/projects/coacus`) `projects.js` has already called
- * `showModal()` by the time this runs, so the automatic run is deferred until
- * the dialog fires `close` — a one-shot listener that then applies the same
- * delay and reduced-motion rules. The completed flag is never written while the
- * dialog is open, because the tour never starts.
+ * `showModal()` by the time this runs. Every deferred start re-checks for an
+ * open modal and re-arms rather than starting, so a project modal reopened
+ * within the delay window keeps the tour out too.
  */
 export function initTour() {
   if (isTourDone()) return;
   if (prefersReducedMotion()) return;
-
-  const modal = openModal();
-  if (!modal) {
-    setTimeout(start, TOUR_DELAY_MS);
-    return;
-  }
-
-  // One-shot: a second open/close pair must not queue a second tour.
-  modal.addEventListener(
-    'close',
-    () => setTimeout(start, TOUR_DELAY_MS),
-    { once: true },
-  );
+  scheduleStart();
 }
 
 // Prefs' "Replay tour" control calls this handle. Set here rather than in
