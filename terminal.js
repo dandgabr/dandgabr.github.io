@@ -19,6 +19,28 @@ const HELP_COL = 24;
 // Per-line styling for the boot sequence, aligned with `cmdBoot`'s output.
 const BOOT_TYPES = ['dim', 'dim', 'accent', 'highlight', 'dim', 'accent'];
 
+// The AmigaDOS prompt. `%N` is the CLI process number and `%S` the current
+// directory; 2.x+ renders the default prompt as `n.dir>`, so this shell shows
+// `1.Workbench:>`. The number is the PROCESS number, constant for the life of a
+// shell — it is not a per-command counter.
+export const PROMPT = '1.Workbench:>';
+
+// AmigaDOS date format: `<Weekday> <D-MMM-YY> <HH:MM:SS>`, 24-hour clock, day
+// with no leading zero, three-letter month. Taken from the PROMPT example in
+// the AmigaOS 3.1 reference (`Tuesday 11-Sep-90 14:36:39`), which is the
+// clearest place the full form is documented.
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday',
+                  'Thursday', 'Friday', 'Saturday'];
+
+function amigaDate(now = new Date()) {
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${WEEKDAYS[now.getDay()]} ${now.getDate()}-${MONTHS[now.getMonth()]}-`
+    + `${pad(now.getFullYear() % 100)} ${pad(now.getHours())}:`
+    + `${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+}
+
 // Minimal `{placeholder}` interpolation. Only used for values that are not
 // translatable (project telemetry, dates); prose stays in the i18n dictionary.
 function renderTemplate(template, vars) {
@@ -55,15 +77,19 @@ function cmdSkills(cli) {
 }
 
 function cmdProjects(cli) {
+  // `Dir` lists the featured repositories as though they were files on a
+  // volume. AmigaDOS `Dir` prints names only, in columns, with no size or date.
   const lines = [I18N.t('cmd.projects.output')];
-  Object.keys(PROJECTS_DATA).forEach((id, index) => {
-    const proj = getProjectData(id, I18N.currentLang);
-    lines.push(`  ${index + 1}. ${id.padEnd(HELP_COL)}- ${proj.subtitle}`);
+  Object.keys(PROJECTS_DATA).forEach((id) => {
+    lines.push(`  ${id}`);
   });
   cli.appendLog(lines.join('\n'), 'text-main');
 }
 
 function cmdCat(cli, args) {
+  // `Type` prints the contents of a file. Here the "file" is a project's
+  // telemetry, so an unknown id reports the AmigaDOS object-not-found wording
+  // rather than a Unix `cat:` diagnostic.
   const id = args[0];
   if (!id) {
     cli.appendLog(I18N.t('cmd.cat.usage'), 'text-dim');
@@ -87,6 +113,14 @@ function cmdCat(cli, args) {
   }), 'text-accent');
 }
 
+function cmdVersion(cli) {
+  cli.appendLog(I18N.t('cmd.version.output'), 'text-main');
+}
+
+function cmdAvail(cli) {
+  cli.appendLog(I18N.t('cmd.avail.output'), 'text-main');
+}
+
 function cmdCredentials(cli) {
   cli.appendLog(I18N.t('cmd.credentials.output'), 'text-main');
 }
@@ -108,18 +142,11 @@ function cmdBoot(cli) {
 }
 
 function cmdDate(cli) {
-  cli.appendLog(renderTemplate(I18N.t('cmd.date.output'), {
-    utc: new Date().toUTCString(),
-    local: new Date().toLocaleString()
-  }), 'text-main');
+  cli.appendLog(amigaDate(), 'text-main');
 }
 
 function cmdEcho(cli, args) {
   cli.appendLog(args.join(' '), 'text-main');
-}
-
-function cmdSudo(cli) {
-  cli.appendLog(I18N.t('cmd.sudo.output'), 'text-dim');
 }
 
 /**
@@ -128,21 +155,26 @@ function cmdSudo(cli) {
  * language was active before `setLanguage` ran. The help renderer resolves it
  * with `I18N.t()` at call time instead. `hidden` commands are omitted from the
  * short `help` listing but shown by `help --all`.
+ *
+ * Names follow the AmigaDOS canon: built-in commands are case-insensitive and
+ * documented in upper case, and the aliases map AmigaDOS wording onto the
+ * portfolio's content (`Type` reads a project, `Dir` lists them).
  */
 export const COMMANDS = {
   help:        { aliases: ['?'],                  handler: cmdHelp,        description: 'cmd.help.desc',        hidden: true },
   whoami:      { aliases: ['who'],                handler: cmdWhoami,      description: 'cmd.whoami.desc' },
   about:       { aliases: ['intel'],              handler: cmdAbout,       description: 'cmd.about.desc' },
   skills:      { aliases: [],                     handler: cmdSkills,      description: 'cmd.skills.desc' },
-  projects:    { aliases: ['ls'],                 handler: cmdProjects,    description: 'cmd.projects.desc' },
-  cat:         { aliases: ['project'],            handler: cmdCat,         description: 'cmd.cat.desc' },
+  dir:         { aliases: ['projects'],          handler: cmdProjects,    description: 'cmd.dir.desc' },
+  type:        { aliases: ['cat'],               handler: cmdCat,         description: 'cmd.type.desc' },
   credentials: { aliases: ['education', 'certs'], handler: cmdCredentials, description: 'cmd.credentials.desc' },
   contact:     { aliases: [],                     handler: cmdContact,     description: 'cmd.contact.desc' },
   clear:       { aliases: ['cls'],                handler: cmdClear,       description: 'cmd.clear.desc' },
   boot:        { aliases: [],                     handler: cmdBoot,        description: 'cmd.boot.desc' },
   date:        { aliases: [],                     handler: cmdDate,        description: 'cmd.date.desc' },
-  echo:        { aliases: [],                     handler: cmdEcho,        description: 'cmd.echo.desc',        hidden: true },
-  sudo:        { aliases: [],                     handler: cmdSudo,        description: 'cmd.sudo.desc',        hidden: true }
+  version:     { aliases: [],                     handler: cmdVersion,     description: 'cmd.version.desc' },
+  avail:       { aliases: [],                     handler: cmdAvail,       description: 'cmd.avail.desc' },
+  echo:        { aliases: [],                     handler: cmdEcho,        description: 'cmd.echo.desc',        hidden: true }
 };
 
 // Alias -> canonical name. Derived from COMMANDS so there is one source.
@@ -222,13 +254,16 @@ export class TerminalCLI {
     const mainCmd = parts[0].toLowerCase();
     const args = parts.slice(1).map(part => part.toLowerCase());
 
-    this.appendLog(`terminal> ${cmdStr}`, 'term-cmd-echo');
+    // Echo the line behind the AmigaDOS prompt, not a Unix one.
+    this.appendLog(`${PROMPT} ${cmdStr}`, 'term-cmd-echo');
 
     const name = COMMANDS[mainCmd] ? mainCmd : ALIASES[mainCmd];
     if (name) {
       COMMANDS[name].handler(this, args);
       this.setStatus(renderTemplate(I18N.t('cmd.status.done'), { cmd: name }));
     } else {
+      // AmigaDOS 2.x+ says `Unknown command <name>`; it does not prefix the
+      // message with a shell name the way `bash:` does.
       const notFound = renderTemplate(I18N.t('cmd.error.notfound'), { cmd: mainCmd });
       this.appendLog(notFound, 'text-dim');
       this.setStatus(notFound);

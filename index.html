@@ -766,8 +766,8 @@
                 <span class="dot"></span>
                 <span class="dot"></span>
               </div>
-              <div class="terminal-title">guest@dandga-kernel:/workspace (bash 5.2)</div>
-              <div class="terminal-meta">TTY: /dev/pts/0</div>
+              <div class="terminal-title">Workbench:Shell — CON:0/0/640/200/AmigaShell</div>
+              <div class="terminal-meta">CLI 1</div>
             </div>
 
             <div class="terminal-card-body terminal-interactive">
@@ -780,10 +780,10 @@
                 <button type="button" class="cmd-chip bevel" data-cmd="help">help</button>
                 <button type="button" class="cmd-chip bevel" data-cmd="whoami">whoami</button>
                 <button type="button" class="cmd-chip bevel" data-cmd="skills">skills</button>
-                <button type="button" class="cmd-chip bevel" data-cmd="projects">projects</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="dir">dir</button>
                 <button type="button" class="cmd-chip bevel" data-cmd="credentials">credentials</button>
                 <button type="button" class="cmd-chip bevel" data-cmd="contact">contact</button>
-                <button type="button" class="cmd-chip bevel" data-cmd="clear">clear</button>
+                <button type="button" class="cmd-chip bevel" data-cmd="version">version</button>
               </div>
 
               <!-- Terminal Output Log. `role="log"` stays (it is a navigable
@@ -794,15 +794,18 @@
                    force-announced in full. -->
               <div id="terminal-output" class="terminal-output bevel-inset" role="log" aria-live="off">
                 <div class="term-response">
-                  <span class="text-dim">Security Shell v2.4.0 (x86_64-hardened-linux)</span><br>
-                  <span class="text-dim" data-i18n="terminal.welcome">Session initialized for peer review. Type 'help' for guidance.</span>
+                  <span class="text-dim">AmigaDOS 3.1 — Kickstart 40.68, Workbench 40.42</span><br>
+                  <span class="text-dim" data-i18n="terminal.welcome">AmigaDOS 3.1. Type 'help' for a list of commands.</span>
                 </div>
               </div>
 
-              <!-- Command Input Line -->
+              <!-- Command Input Line. The prompt shows the AmigaDOS default
+                   `n.dir>`: `1` is the CLI process number (constant for the
+                   session — not a per-command counter) and `Workbench:` the
+                   current directory. -->
               <form id="terminal-form" class="terminal-input-row bevel" autocomplete="off">
                 <label for="cli-input" class="term-prompt">
-                  <span class="term-user">terminal</span>&gt;&nbsp;
+                  <span class="term-user">1.Workbench:</span>&gt;&nbsp;
                 </label>
                 <input type="text" id="cli-input" class="term-input" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Terminal command line input" data-i18n-attr="placeholder:terminal.placeholder,aria-label:terminal.input_aria" placeholder="type a command...">
                 <button type="submit" class="term-submit-btn bevel" aria-label="Execute command">&gt;</button>
@@ -920,7 +923,7 @@
     <div class="footer-container">
       <div class="footer-left">
         <span class="prompt-symbol">&gt;&gt;</span>
-        <span>terminal&gt; EOF</span>
+        <span>1.Workbench:&gt; EndCLI</span>
         <span class="footer-sep">|</span>
         <span class="footer-spec" data-i18n="footer.spec">ZERO-FRAMEWORKS &bull; PURE HTML5/CSS3/ES6+</span>
       </div>
