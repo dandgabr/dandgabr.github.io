@@ -38,15 +38,15 @@
   <!-- Favicon / SVG Icon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23061109' rx='6'/%3E%3Cpath d='M16 4 L28 9 V18 C28 24 16 28 16 28 C16 28 4 24 4 18 V9 Z' fill='none' stroke='%2300ff66' stroke-width='2'/%3E%3Cpath d='M11 16 L15 20 L21 12' fill='none' stroke='%2300ff66' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 
-  <!-- Stylesheet & Deferred Scripts -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Stylesheets. The Amiga design system is the only project stylesheet: the
+       legacy terminal-HUD style.css was retired once every section had moved
+       onto the Workbench surface. -->
   <!-- Vendored Driver.js stylesheet (v1.8.0, MIT). A same-origin <link> keeps
        `style-src 'self'` intact; nothing is fetched from a CDN. It loads before
        amiga.css so the design-system overrides below can restyle the popover. -->
   <link rel="stylesheet" href="vendor/driver/driver.css">
-  <!-- Amiga design system. Loaded after style.css so it wins during the Phase 2
-       transition; style.css is removed once Phase 3 converts every section. It
-       also restyles the Driver.js popover onto the flat Workbench surface. -->
+  <!-- Amiga design system. It also restyles the Driver.js popover onto the flat
+       Workbench surface. -->
   <link rel="stylesheet" href="amiga.css">
   <script type="module" src="main.js"></script>
 </head>
@@ -120,21 +120,21 @@
 
               <div class="hero-pillars">
                 <div class="pillar-chip">
-                  <span class="chip-icon" aria-hidden="true">🛡️</span>
+                  <span class="chip-icon" aria-hidden="true">&#9635;</span>
                   <div class="chip-body">
                     <strong data-i18n="hero.pillar1.title">Enterprise Security</strong>
                     <small data-i18n="hero.pillar1.sub">Threat Modeling & DevSecOps</small>
                   </div>
                 </div>
                 <div class="pillar-chip">
-                  <span class="chip-icon" aria-hidden="true">🤖</span>
+                  <span class="chip-icon" aria-hidden="true">&#9672;</span>
                   <div class="chip-body">
                     <strong data-i18n="hero.pillar2.title">AI Safety & Hardening</strong>
                     <small data-i18n="hero.pillar2.sub">MCP & Agent Containment</small>
                   </div>
                 </div>
                 <div class="pillar-chip">
-                  <span class="chip-icon" aria-hidden="true">☁️</span>
+                  <span class="chip-icon" aria-hidden="true">&#9636;</span>
                   <div class="chip-body">
                     <strong data-i18n="hero.pillar3.title">Cloud & Infrastructure</strong>
                     <small data-i18n="hero.pillar3.sub">AWS, Azure, CIS Hardening</small>
