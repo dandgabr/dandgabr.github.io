@@ -92,6 +92,13 @@ export function closeProject() {
   const modal = dialogEl();
   if (!modal) return;
 
+  // Drop the last repo target so the closed dialog holds no stale deep link
+  // after a valid project is followed by an unknown id. Safe to repeat: the
+  // element starts at `href="#"` and `renderModal` rewrites it before every
+  // `showModal()`, so no open path can observe the reset.
+  const repoLink = document.getElementById('modal-repo-link');
+  if (repoLink) repoLink.setAttribute('href', '#');
+
   if (typeof modal.close === 'function') {
     // `close()` is a no-op on a closed dialog in every current engine, but the
     // explicit guard keeps the intent readable and avoids an `open` attribute

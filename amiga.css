@@ -661,6 +661,17 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
   border-radius: 0;
 }
 
+/* The rule above the inspect row is the last legacy colour inside the surface:
+   `.proj-actions` draws `border-top` from `--border-subtle`, which is the
+   dark-theme green tint (or the light-theme orange one). Both are non-palette,
+   so the divider takes the same grey as every other bevel shadow. The
+   `display` / `align-items` / `justify-content` / `gap` / `padding-top` metrics
+   from style.css are left alone: only the border colour changes, and the 1px
+   width is kept so the row does not reflow. */
+[data-app="projects"] .proj-actions {
+  border-top: 1px solid var(--bevel-shadow);
+}
+
 /* Filter tabs and inspect buttons are raised grey controls, matching the dock
    gadget. The legacy green text, green fill and glow are replaced; `.active`
    reads as a pressed gadget exactly like `.dock-item[aria-current="page"]`. */
@@ -709,6 +720,16 @@ body { background:var(--screen-bg); color:var(--win-body-fg); font-family:var(--
 }
 
 /* --- Inspection modal (`<dialog>`) ---------------------------------------- */
+
+/* `.terminal-modal` (style.css) sets `color: var(--text-main)` on the dialog
+   itself. Every current child re-declares a palette colour, so nothing renders
+   wrong today, but any future descendant added without its own `color` would
+   inherit the legacy theme text instead of the Amiga token. Overriding it here
+   costs one declaration and makes the dialog's own computed colour correct;
+   `margin` / `padding` / `max-width` / `width` from style.css are untouched. */
+#project-modal {
+  color: var(--win-body-fg);
+}
 
 /* A flat black backdrop with no blur. `backdrop-filter` is what the legacy
    `::backdrop` used for its frosted effect; a classic requester sits on an
