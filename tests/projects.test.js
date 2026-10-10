@@ -7,7 +7,7 @@ test('getProjectData returns null for an unknown id instead of throwing', () => 
 });
 
 test('every featured project resolves in all three languages', () => {
-  for (const id of ['coacus', 'anvilai', 'mcp-cheatengine', 'mcp-security-mitmproxy']) {
+  for (const id of Object.keys(PROJECTS_DATA)) {
     for (const lang of ['en', 'pt-br', 'es']) {
       const p = getProjectData(id, lang);
       assert.ok(p, `${id} missing in ${lang}`);

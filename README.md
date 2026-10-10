@@ -68,7 +68,7 @@ tests/              suíte `node --test`
 | --- | --- |
 | `intel` | Perfil, cargo atual na Dasa e os três cargos anteriores em segurança |
 | `skills` | Cinco domínios técnicos |
-| `projects` | Quatro repositórios em destaque, com modal |
+| `projects` | Nove repositórios públicos em destaque, com filtros e modal |
 | `academic` | CompTIA, três pós-graduações, bacharelado e docência |
 | `connect` | LinkedIn e GitHub |
 | `shell` | Terminal interativo |

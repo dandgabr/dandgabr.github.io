@@ -403,35 +403,38 @@
             <span class="section-line"></span>
           </div>
 
-          <!-- Category Filter Tabs. Four featured repos: ALL (4), the two MCP
-               repos under TOOLING, AnvilAI + the mitmproxy proxy under SECURITY,
-               Coacus + AnvilAI under AI. The COMMUNITY tab is gone with the GDG
-               theme it filtered. -->
+          <!-- Category filters cover all nine featured public projects. -->
           <div class="filter-bar" role="tablist" aria-label="Filter projects by discipline">
             <button type="button" class="filter-btn bevel active" role="tab" aria-selected="true" data-filter="all">
-              <span data-i18n="projects.tab.all">[ ALL (4) ]</span>
+              <span data-i18n="projects.tab.all">[ ALL (9) ]</span>
             </button>
             <button type="button" class="filter-btn bevel" role="tab" aria-selected="false" data-filter="security">
-              <span data-i18n="projects.tab.security">[ SECURITY (2) ]</span>
+              <span data-i18n="projects.tab.security">[ SECURITY (3) ]</span>
             </button>
             <button type="button" class="filter-btn bevel" role="tab" aria-selected="false" data-filter="ai">
               <span data-i18n="projects.tab.ai">[ AI & AGENTS (2) ]</span>
             </button>
             <button type="button" class="filter-btn bevel" role="tab" aria-selected="false" data-filter="tools">
-              <span data-i18n="projects.tab.tools">[ TOOLING (2) ]</span>
+              <span data-i18n="projects.tab.tools">[ TOOLING (4) ]</span>
             </button>
           </div>
 
-          <!-- Projects Grid: the four featured repositories, in the order the
-               GitHub profile features them. Each card's `data-project-id` is a
+          <!-- Projects Grid: selected public projects, with each `data-project-id` as a
                `PROJECTS_DATA` key and its inspect button deep-links the modal. -->
           <div class="projects-grid" id="projects-grid">
 
-            <!-- Project 1: Coacus -->
+            <article class="project-card bevel" data-category="tools" data-project-id="elfvision">
+              <div class="project-card-header"><div class="proj-telemetry"><span class="proj-id">PRJ-01</span><span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span></div><div class="proj-category-tags"><span class="mini-tag bevel-inset" data-i18n="proj.category.tools">TOOLING</span></div></div>
+              <h3 class="proj-title">Elfvision</h3>
+              <p class="proj-desc" data-i18n="proj.elfvision.desc">Monitors AI provider quotas, reset times and API spending from the Linux desktop, with a native GNOME Shell extension.</p>
+              <div class="proj-actions"><button type="button" class="inspect-btn bevel" data-project="elfvision" aria-haspopup="dialog"><span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span></button><a href="https://github.com/dandgabr/elfvision" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View Elfvision on GitHub">REPO <span aria-hidden="true">&#8599;</span></a></div>
+            </article>
+
+            <!-- Coacus -->
             <article class="project-card bevel" data-category="ai" data-project-id="coacus">
               <div class="project-card-header">
                 <div class="proj-telemetry">
-                  <span class="proj-id">PRJ-01</span>
+                  <span class="proj-id">PRJ-02</span>
                   <span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span>
                 </div>
                 <div class="proj-category-tags">
@@ -460,56 +463,35 @@
               </div>
             </article>
 
-            <!-- Project 2: AnvilAI (the harness-hardening tool, formerly named
-                 differently; this is the only live repository link). -->
-            <article class="project-card bevel" data-category="security ai" data-project-id="anvilai">
-              <div class="project-card-header">
-                <div class="proj-telemetry">
-                  <span class="proj-id">PRJ-02</span>
-                  <span class="proj-status bevel-inset" data-i18n="proj.status.research">ACTIVE RESEARCH</span>
-                </div>
-                <div class="proj-category-tags">
-                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.aisafety">AI Safety</span>
-                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.hardening">Hardening</span>
-                </div>
-              </div>
-              <h3 class="proj-title">
-                AnvilAI
-              </h3>
-              <p class="proj-desc" data-i18n="proj.anvilai.desc">
-                An automated hardening and governance layer for third-party AI harnesses, validating sandbox isolation, enforcing API token boundaries, and auditing permissions on tooling you do not control.
-              </p>
-              <div class="proj-capabilities bevel-inset">
-                <div class="cap-item" data-i18n="proj.anvilai.c1">&gt; Sandbox isolation profiles for Docker / Podman / Bubblewrap</div>
-                <div class="cap-item" data-i18n="proj.anvilai.c2">&gt; Automated audits of filesystem ACLs, process isolation and egress</div>
-                <div class="cap-item" data-i18n="proj.anvilai.c3">&gt; Aligned with the OWASP Top 10 for LLM Applications</div>
-              </div>
-              <div class="proj-actions">
-                <button type="button" class="inspect-btn bevel" data-project="anvilai" aria-haspopup="dialog">
-                  <span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span>
-                </button>
-                <a href="https://github.com/dandgabr/AnvilAI" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View AnvilAI on GitHub">
-                  REPO <span aria-hidden="true">&#8599;</span>
-                </a>
-              </div>
+            <article class="project-card bevel" data-category="tools" data-project-id="estilos-visuais">
+              <div class="project-card-header"><div class="proj-telemetry"><span class="proj-id">PRJ-03</span><span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span></div><div class="proj-category-tags"><span class="mini-tag bevel-inset" data-i18n="proj.category.tools">TOOLING</span></div></div>
+              <h3 class="proj-title">Estilos Visuais</h3>
+              <p class="proj-desc" data-i18n="proj.estilos.desc">An interactive gallery for exploring and comparing interface styles by applying their design tokens to a live demo panel.</p>
+              <div class="proj-actions"><button type="button" class="inspect-btn bevel" data-project="estilos-visuais" aria-haspopup="dialog"><span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span></button><a href="https://github.com/dandgabr/estilos-visuais" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View Estilos Visuais on GitHub">REPO <span aria-hidden="true">&#8599;</span></a></div>
             </article>
 
-            <!-- Project 3: mcp-cheatengine -->
-            <article class="project-card bevel" data-category="tools" data-project-id="mcp-cheatengine">
+            <article class="project-card bevel" data-category="tools" data-project-id="treinamento-si">
+              <div class="project-card-header"><div class="proj-telemetry"><span class="proj-id">PRJ-04</span><span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span></div><div class="proj-category-tags"><span class="mini-tag bevel-inset" data-i18n="proj.category.tools">TOOLING</span></div></div>
+              <h3 class="proj-title">treinamento-si</h3>
+              <p class="proj-desc" data-i18n="proj.treinamento.desc">A security management training proposal with structured learning material and a study application for desktop or browser.</p>
+              <div class="proj-actions"><button type="button" class="inspect-btn bevel" data-project="treinamento-si" aria-haspopup="dialog"><span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span></button><a href="https://github.com/dandgabr/treinamento-si" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View treinamento-si on GitHub">REPO <span aria-hidden="true">&#8599;</span></a></div>
+            </article>
+
+            <!-- Cheat Engine MCP integration -->
+            <article class="project-card bevel" data-category="security" data-project-id="mcp-cheatengine">
               <div class="project-card-header">
                 <div class="proj-telemetry">
-                  <span class="proj-id">PRJ-03</span>
-                  <span class="proj-status bevel-inset" data-i18n="proj.status.integration">INTEGRATION</span>
+                  <span class="proj-id">PRJ-05</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span>
                 </div>
                 <div class="proj-category-tags">
-                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.mcp">AI Tooling &amp; MCP</span>
-                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.automation">Process Automation</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.category.security">SECURITY</span>
                 </div>
               </div>
               <h3 class="proj-title">
                 mcp-cheatengine
               </h3>
-              <p class="proj-desc" data-i18n="proj.mcp_ce.desc">
+              <p class="proj-desc" data-i18n="proj.mcpcheat.desc">
                 Model Context Protocol (MCP) server interface for Cheat Engine, enabling programmatic inspection, process automation, and security telemetry for AI assistants.
               </p>
               <div class="proj-capabilities bevel-inset">
@@ -527,22 +509,20 @@
               </div>
             </article>
 
-            <!-- Project 4: mcp-security-mitmproxy -->
-            <article class="project-card bevel" data-category="security tools" data-project-id="mcp-security-mitmproxy">
+            <article class="project-card bevel" data-category="security" data-project-id="mcp-security-mitmproxy">
               <div class="project-card-header">
                 <div class="proj-telemetry">
-                  <span class="proj-id">PRJ-04</span>
-                  <span class="proj-status bevel-inset" data-i18n="proj.status.integration">INTEGRATION</span>
+                  <span class="proj-id">PRJ-06</span>
+                  <span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span>
                 </div>
                 <div class="proj-category-tags">
-                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.mcpsecurity">MCP Security</span>
-                  <span class="mini-tag bevel-inset" data-i18n="proj.tag.security">Traffic Inspection</span>
+                  <span class="mini-tag bevel-inset" data-i18n="proj.category.security">SECURITY</span>
                 </div>
               </div>
               <h3 class="proj-title">
                 mcp-security-mitmproxy
               </h3>
-              <p class="proj-desc" data-i18n="proj.mitmproxy.desc">
+              <p class="proj-desc" data-i18n="proj.mitm.desc">
                 An mitmproxy-based security layer for Model Context Protocol traffic, intercepting, decoding, and inspecting tool calls between agents and servers to surface prompt injection and tool misuse.
               </p>
               <div class="proj-capabilities bevel-inset">
@@ -558,6 +538,27 @@
                   REPO <span aria-hidden="true">&#8599;</span>
                 </a>
               </div>
+            </article>
+
+            <article class="project-card bevel" data-category="ai" data-project-id="autodoc">
+              <div class="project-card-header"><div class="proj-telemetry"><span class="proj-id">PRJ-07</span><span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span></div><div class="proj-category-tags"><span class="mini-tag bevel-inset" data-i18n="proj.category.ai">AI &amp; AGENTS</span></div></div>
+              <h3 class="proj-title">AutoDoc</h3>
+              <p class="proj-desc" data-i18n="proj.autodoc.desc">An MCP server for mapping codebases and producing architecture documentation for AI agent harnesses.</p>
+              <div class="proj-actions"><button type="button" class="inspect-btn bevel" data-project="autodoc" aria-haspopup="dialog"><span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span></button><a href="https://github.com/dandgabr/autodoc" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View AutoDoc on GitHub">REPO <span aria-hidden="true">&#8599;</span></a></div>
+            </article>
+
+            <article class="project-card bevel" data-category="security" data-project-id="Valida-o-de-seguran-a-em-sistemas-Linux">
+              <div class="project-card-header"><div class="proj-telemetry"><span class="proj-id">PRJ-08</span><span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span></div><div class="proj-category-tags"><span class="mini-tag bevel-inset" data-i18n="proj.category.security">SECURITY</span></div></div>
+              <h3 class="proj-title">Linux Security Assessment</h3>
+              <p class="proj-desc" data-i18n="proj.linux.desc">A Linux security assessment and compliance tool for collecting evidence, checking controls and supporting hardening.</p>
+              <div class="proj-actions"><button type="button" class="inspect-btn bevel" data-project="Valida-o-de-seguran-a-em-sistemas-Linux" aria-haspopup="dialog"><span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span></button><a href="https://github.com/dandgabr/Valida-o-de-seguran-a-em-sistemas-Linux" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View Linux Security Assessment on GitHub">REPO <span aria-hidden="true">&#8599;</span></a></div>
+            </article>
+
+            <article class="project-card bevel" data-category="tools" data-project-id="gdg-polylux-theme">
+              <div class="project-card-header"><div class="proj-telemetry"><span class="proj-id">PRJ-09</span><span class="proj-status bevel-inset" data-i18n="proj.status.opensource">OPEN SOURCE</span></div><div class="proj-category-tags"><span class="mini-tag bevel-inset" data-i18n="proj.category.tools">TOOLING</span></div></div>
+              <h3 class="proj-title">gdg-polylux-theme</h3>
+              <p class="proj-desc" data-i18n="proj.gdg.desc">A reusable Typst presentation theme inspired by Google Developer Groups, with layouts, colors, typography and a sample deck.</p>
+              <div class="proj-actions"><button type="button" class="inspect-btn bevel" data-project="gdg-polylux-theme" aria-haspopup="dialog"><span class="btn-prefix">&gt;</span> <span data-i18n="proj.action.inspect">INSPECT ARCHITECTURE</span></button><a href="https://github.com/dandgabr/gdg-polylux-theme" target="_blank" rel="noopener noreferrer" class="repo-link" aria-label="View gdg-polylux-theme on GitHub">REPO <span aria-hidden="true">&#8599;</span></a></div>
             </article>
 
           </div>
